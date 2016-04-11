@@ -1,6 +1,5 @@
 {
     "require": {
-        "gdmgent/artestead": "^3.0",
-        "barryvdh/laravel-cors": "^0.8.0"
+        "gdmgent/artestead": "^3.0"
     }
 }

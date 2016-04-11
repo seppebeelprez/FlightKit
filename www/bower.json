@@ -1,0 +1,42 @@
+{
+  "name": "flightkit-app",
+  "authors": [
+    "Seppe Beelprez <seppe.beelprez@student.arteveldehs.be>"
+  ],
+  "version": "1.0.0",
+  "description": "Up to date flight information Mobile Web App",
+  "license": "MIT",
+  "homepage": "www.flightkit.dev",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.0-rc.2",
+    "angular-animate": "~1.4.0-rc.2",
+    "angular-aria": "~1.4.0-rc.2",
+    "angular-cookies": "~1.4.0-rc.2",
+    "angular-material": "^0.9.4",
+    "angular-messages": "~1.4.0-rc.2",
+    "angular-resource": "~1.4.0-rc.2",
+    "angular-route": "~1.4.0-rc.2",
+    "angular-sanitize": "~1.4.0-rc.2",
+    "angular-touch": "~1.4.0-rc.2",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap-sass-official": "~3.3.4",
+    "chartjs": "~1.0.2",
+    "fontawesome": "~4.3.0",
+    "leaflet": "~0.7.3",
+    "lodash": "^3.9.3",
+    "moment": "~2.10.3"
+  },
+  "resolutions": {
+    "angular": "~1.4.0-rc.2"
+  },
+  "devDependencies": {
+    "Materialize": "materialize#^0.97.6"
+  }
+}

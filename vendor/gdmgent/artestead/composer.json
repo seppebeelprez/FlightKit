@@ -1,0 +1,23 @@
+{
+    "name": "gdmgent/artestead",
+    "description": "Artestead is a fork of Laravel Homestead for use at Artevelde University College Ghent.",
+    "require": {
+        "php": ">=7.0.0",
+        "symfony/console": "~2.3|~3.0",
+        "symfony/process": "~2.3|~3.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Olivier Parent"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "GdmGent\\Artestead\\": "src/"
+        }
+    },
+    "bin": [
+        "artestead"
+    ]
+}

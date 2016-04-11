@@ -1,0 +1,48 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the button component.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+.buttons_create {
+  margin-top: 64px;
+}
+
+.own_btn {
+  padding: 16px 32px;
+  border: 1px solid transparent;
+  color: $white;
+  font-size: 1.6rem;
+}
+
+.own_btn:hover,
+.own_btn:active,
+.own_btn:visited,
+.own_btn:focus {
+  text-decoration: none;
+  color: $white;
+}
+
+.own_btn:focus {
+  outline: none;
+}
+
+.back_button {
+  background-color: transparent;
+  border: 1px solid $main_green;
+  color: $main_green;
+}
+
+.back_button:hover {
+  background-color: $accent_green;
+  border: 1px solid $accent_green;
+}
+
+.next_button {
+  border: 1px solid $main_green;
+  background-color: $main_green;
+}
+
+.next_button:hover {
+  border: 1px solid $accent_green;
+  background-color: $accent_green;
+}

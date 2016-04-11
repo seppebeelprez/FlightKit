@@ -1,0 +1,377 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the login page.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+.container_navguest {
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+
+  nav {
+    background-color: transparent;
+    border: none;
+
+    .navbar-header {
+
+      .navbar-brand {
+        padding-top: 10px;
+
+        img {
+          max-height: 30px;
+          height: 50px;
+          -webkit-backface-visibility: hidden;
+        }
+      }
+    }
+
+    #app-navbar-collapse {
+
+      ul {
+
+        li {
+          margin-left: 4px;
+
+          a {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 300;
+            padding: 8px 15px;
+            border: 1px solid transparent;
+          }
+
+          a:hover {
+            background-color: $white;
+            color: $main_green;
+            border: 1px solid $white;
+          }
+
+          a.active {
+            color: $white;
+            border: 1px solid $white;
+          }
+
+          a.active:hover {
+            color: $main_green;
+            border: 1px solid $white;
+          }
+        }
+      }
+    }
+  }
+}
+
+.container_login {
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+
+  .login_block {
+
+    h2 {
+      margin-top: 0;
+      color: $white;
+      font-weight: 300;
+    }
+
+    .login_form {
+
+      form {
+
+        .or_divider {
+          p {
+            text-align: center;
+            font-weight: 300;
+            font-size: 1.6rem;
+            color: $white;
+          }
+        }
+
+        .form-group {
+
+          label {
+            color: $white;
+            font-weight: 300;
+          }
+
+          .input-group {
+            padding-left: 15px;
+            padding-right: 15px;
+
+            span {
+              min-width: 52px;
+              padding: 10px 12px;
+              border: none;
+              border-radius: 0;
+              background-color: $black_opacity;
+
+              i {
+                color: $white;
+              }
+            }
+
+            input {
+              height: 48px;
+              border: none;
+              border-radius: 0;
+              outline: none;
+            }
+          }
+
+          .btn-login {
+            font-size: 2rem;
+            font-weight: 300;
+            color: $white;
+            background-color: $main_green;
+            width: 100%;
+            min-height: 48px;
+            max-height: 48px;
+            border: none;
+            border-radius: 0;
+            outline: none;
+          }
+
+          .btn-login:hover {
+            background-color: $accent_green;
+          }
+
+          .btn-social {
+            padding-top: 8px;
+            font-size: 2rem;
+            font-weight: 300;
+            color: $white;
+            background-color: $facebook;
+            width: 100%;
+            min-height: 48px;
+            max-height: 48px;
+            border: none;
+            border-radius: 0;
+          }
+
+          .btn-social:hover {
+            background-color: $facebook_hover;
+          }
+
+          .login_extra {
+            padding-left: 0;
+
+            .col-xs-6 {
+              padding-left: 0;
+              padding-right: 0;
+            }
+
+            li {
+              display: inline-block;
+              list-style: none;
+            }
+
+            .btn-link {
+              margin-left: 8px;
+              float: right;
+              color: $accent_green;
+              text-align: right;
+            }
+          }
+        }
+      }
+
+      .help-block {
+        padding-left: 15px;
+        color: $accent_red;
+        font-weight: 300;
+        font-size: 1.4rem;
+        font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+      }
+    }
+  }
+}
+
+
+@media only screen and (min-width: 768px) {
+  .container_navguest {
+    padding-top: 64px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .container_navguest {
+    padding-top: 24px;
+
+    nav {
+      .navbar-header {
+        float: left;
+
+        .navbar-brand {
+          img {
+            max-height: 36px;
+            height: 36px;
+          }
+        }
+      }
+
+      #app-navbar-collapse {
+        .navbar-nav {
+          margin: 7.5px 0;
+        }
+
+        ul {
+          float: right;
+          padding: 0;
+
+          li {
+            display: inline-block;
+            margin-left: 0;
+
+            a {
+            }
+
+            a:hover {
+              background-color: $white;
+              color: $main_green;
+              border: 1px solid $white;
+            }
+
+            a.active {
+              color: $white;
+              border: 1px solid $white;
+            }
+
+            a.active:hover {
+              color: $main_green;
+              border: 1px solid $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .container_login {
+    padding-top: 0 !important;
+
+    .col-xxs {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  .container_navguest {
+    padding-top: 24px;
+
+    nav {
+      .navbar-header {
+        float: left;
+
+        .navbar-brand {
+          padding-left: 0;
+
+          img {
+            max-height: 28px;
+            height: 28px;
+          }
+        }
+      }
+
+      #app-navbar-collapse {
+        .navbar-nav {
+          margin: 7.5px 0;
+        }
+
+        ul {
+          float: right;
+          padding: 0;
+
+          li {
+            display: inline-block;
+            margin-left: 0;
+
+            a {
+            }
+
+            a:hover {
+              background-color: $white;
+              color: $main_green;
+              border: 1px solid $white;
+            }
+
+            a.active {
+              color: $white;
+              border: 1px solid $white;
+            }
+
+            a.active:hover {
+              color: $main_green;
+              border: 1px solid $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .container_navguest {
+    padding-top: 24px;
+
+    nav {
+      .navbar-header {
+        float: left;
+
+        .navbar-brand {
+          padding: 4px 0 0 0;
+
+          img {
+            max-height: 24px;
+            height: 24px;
+          }
+        }
+      }
+
+      #app-navbar-collapse {
+
+        .navbar-nav {
+          margin: 0;
+        }
+
+        ul {
+          float: right;
+          padding: 0;
+
+          li {
+            display: inline-block;
+            margin-left: 0;
+
+            a {
+              padding: 4px 10px 6px 10px;
+            }
+
+            a:hover {
+              background-color: $white;
+              color: $main_green;
+              border: 1px solid $white;
+            }
+
+            a.active {
+              color: $white;
+              border: 1px solid $white;
+            }
+
+            a.active:hover {
+              color: $main_green;
+              border: 1px solid $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

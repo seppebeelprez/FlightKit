@@ -1,0 +1,120 @@
+<div id="flight_overview_content" ng-cloak>
+    <md-toolbar>
+        <div class="flight_overview_intro">
+            {{vm.$$ui.title}}
+        </div>
+    </md-toolbar>
+
+    <md-content>
+        <div ng-repeat="flight in vm.flights | orderBy:'flightStatuses[0].departureDate.dateLocal'" class="flights_overview col-xs-12">
+
+            <div ng-if="flight.flightStatuses[0].status === 'S'">
+                <a href="flights/{{ flight.id }}">
+                    <div class="flight_item col-xs-12">
+                        <!--<h3>{{ flight.id }}</h3>-->
+                        <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
+                            <span>{{ flight.appendix.airports[0].name }} ({{ flight.appendix.airports[0].iata }})</span>
+                        <span>
+                            <i class="material-icons">flight_takeoff</i>
+                            <p>{{ flight.appendix.airports[1].name }} ({{ flight.appendix.airports[1].iata }})</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Status</span>
+                        <span>
+                            <p>Scheduled</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Departure</span>
+                        <span>
+                            <p>{{ flight.flightStatuses[0].departureDate.dateLocal | date : 'hh:mm a' }}</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Estimated</span>
+                        <span>
+                            <p>{{ flight.flightStatuses[0].operationalTimes.scheduledGateDeparture.dateLocal | date : 'hh:mm a' }}</p>
+                        </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div ng-if="flight.flightStatuses[0].status === 'A'">
+                <a href="flights/{{ flight.id }}">
+                    <div class="flight_item col-xs-12">
+                        <!--<h3>{{ flight.id }}</h3>-->
+                        <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
+                            <span>{{ flight.appendix.airports[0].name }} ({{ flight.appendix.airports[0].iata }})</span>
+                        <span>
+                            <i class="material-icons">flight_takeoff</i>
+                            <p>{{ flight.appendix.airports[1].name }} ({{ flight.appendix.airports[1].iata }})</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Status</span>
+                        <span>
+                            <p>In the air</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Carrier</span>
+                        <span>
+                            <p>{{ flight.carrier }}</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Number</span>
+                        <span>
+                            <p>{{ flight.number }}</p>
+                        </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div ng-if="flight.flightStatuses[0].status === 'L'">
+                <a>
+                    <div class="flight_item col-xs-12">
+                        <!--<h3>{{ flight.id }}</h3>-->
+                        <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
+                            <span>{{ flight.appendix.airports[0].name }} ({{ flight.appendix.airports[0].iata }})</span>
+                        <span>
+                            <i class="material-icons">flight_takeoff</i>
+                            <p>{{ flight.appendix.airports[1].name }} ({{ flight.appendix.airports[1].iata }})</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Status</span>
+                        <span>
+                            <p>Landed</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first">Arrived</span>
+                        <span>
+                            <p>{{ flight.flightStatuses[0].operationalTimes.actualGateArrival.dateLocal | date : 'hh:mm a' }}, {{ flight.flightStatuses[0].operationalTimes.actualGateArrival.dateLocal | date : 'MMM d' }}</p>
+                        </span>
+                        </div>
+
+                        <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                            <span class="fi_first"> </span>
+                        <span>
+                            <p>delete</p>
+                        </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </md-content>
+</div>

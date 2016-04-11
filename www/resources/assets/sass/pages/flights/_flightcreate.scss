@@ -1,0 +1,202 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the flight create page.
+// -----------------------------------------------------------------------------
+@import "../../themes/default";
+
+#flight_create_content {
+  padding-top: 32px;
+
+  .flight_create_intro {
+    text-align: center;
+    color: $white;
+    font-size: 3rem;
+    font-weight: 300;
+  }
+
+  .flight_create_subtitle {
+    text-align: center;
+    color: $white;
+    font-size: 2.4rem;
+    font-weight: 300;
+    margin-bottom: 64px;
+  }
+
+
+  .flight_create_options {
+
+    .full {
+      background-color: $white_opacity;
+    }
+
+    .between {
+      padding-bottom: 8px !important;
+      p {
+        text-align: center;
+        margin-bottom: 0;
+
+        i {
+          color: $white_opacity;
+        }
+      }
+    }
+
+    .flight_create_option {
+      width: 100%;
+      margin-bottom: 16px;
+      padding: 8px 16px 16px 16px;
+    }
+
+    .flight_create_option.between {
+      padding: 8px 0 8px 0 !important;
+    }
+
+    .flight_airline {
+      select {
+        font-weight: 300;
+        font-family: inherit;
+        background-color: transparent;
+        width: 100%;
+        padding: 4px 0;
+        font-size: $select-font-size;
+        color: $select-color;
+        border: none;
+        border-bottom: 1px solid $input_border;
+      }
+
+      /* Remove focus */
+      select:focus {
+        outline: none;
+        border-bottom: 1px solid $main_green !important;
+        box-shadow: none !important;
+      }
+
+      /* Hide label */
+      .mdl-selectfield label {display: none;}
+      /* Use custom arrow */
+      .mdl-selectfield select {appearance: none}
+      .mdl-selectfield {
+        font-family: 'Helvetica','Arial',sans-serif;
+        position: relative;
+        &:after {
+          position: absolute;
+          top: 0.75em;
+          right: 0.5em;
+          /* Styling the down arrow */
+          width: 0;
+          height: 0;
+          padding: 0;
+          content: '';
+          border-left: .25em solid transparent;
+          border-right: .25em solid transparent;
+          border-top: .375em solid $input_border;
+          pointer-events: none;
+        }
+      }
+    }
+
+    .flight_number,
+    .flight_airline {
+      input {
+        margin-bottom: 0;
+        font-weight: 300;
+        font-size:$select-font-size;
+        //padding: 4px 0;
+        display:block;
+        background-color: transparent;
+        color: $select-color;
+        outline: none;
+        width:100%;
+        border:none;
+        border-bottom:1px solid $input_border;
+      }
+    }
+
+    .flight_date {
+
+      input {
+        font-weight: 300;
+        font-size:$select-font-size;
+        //padding: 4px 0;
+        color: $select-color;
+        outline: none;
+        width:100%;
+        margin-bottom: 0;
+        border:none;
+        border-bottom:1px solid $input_border;
+      }
+
+      input[type=date]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        display: none;
+      }
+    }
+
+    .button_left {
+      text-align: right;
+    }
+  }
+
+
+}
+
+@media screen and (max-width: 768px) {
+  #flight_create_content {
+
+    .flight_create_subtitle {
+      margin-bottom: 32px;
+    }
+
+    .buttons_create {
+      margin-top: 32px;
+    }
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+  #flight_create_content {
+    padding-top: 32px;
+
+    .flight_create_subtitle {
+      margin-bottom: 64px;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #flight_create_content {
+    padding-top: 32px;
+
+    .flight_create_subtitle {
+      margin-bottom: 16px;
+      padding: 0 16px;
+    }
+
+    .col-500 {
+      margin-left: 8.33333333%;
+      width: 83.33333333%;
+    }
+
+    .flight_create_option.between {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #flight_create_content {
+    padding-top: 16px;
+
+    .col-500, .col-xxs-10 {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .flight_create_intro {
+      font-size: 2rem;
+    }
+
+    .flight_create_subtitle {
+      font-size: 1.6rem;
+    }
+  }
+}

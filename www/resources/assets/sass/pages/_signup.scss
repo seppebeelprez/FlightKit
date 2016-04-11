@@ -1,0 +1,122 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the signup page.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+.container_login {
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 100%;
+
+  .signup_block {
+
+    h2 {
+      color: $white;
+      font-weight: 300;
+    }
+
+    .signup_form {
+
+      form {
+
+        .or_divider {
+          p {
+            text-align: center;
+            font-weight: 300;
+            font-size: 1.6rem;
+            color: $white;
+          }
+        }
+
+        .form-group {
+
+          label {
+            color: $white;
+            font-weight: 300;
+          }
+
+          .input-group {
+            padding-left: 15px;
+            padding-right: 15px;
+
+            span {
+              min-width: 52px;
+              padding: 10px 12px;
+              border: none;
+              border-radius: 0;
+              background-color: $black_opacity;
+
+              i {
+                color: $white;
+              }
+            }
+
+            input {
+              height: 48px;
+              border: none;
+              border-radius: 0;
+              outline: none;
+            }
+          }
+
+          .btn-login {
+            font-size: 2rem;
+            font-weight: 300;
+            color: $white;
+            background-color: $main_green;
+            width: 100%;
+            min-height: 48px;
+            max-height: 48px;
+            border: none;
+            border-radius: 0;
+            outline: none;
+          }
+
+          .btn-login:hover {
+            background-color: $accent_green;
+          }
+
+          .btn-social {
+            padding-top: 8px;
+            font-size: 2rem;
+            font-weight: 300;
+            color: $white;
+            background-color: $facebook;
+            width: 100%;
+            min-height: 48px;
+            max-height: 48px;
+            border: none;
+            border-radius: 0;
+          }
+
+          .btn-social:hover {
+            background-color: $facebook_hover;
+          }
+
+          .login_extra {
+            padding-left: 0;
+
+            .col-xs-6 {
+              padding-left: 0;
+              padding-right: 0;
+            }
+
+            li {
+              display: inline-block;
+              list-style: none;
+            }
+
+            .btn-link {
+              margin-left: 8px;
+              float: right;
+              color: $accent_green;
+            }
+          }
+        }
+      }
+    }
+  }
+}

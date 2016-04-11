@@ -1,0 +1,144 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the flight overview page.
+// -----------------------------------------------------------------------------
+@import "../../themes/default";
+
+#flight_overview_content {
+  padding-top: 32px;
+
+  .flight_overview_intro {
+    text-align: center;
+    color: $white;
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 64px;
+  }
+
+  .flights_overview {
+
+
+    .flight_item {
+      background-color: $black_opacity_24;
+      color: $white;
+      margin-bottom: 16px;
+      padding-top: 16px;
+      padding-bottom: 8px;
+      font-size: 1.6rem;
+      font-weight: 300;
+
+      span {
+        margin-bottom: 8px;
+        display: block;
+
+        p {
+          font-size: 1.4rem;
+        }
+      }
+
+      .fi_place {
+
+        span {
+
+          p {
+            margin-bottom: 0;
+            display: inline-block;
+            position: absolute;
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #flight_overview_content {
+    .flight_overview_intro {
+      margin-bottom: 32px;
+    }
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+  #flight_overview_content {
+    padding-top: 32px;
+
+    .flight_overview_intro {
+      margin-bottom: 32px;
+    }
+
+    .flight_item {
+      padding-bottom: 16px;
+
+      .fi_first {
+        min-width: 80px;
+      }
+
+      .fi_dep {
+        margin-top: 16px;
+      }
+
+      .fi_dep span,
+      .fi_ter span,
+      .fi_gate span {
+        display: inline-block;
+        margin-bottom: 0;
+
+        p {
+          margin-left: 8px;
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #flight_overview_content {
+    padding-top: 32px;
+
+    .flight_overview_intro {
+      margin-bottom: 16px;
+    }
+
+    .flight_item {
+      padding-bottom: 16px;
+
+      .fi_first {
+        min-width: 80px;
+      }
+
+      .fi_dep {
+        margin-top: 16px;
+      }
+
+      .fi_dep span,
+      .fi_ter span,
+      .fi_gate span {
+        display: inline-block;
+        margin-bottom: 0;
+
+        p {
+          margin-left: 8px;
+          margin-bottom: 4px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #flight_overview_content {
+    padding-top: 16px;
+
+    .flight_item {
+      .fi_place,
+      .fi_dep,
+      .fi_ter,
+      .fi_gate {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}

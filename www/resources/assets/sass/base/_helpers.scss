@@ -1,0 +1,188 @@
+// -----------------------------------------------------------------------------
+// This file contains CSS helper classes.
+// -----------------------------------------------------------------------------
+
+/**
+ * Clear inner floats
+ */
+.clearfix::after {
+  clear: both;
+  content: '';
+  display: table;
+}
+
+/**
+ * Main content containers
+ * 1. Make the container full-width with a maximum width
+ * 2. Center it in the viewport
+ * 3. Leave some space on the edges, especially valuable on small screens
+ */
+.container {
+  max-width: 980px; /* 1 */
+  margin-left: auto; /* 2 */
+  margin-right: auto; /* 2 */
+  padding-left: 20px; /* 3 */
+  padding-right: 20px; /* 3 */
+  width: 100%; /* 1 */
+ }
+
+/**
+ * Hide text while making it readable for screen readers
+ * 1. Needed in WebKit-based browsers because of an implementation bug;
+ *    See: https://code.google.com/p/chromium/issues/detail?id=457146
+ */
+.hide-text {
+  overflow: hidden;
+  padding: 0; /* 1 */
+  text-indent: 101%;
+  white-space: nowrap;
+}
+
+/**
+ * Hide element while making it readable for screen readers
+ * Shamelessly borrowed from HTML5Boilerplate:
+ * https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css#L119-L133
+ */
+.visually-hidden { 
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.col-xxs-1, .col-xxs-2, .col-xxs-3, .col-xxs-4,
+.col-xxs-5, .col-xxs-6, .col-xxs-7, .col-xxs-8,
+.col-xxs-9, .col-xxs-10, .col-xxs-11, .col-xxs-12 {
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  float: left;
+}
+
+@media (max-width: 600px) {
+  .col-xxs-1 {
+    width: 8.33333333%;
+  }
+
+  .col-xxs-2 {
+    width: 16.66666667%;
+  }
+
+  .col-xxs-3 {
+    width: 25%;
+  }
+
+  .col-xxs-4 {
+    width: 33.33333333%;;
+  }
+
+  .col-xxs-5 {
+    width: 41.66666667%;
+  }
+
+  .col-xxs-6 {
+    width: 50%;
+  }
+
+  .col-xxs-7 {
+    width: 58.33333333%;
+  }
+
+  .col-xxs-8 {
+    width: 66.66666667%;
+  }
+
+  .col-xxs-9 {
+    width: 75%;
+  }
+
+  .col-xxs-10 {
+    width: 83.33333333%;
+  }
+
+  .col-xxs-11 {
+    width: 91.66666667%;
+  }
+
+  .col-xxs-12 {
+    width: 100%;
+  }
+
+  //OFFSET
+  .col-xxs-offset-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .col-xxs-offset-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .col-xxs-offset-3 {
+    margin-left: 25%;
+  }
+
+  .col-xxs-offset-4 {
+    margin-left: 33.33333333%;;
+  }
+
+  .col-xxs-offset-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .col-xxs-offset-6 {
+    margin-left: 50%;
+  }
+
+  .col-xxs-offset-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .col-xxs-offset-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .col-xxs-offset-9 {
+    margin-left: 75%;
+  }
+
+  .col-xxs-offset-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .col-xxs-offset-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .col-xxs-offset-12 {
+    margin-left: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .col-500 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 320px) {
+  .col-320 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+    float: left;
+    width: 100%;
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,164 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the sidenav of the site/application.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+header {
+  .sticky-navigation {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    -webkit-backface-visibility: hidden;
+    -webkit-box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.08);
+    box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.32);
+  }
+
+  .navbar-toggle {
+    border: none;
+  }
+
+  .navbar-inverse .navbar-toggle:hover,
+  .navbar-inverse .navbar-toggle:focus {
+    background-color: transparent;
+  }
+}
+
+.nav-is-visible .icon-bar {
+  background-color: #ffffff !important;
+}
+
+.icon-bar-2 {
+  margin-left: 6px;
+  width: 16px !important;
+}
+
+.navbar-toggle .icon-bar+.icon-bar {
+  margin-top: 6px !important;
+}
+
+
+// MOBILE NAVIGATION OVERLAY AND STYLES
+.overlay {
+
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  background: $main_green; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient($main_green, $main_blue); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient($main_green, $main_blue); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient($main_green, $main_blue); /* For Firefox 3.6 to 15 */
+  background: linear-gradient($main_green, $main_blue); /* Standard syntax (must be last) */
+  overflow-y: hidden;
+  transition: 0.3s;
+}
+
+#myNav .container_mynav {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 48px;
+  padding-right: 24px;
+  padding-top: 16px;
+  width: 100%;
+}
+
+.overlay-data {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.overlay-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay-content {
+  position: relative;
+  top: 25%;
+  width: auto;
+  text-align: center;
+  margin-top: 30px;
+  float: right;
+}
+
+.overlay-content .active {
+  border: 1px solid white;
+}
+
+.overlay-content a {
+  padding: 2px 24px 6px 24px;
+  margin: 4px 0;
+  text-decoration: none;
+  font-size: 36px;
+  color: white;
+  font-weight: 300;
+  display: block;
+  transition: 0.3s;
+  text-align: right;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #f1f1f1;
+}
+
+.closebtn {
+  color: white;
+  float: right;
+  font-size: 60px !important;
+}
+
+.closebutton_div {
+  display: inline-block;
+  width: 100%;
+  padding-right: 24px;
+}
+
+#mobile_button_close {
+  padding: 0;
+
+  img {
+    width: 50px;
+  }
+}
+
+@media screen and (max-height: 450px) {
+  .overlay {overflow-y: auto;}
+  .overlay a {font-size: 20px}
+  .closebtn {
+    font-size: 40px !important;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+@media screen and (min-width: 321px) and (max-width: 500px) {
+  .overlay-content {
+    top: 10%;
+  }
+
+  #mobile_button_close {
+    padding: 0;
+
+    img {
+      width: 32px;
+    }
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .overlay-content {
+    top: 10%;
+  }
+
+  #mobile_button_close {
+    padding: 0;
+
+    img {
+      width: 32px;
+    }
+  }
+}

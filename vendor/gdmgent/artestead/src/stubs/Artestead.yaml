@@ -1,0 +1,18 @@
+---
+ip: "192.168.10.10"
+memory: 2048
+cpus: 1
+provider: virtualbox
+
+folders:
+    - map: ~/Code
+      to: /home/vagrant/Code
+      type: ~ # folder type
+
+sites:
+    - map: www.artestead.local
+      to: /home/vagrant/Code/Artestead/www
+      type: ~ # site type
+
+databases:
+    - artestead_local

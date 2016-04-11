@@ -1,0 +1,106 @@
+// -----------------------------------------------------------------------------
+// This file contains very basic styles.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+/**
+ * Set up a decent box model on the root element
+ */
+html {
+  box-sizing: border-box;
+}
+
+/**
+ * Make all elements from the DOM inherit from the parent box-sizing
+ * Since `*` has a specificity of 0, it does not override the `html` value
+ * making all elements inheriting from the root box-sizing value
+ * See: https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
+ */
+*, *::before, *::after {
+  box-sizing: inherit;
+} 
+
+/**
+ * Basic styles for links
+ */
+a {
+  color: $brand-color;
+  text-decoration: none;
+
+  @include on-event {
+    color: $text-color;
+    text-decoration: underline;
+  }
+}
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: #c8c8c8;
+  line-height: 28px;
+  overflow-x: hidden !important;
+  margin: auto !important;
+  overflow: scroll;
+
+  height: 100%;
+  background: $main_green; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient($main_green, $main_blue); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient($main_green, $main_blue); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient($main_green, $main_blue); /* For Firefox 3.6 to 15 */
+  background: linear-gradient($main_green, $main_blue); /* Standard syntax (must be last) */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* PRE LOADER */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fefefe;
+  z-index: 99999;
+  height: 100%;
+  width: 100%;
+  overflow: hidden !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .col-xxs {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: relative;
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .col-xxs-600 {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+    position: relative;
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+
+}
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+
+}
+
+@media screen and (max-width: 500px) {
+
+}
+
+@media screen and (max-width: 320px) {
+
+}

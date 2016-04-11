@@ -1,0 +1,95 @@
+<div id="flight_create_content" ng-cloak>
+    <md-toolbar>
+        <!--<h1 class="welkom_user">-->
+        <!--<span>Welkom {{ account.user.name }}</span>-->
+        <!--</h1>-->
+        <div class="flight_create_intro">
+            {{vm.$$ui.title}}
+        </div>
+
+        <div class="flight_create_subtitle">
+            {{vm.$$ui.subtitle}}
+        </div>
+    </md-toolbar>
+
+    <md-content>
+
+        <form name="form" novalidate>
+            <div class="flight_create_options">
+                <div class="col-lg-offset-0 col-lg-6 col-md-offset-0 col-md-5 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10 col-xxs-offset-1 col-xxs-10">
+                    <div class="flight_create_option flight_airline full col-xs-12">
+                        <h5>Airline</h5>
+
+                        <!-- Standard Select -->
+                        <!--<div class="mdl-selectfield">-->
+                            <!--<label>Standard Select</label>-->
+                            <!--<select class="browser-default" ng-model="vm.flight.airline" name="fAirline" required="">-->
+                                <!--<option value="" disabled>Choose your airline</option>-->
+                                <!--<option value="1" selected>Option 1</option>-->
+                                <!--<option value="2">Option 2</option>-->
+                                <!--<option value="3">Option 3</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                        <input type="text" ng-model="vm.flight.airline" name="fAirline" placeholder="Choose your airline" required="">
+                        <div ng-show="form.$submitted" class="ngShow">
+                            <div ng-show="form.fAirline.$error.required">Airline required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-xxs-12">
+                    <div class="flight_create_option between col-xs-12">
+                        <p>
+                            <i class="material-icons">all_inclusive</i>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-offset-0 col-lg-3 col-md-offset-0 col-md-3 col-sm-offset-2 col-sm-4 col-xs-offset-1 col-xs-5 col-xxs-offset-1 col-xxs-5 col-500">
+                    <div class="flight_create_option flight_number full col-xs-12">
+                        <h5>Flight number</h5>
+                        <input type="number" ng-model="vm.flight.number" name="fNumber" placeholder="Enter your number" required="">
+                        <div ng-show="form.$submitted" class="ngShow">
+                            <div ng-show="form.fNumber.$error.required">Number required</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-offset-0 col-lg-2 col-md-3 col-sm-4 col-xs-5 col-xxs-5 col-500">
+                    <div class="flight_create_option flight_date full col-xs-12">
+                        <h5>Date</h5>
+                        <input type="date" ng-model="vm.flight.today" name="fDate" class="datepicker" required=""
+                               min="{{vm.flight.today | date:'yyyy-MM-dd'}}">
+                        <div ng-show="form.$submitted" class="ngShow">
+                            <div ng-show="form.fDate.$error.required">Date required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="col-lg-2 col-md-2 col-sm-offset-0 col-sm-4 col-xs-offset-0 col-xs-5 col-xxs-offset-0 col-xxs-5 col-500">-->
+                    <!--<div class="flight_create_option flight_date full col-xs-12">-->
+                        <!--<h5>Hour (0-23)</h5>-->
+                        <!--<input type="number" ng-model="vm.flight.hour" name="fHour" placeholder="0" class="" required="">-->
+                        <!--<div ng-show="form.$submitted" class="ngShow"-->
+                             <!--min="0" max="23">-->
+                            <!--<div ng-show="form.fHour.$error.required">Only 0-23</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="buttons_create col-xs-12">
+                    <div class="button_left col-xs-6">
+                        <input type="button" ng-click="vm.go('/')" class="own_btn back_button" target="_self" value="BACK">
+                        <!--<a href="/" class="own_btn back_button" target="_self">BACK</a>-->
+                    </div>
+
+                    <div class="button_right col-xs-6">
+                        <input type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self" value="NEXT">
+                        <!--<a href="" type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self">NEXT</a>-->
+                    </div>
+                </div>
+            </div>
+        </form>
+    </md-content>
+</div>

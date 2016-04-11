@@ -1,0 +1,46 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the header of the site/application.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+header {
+
+  .navbar-header {
+
+    .navbar-brand {
+      padding-top: 10px;
+
+      img {
+        max-height: 30px;
+        height: 50px;
+        -webkit-backface-visibility: hidden;
+      }
+    }
+  }
+
+  .navbar-inverse {
+
+    .navbar-nav {
+
+      li {
+
+        a {
+          color: white;
+          font-size: 1.6rem;
+          font-weight: 300;
+          padding-bottom: 14px;
+        }
+
+        a:hover {
+          color: $main_green;
+        }
+
+        a.active {
+          color: $main_green;
+          border-bottom: 2px solid $main_green;
+        }
+      }
+    }
+  }
+}
+

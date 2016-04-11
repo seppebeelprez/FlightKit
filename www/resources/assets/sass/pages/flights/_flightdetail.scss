@@ -1,0 +1,45 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the flight detail page.
+// -----------------------------------------------------------------------------
+@import "../../themes/default";
+
+#flight_detail_content {
+  padding-top: 32px;
+
+  .flight_detail_intro {
+    text-align: center;
+    color: $white;
+    font-size: 3rem;
+    font-weight: 300;
+  }
+
+  .flight_detail_subtitle {
+    text-align: center;
+    color: $white;
+    font-size: 2.4rem;
+    font-weight: 300;
+    margin-bottom: 64px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #flight_detail_content {
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+  #flight_detail_content {
+    padding-top: 32px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #flight_detail_content {
+    padding-top: 32px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #flight_detail_content {
+  }
+}

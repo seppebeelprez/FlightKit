@@ -68,6 +68,9 @@ class FlightsController extends Controller
             $airline = $request->input('airline');
             $number = $request->input('number');
             $date = $request->input('day');
+            $flightId = $request->input('flightId');
+            $departure = $request->input('departure');
+            $arrival = $request->input('arrival');
 
 
             //Check if flight is already in database
@@ -75,6 +78,9 @@ class FlightsController extends Controller
                 ->where('airline', $airline)
                 ->where('number', $number)
                 ->where('day', $date)
+                ->where('flightId', $flightId)
+                ->where('departure', $departure)
+                ->where('arrival', $arrival)
                 ->first();
 
             //If no, create new flight
@@ -84,6 +90,9 @@ class FlightsController extends Controller
                     'airline'   => $airline,
                     'number'    => $number,
                     'day'       => $date,
+                    'flightId'  => $flightId,
+                    'departure'  => $departure,
+                    'arrival'  => $arrival,
                 ));
 
                 //Save flight before updating the pivot table

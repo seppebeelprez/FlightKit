@@ -39,7 +39,7 @@ return [
     'facebook' => [
         'client_id'     => '1692779330963372',
         'client_secret' => 'e15eb7202a8b68ffca5f7c2996a0007a',
-        'redirect'      => 'http://phplaravel-18195-40055-102020.cloudwaysapps.com/callback',
+        'redirect'      => 'http://www.flightkit.dev/callback',
     ],
 
 ];

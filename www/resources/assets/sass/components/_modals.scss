@@ -1,0 +1,87 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the modal component.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+.modal {
+  background-color: transparent;
+  box-shadow: none;
+  width: 64%;
+
+  .modal-dialog {
+    margin: 0;
+    width: 100%;
+
+    .modal-content {
+      border-radius: 0;
+      border: none;
+      background-color: rgba(255,255,255,0.9);
+
+      .modal-body {
+        padding: 0;
+
+        .modal-title {
+          text-align: center;
+          color: $main_green;
+
+          span {
+            font-size: 2rem;
+          }
+        }
+
+        .modal-check {
+          padding: 32px 0;
+          text-align: center;
+          color: #757575;
+
+          .date {
+            display: block;
+          }
+
+          span {
+            font-size: 1.6rem;
+          }
+
+          p {
+            margin-bottom: 0;
+            padding: 8px 0;
+
+            i {
+              -webkit-transform: rotate(180deg);
+            }
+          }
+        }
+
+        .modal-info {
+          padding: 0 24px;
+          text-align: center;
+          color: #757575;
+        }
+      }
+    }
+  }
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .modal {
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .modal {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .modal {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .modal {
+    width: 90%;
+  }
+}

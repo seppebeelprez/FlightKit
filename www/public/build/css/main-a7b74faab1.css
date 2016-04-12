@@ -487,7 +487,7 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 /**
  * Hide element while making it readable for screen readers
  * Shamelessly borrowed from HTML5Boilerplate:
- * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-4335ed4c4e.css#L119-L133
+ * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-a7b74faab1.css#L119-L133
  */
 .visually-hidden {
   border: 0;
@@ -761,6 +761,134 @@ header .navbar-inverse .navbar-toggle:focus {
 .next_button:hover {
   border: 1px solid #33CC99;
   background-color: #33CC99; }
+
+.buttons_create_modal {
+  margin-top: 32px; }
+  .buttons_create_modal .button_left {
+    text-align: right; }
+
+.modal_btn {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  color: #ffffff;
+  font-size: 1.6rem;
+  min-width: 84px; }
+
+.modal_btn:hover,
+.modal_btn:active,
+.modal_btn:visited,
+.modal_btn:focus {
+  text-decoration: none;
+  color: #ffffff; }
+
+.modal_btn:focus {
+  outline: none; }
+
+.modal_cancel_button {
+  background-color: transparent;
+  border: 1px solid #EF402C;
+  color: #EF402C; }
+
+.modal_cancel_button:hover,
+.modal_cancel_button:active {
+  background-color: #EF402C;
+  border: 1px solid #EF402C; }
+
+.modal_add_button {
+  border: 1px solid #30B996;
+  background-color: #30B996; }
+
+.modal_add_button:hover {
+  border: 1px solid #33CC99;
+  background-color: #33CC99; }
+
+.buttons_error_modal {
+  margin-top: 32px; }
+  .buttons_error_modal .button_right {
+    text-align: center; }
+
+.modal_btn_error {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  color: #ffffff;
+  font-size: 1.6rem;
+  min-width: 116px; }
+
+.modal_btn_error:hover,
+.modal_btn_error:active,
+.modal_btn_error:visited,
+.modal_btn_error:focus {
+  text-decoration: none;
+  color: #ffffff; }
+
+.modal_btn_error:focus {
+  outline: none; }
+
+.modal_error_cancel_button {
+  background-color: transparent;
+  border: 1px solid #EF402C;
+  color: #EF402C; }
+
+.modal_error_cancel_button:hover,
+.modal_error_cancel_button:active {
+  background-color: #EF402C;
+  border: 1px solid #EF402C; }
+
+.modal_error_again_button {
+  border: 1px solid #30B996;
+  background-color: #30B996; }
+
+.modal_error_again_button:hover {
+  border: 1px solid #33CC99;
+  background-color: #33CC99; }
+
+.modal {
+  background-color: transparent;
+  box-shadow: none;
+  width: 64%; }
+  .modal .modal-dialog {
+    margin: 0;
+    width: 100%; }
+    .modal .modal-dialog .modal-content {
+      border-radius: 0;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.9); }
+      .modal .modal-dialog .modal-content .modal-body {
+        padding: 0; }
+        .modal .modal-dialog .modal-content .modal-body .modal-title {
+          text-align: center;
+          color: #30B996; }
+          .modal .modal-dialog .modal-content .modal-body .modal-title span {
+            font-size: 2rem; }
+        .modal .modal-dialog .modal-content .modal-body .modal-check {
+          padding: 32px 0;
+          text-align: center;
+          color: #757575; }
+          .modal .modal-dialog .modal-content .modal-body .modal-check .date {
+            display: block; }
+          .modal .modal-dialog .modal-content .modal-body .modal-check span {
+            font-size: 1.6rem; }
+          .modal .modal-dialog .modal-content .modal-body .modal-check p {
+            margin-bottom: 0;
+            padding: 8px 0; }
+            .modal .modal-dialog .modal-content .modal-body .modal-check p i {
+              -webkit-transform: rotate(180deg); }
+        .modal .modal-dialog .modal-content .modal-body .modal-info {
+          padding: 0 24px;
+          text-align: center;
+          color: #757575; }
+
+@media only screen and (max-width: 992px) {
+  .modal {
+    width: 80%; } }
+
+@media only screen and (max-width: 768px) {
+  .modal {
+    width: 80%; } }
+
+@media only screen and (max-width: 500px) {
+  .modal {
+    width: 90%; } }
 
 #app-layout {
   padding-bottom: 0 !important; }
@@ -1298,12 +1426,14 @@ header .navbar-inverse .navbar-toggle:focus {
     margin-bottom: 64px; }
   #flight_overview_content .flights_overview .flight_item {
     background-color: rgba(0, 0, 0, 0.24);
-    color: #ffffff;
+    color: #ffffff !important;
     margin-bottom: 16px;
     padding-top: 16px;
     padding-bottom: 8px;
     font-size: 1.6rem;
     font-weight: 300; }
+    #flight_overview_content .flights_overview .flight_item a {
+      color: #ffffff !important; }
     #flight_overview_content .flights_overview .flight_item span {
       margin-bottom: 8px;
       display: block; }
@@ -1314,6 +1444,10 @@ header .navbar-inverse .navbar-toggle:focus {
       display: inline-block;
       position: absolute;
       margin-left: 8px; }
+  #flight_overview_content .flight_landed .fi_gate .fi_first {
+    height: 22px !important; }
+  #flight_overview_content .flight_landed .fi_gate .fi_remove a {
+    color: #ffffff; }
 
 @media screen and (max-width: 768px) {
   #flight_overview_content .flight_overview_intro {

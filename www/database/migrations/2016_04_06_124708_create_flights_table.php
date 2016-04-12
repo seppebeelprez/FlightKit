@@ -30,6 +30,9 @@ class CreateFlightsTable extends Migration
             $table->string('airline');
             $table->integer('number');
             $table->date('day');
+            $table->integer('flightId');
+            $table->string('departure')->nullable();
+            $table->string('arrival')->nullable();
         });
     }
 

@@ -3,6 +3,8 @@
 // -----------------------------------------------------------------------------
 @import "../themes/default";
 
+
+// CREATE AND BACK BUTTONS ON FLIGHTS/CREATE PAGE
 .buttons_create {
   margin-top: 64px;
 }
@@ -46,3 +48,111 @@
   border: 1px solid $accent_green;
   background-color: $accent_green;
 }
+
+
+
+
+// ADD AND CANCEL BUTTONS ON MODAL ON FLIGHTS/CREATE PAGE ON CONFIRM
+.buttons_create_modal {
+  margin-top: 32px;
+
+  .button_left {
+    text-align: right;
+  }
+}
+
+.modal_btn {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  color: $white;
+  font-size: 1.6rem;
+  min-width: 84px;
+}
+
+.modal_btn:hover,
+.modal_btn:active,
+.modal_btn:visited,
+.modal_btn:focus {
+  text-decoration: none;
+  color: $white;
+}
+
+.modal_btn:focus {
+  outline: none;
+}
+
+.modal_cancel_button {
+  background-color: transparent;
+  border: 1px solid $button_red;
+  color: $button_red;
+}
+
+.modal_cancel_button:hover,
+.modal_cancel_button:active {
+  background-color: $button_red;
+  border: 1px solid $button_red;
+}
+
+.modal_add_button {
+  border: 1px solid $main_green;
+  background-color: $main_green;
+}
+
+.modal_add_button:hover {
+  border: 1px solid $accent_green;
+  background-color: $accent_green;
+}
+
+
+
+// CANCEL AND TRY AGAIN BUTTONS ON MODAL ON FLIGHTS/CREATE PAGE ON ERROR
+.buttons_error_modal {
+  margin-top: 32px;
+
+  .button_right {
+    text-align: center;
+  }
+}
+
+.modal_btn_error {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  color: $white;
+  font-size: 1.6rem;
+  min-width: 116px;
+}
+
+.modal_btn_error:hover,
+.modal_btn_error:active,
+.modal_btn_error:visited,
+.modal_btn_error:focus {
+  text-decoration: none;
+  color: $white;
+}
+
+.modal_btn_error:focus {
+  outline: none;
+}
+
+.modal_error_cancel_button {
+  background-color: transparent;
+  border: 1px solid $button_red;
+  color: $button_red;
+}
+
+.modal_error_cancel_button:hover,
+.modal_error_cancel_button:active {
+  background-color: $button_red;
+  border: 1px solid $button_red;
+}
+
+.modal_error_again_button {
+  border: 1px solid $main_green;
+  background-color: $main_green;
+}
+
+.modal_error_again_button:hover {
+  border: 1px solid $accent_green;
+  background-color: $accent_green;
+}
+

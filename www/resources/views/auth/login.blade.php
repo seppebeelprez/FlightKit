@@ -15,9 +15,9 @@
                         <div class="input-group col-xs-12">
                             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-envelope fa-2x"></i></span>
                             <input type="email" class="form-control" name="email" aria-describedby="basic-addon1" value="{{ old('email') }}">
-                            <div ng-show="form.$submitted" class="ngShow">
-                                <div ng-show="form.email.$error.required">Email required</div>
-                            </div>
+                            {{--<div ng-show="form.$submitted" class="ngShow">--}}
+                                {{--<div ng-show="form.email.$error.required">Email required</div>--}}
+                            {{--</div>--}}
                         </div>
 
                         @if ($errors->has('email'))

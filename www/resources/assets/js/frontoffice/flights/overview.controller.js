@@ -193,10 +193,14 @@
             angular.forEach(vm.data.flights,function(flight,key){
 
                 var result = $.ajax({
+                    //url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
+                    //'' + flight.airline + '/' +
+                    //'' + flight.number + '/dep/' +
+                    //'' + $filter('date')(flight.day, 'yyyy/MM/dd') + '?appId=' +
+                    //'' + config.appId + '&appKey=' +
+                    //'' + config.appKey + '',
                     url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
-                    '' + flight.airline + '/' +
-                    '' + flight.number + '/dep/' +
-                    '' + $filter('date')(flight.day, 'yyyy/MM/dd') + '?appId=' +
+                    '' + flight.flightId + '?appId=' +
                     '' + config.appId + '&appKey=' +
                     '' + config.appKey + '',
                     dataType: 'jsonp',

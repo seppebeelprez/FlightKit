@@ -28,6 +28,7 @@ var vendor = {
     angularModule   : {
         animate     : elixir.config.bowerDir + '/angular-animate/angular-animate.js',
         aria        : elixir.config.bowerDir + '/angular-aria/angular-aria.js',
+        bootstrap   : elixir.config.bowerDir + '/angular-bootstrap/ui-bootstrap-tpls.min.js',
         cookies     : elixir.config.bowerDir + '/angular-cookies/angular-cookies.js',
         material    : elixir.config.bowerDir + '/angular-material/',
         messages    : elixir.config.bowerDir + '/angular-messages/angular-messages.js',
@@ -98,6 +99,7 @@ elixir(function(mix) {
                 vendor.angular,
                 vendor.angularModule.animate,
                 vendor.angularModule.aria,
+                vendor.angularModule.bootstrap,
                 vendor.angularModule.cookies,
                 vendor.angularModule.material + 'angular-material.js',
                 vendor.angularModule.messages,

@@ -12,15 +12,13 @@
     createFlightsFactory.$inject = [
         '$http',
         'config',
-        '$state',
-        '$resource'
+        '$state'
     ];
 
     function createFlightsFactory(
         $http,
         config,
-        $state,
-        $resource
+        $state
     ) {
         return {
 
@@ -30,7 +28,8 @@
                     {
                         'airline'   : CreateFlight.airline,
                         'number'    : CreateFlight.number,
-                        'day'       : CreateFlight.date
+                        'day'       : CreateFlight.date,
+                        'flightId'  : CreateFlight.flightId
                     })
                     .then (function successCallback (data, status, headers, config){
                             console.log ("data sent to API, new object created");
@@ -40,22 +39,6 @@
                             console.log("data not sent to API, new object is not created");
                         });
             }
-
-            //, scheduleFlightAPI : function(ScheduleFlightAPI) {
-            //    //BECAUSE FUCK CORS ORIGIN SHIT
-            //    return $.ajax({
-            //            url: 'https://api.flightstats.com/flex/schedules/rest/v1/jsonp/flight/' +
-            //            '' + ScheduleFlightAPI.airline + '/' +
-            //            '' + ScheduleFlightAPI.number + '/departing/' +
-            //            '' + ScheduleFlightAPI.year + '/' +
-            //            '' + ScheduleFlightAPI.month + '/' +
-            //            '' + ScheduleFlightAPI.day + '?appId=' +
-            //            '' + config.appId + '&appKey=' +
-            //            '' + config.appKey + '',
-            //            dataType: 'jsonp',
-            //            crossDomain: true
-            //        });
-            //}
         }
     }
 

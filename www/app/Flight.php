@@ -13,7 +13,7 @@ class Flight extends Model
      * @var array
      */
     protected $fillable = [
-        'airline', 'number', 'day' ,'user_id',
+        'airline', 'number', 'day', 'flightId', 'departure', 'arrival' ,'user_id',
     ];
 
     public $timestamps = false;

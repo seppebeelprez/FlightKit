@@ -42,7 +42,12 @@
                                 <p ng-if="flight.flightStatus.operationalTimes.estimatedGateDeparture">{{ flight.flightStatus.operationalTimes.estimatedGateDeparture.dateLocal | date : 'hh:mm a' }},
                                     {{ flight.flightStatus.operationalTimes.estimatedGateDeparture.dateLocal | date : 'MMM d' }}</p>
 
-                                <p ng-if="!flight.flightStatus.operationalTimes.estimatedGateDeparture">-</p>
+                                <p ng-if="!flight.flightStatus.operationalTimes.estimatedGateDeparture
+                                          && flight.flightStatus.operationalTimes.scheduledGateDeparture">{{ flight.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'hh:mm a' }},
+                                    {{ flight.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'MMM d' }}</p>
+
+                                <p ng-if="!flight.flightStatus.operationalTimes.estimatedGateDeparture
+                                          && !flight.flightStatus.operationalTimes.scheduledGateDeparture">-</p>
                             </span>
                         </div>
                     </div>

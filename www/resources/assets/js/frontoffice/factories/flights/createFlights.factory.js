@@ -12,13 +12,15 @@
     createFlightsFactory.$inject = [
         '$http',
         'config',
-        '$state'
+        '$state',
+        '$window'
     ];
 
     function createFlightsFactory(
         $http,
         config,
-        $state
+        $state,
+        $window
     ) {
         return {
 
@@ -33,7 +35,7 @@
                     })
                     .then (function successCallback (data, status, headers, config){
                             console.log ("data sent to API, new object created");
-                            $state.go('/flights',  {reload:true});
+                            $window.location.href = '/flights';
                         },
                         function errorCallback (){
                             console.log("data not sent to API, new object is not created");

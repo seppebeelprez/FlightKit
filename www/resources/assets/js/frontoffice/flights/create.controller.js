@@ -168,32 +168,13 @@
             vm.flight.flightId = vm.checkCurrentFlight[0].flightStatuses[0].flightId;
             vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
 
-            //vm.flight.departureCode = vm.checkCurrentFlight[0].flightStatuses[0].departureAirportFsCode;
-            //vm.flight.arrivalCode = vm.checkCurrentFlight[0].flightStatuses[0].arrivalAirportFsCode;
-            //
-            //vm.allAirports = [];
-            //vm.allAirports = vm.checkCurrentFlight[0].appendix.airports;
-            //
-            //vm.departureAirport = [];
-            //vm.arrivalAirport = [];
-            //
-            //angular.forEach(vm.allAirports, function(airport, key) {
-            //    //console.log(key, airport);
-            //    if ( airport.iata == vm.flight.departureCode ) {
-            //        vm.departureAirport = airport;
-            //        console.log('Start: ', vm.departureAirport);
-            //    }
-            //    else if ( airport.iata == vm.flight.arrivalCode ) {
-            //        vm.arrivalAirport = airport;
-            //        console.log('End: ', vm.arrivalAirport);
-            //    }
-            //});
-
-            console.log('All airports: ', vm.allAirports);
-            console.log('original flight: ', vm.flight);
-
             createFlightsFactory.createFlight(vm.flight);
-            $window.location.href = '/flights';
+
+            //console.log('All airports: ', vm.allAirports);
+            //console.log('original flight: ', vm.flight);
+            //
+            //createFlightsFactory.createFlight(vm.flight);
+            //$window.location.href = '/flights';
         }
 
         // Go Back

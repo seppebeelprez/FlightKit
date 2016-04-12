@@ -7,4 +7,6 @@ Homestead.json
 /.idea
 /.sass-cache
 .idea/*
+/config/app.php
+/config/services.php
 

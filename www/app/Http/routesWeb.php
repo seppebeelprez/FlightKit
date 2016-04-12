@@ -11,7 +11,7 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/callback', 'SocialAuthController@callback');
 
 //    Route::get('/home', 'MainController@index');
-    Route::get('/account', 'Account\AccountController@index');
+//    Route::get('/account', 'Account\AccountController@index');
 //    Route::resource('/flights', 'Flights\FlightsController@index');
 //    Route::resource('/flights/detail', 'Flights\FlightsController@detail');
 
@@ -22,7 +22,7 @@ Route::group(['middleware' => 'web'], function () {
         Route::resource('detail', 'Flights\FlightsController@detail');
     });
 
-    Route::group(['prefix' => 'trips'], function () {
-        Route::resource('overview', 'Trips\TripsController@index');
-    });
+//    Route::group(['prefix' => 'trips'], function () {
+//        Route::resource('overview', 'Trips\TripsController@index');
+//    });
 });

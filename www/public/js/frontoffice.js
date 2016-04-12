@@ -823,7 +823,7 @@
         // ViewModel
         // =========
         var vm = this;
-        $scope.accountApi = $rootScope.ownAPI + 'account';
+        //$scope.accountApi = $rootScope.ownAPI + 'account';
 
         // User Interface
         // --------------
@@ -831,12 +831,12 @@
             title: 'Home'
         };
 
-        vm.user = GetAccountFactory.getAccount($scope);
-
-        vm.reloadRoute = function() {
-            $route.reload();
-            console.log('reload!')
-        }
+        //vm.user = GetAccountFactory.getAccount($scope);
+        //
+        //vm.reloadRoute = function() {
+        //    $route.reload();
+        //    console.log('reload!')
+        //}
     }
 
 })();

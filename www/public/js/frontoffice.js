@@ -228,6 +228,117 @@
 ;(function () {
     'use strict';
 
+    angular.module('app.home')
+        .controller('HomeController', HomeController);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    HomeController.$inject = [
+        // Angular
+        '$log',
+        '$scope',
+        '$route',
+        '$rootScope',
+
+        // Custom
+        'GetAccountFactory'
+    ];
+
+    function HomeController(
+        // Angular
+        $log,
+        $scope,
+        $route,
+        $rootScope,
+
+        // Custom
+        GetAccountFactory
+    ) {
+        // ViewModel
+        // =========
+        var vm = this;
+        //$scope.accountApi = $rootScope.ownAPI + 'account';
+
+        // User Interface
+        // --------------
+        vm.$$ui = {
+            title: 'Home'
+        };
+
+        //vm.user = GetAccountFactory.getAccount($scope);
+        //
+        //vm.reloadRoute = function() {
+        //    $route.reload();
+        //    console.log('reload!')
+        //}
+    }
+
+})();
+
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
+    angular.module('app.home')
+        .config(Routes);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    Routes.$inject = [
+        // Angular
+        '$stateProvider',
+        '$urlRouterProvider',
+        '$locationProvider'
+    ];
+
+    function Routes(
+        // Angular
+        $stateProvider,
+        $urlRouterProvider,
+        $locationProvider
+    ) {
+        var getView = function( viewName ){
+            return '/views/' + viewName + '.view.html';
+        };
+
+        $urlRouterProvider.otherwise('/');
+
+        $stateProvider
+
+            .state('/landing', {
+                url: '/home',
+                views: {
+                    main: {
+                        controller: 'HomeController as vm',
+                        templateUrl: getView('home/home')
+                    }
+                }
+            })
+            .state('/', {
+                url: '/',
+                views: {
+                    main: {
+                        controller: 'HomeController as vm',
+                        templateUrl: getView('home/home')
+                    }
+                }
+            });
+
+        // use the HTML5 History API
+        $locationProvider.html5Mode(true);
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
     angular.module('app.flights')
         .controller('FlightsCreateController', FlightsCreateController);
 
@@ -337,8 +448,6 @@
                     vm.departureAirport = [];
                     vm.arrivalAirport = [];
 
-                    vm.test = 'test';
-
                     angular.forEach(vm.allAirports, function(airport, key) {
                         //console.log(key, airport);
                         if ( airport.iata == vm.flight.departureCode ) {
@@ -389,6 +498,7 @@
             console.log('createFlight: ', vm.checkCurrentFlight);
             vm.flight.flightId = vm.checkCurrentFlight[0].flightStatuses[0].flightId;
             vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
+            console.log('vm.flight: ', vm.flight);
 
             createFlightsFactory.createFlight(vm.flight);
 
@@ -592,86 +702,6 @@
         };
 
 
-        //function flightDashboard() {
-        //
-        //    var getFlights = function() {
-        //        var params = {};
-        //        return getFlightsFactory
-        //            .query(params)
-        //            .$promise.then(function(data) {
-        //                vm.flights = data[0].flights;
-        //                console.log('vm.flights: ', vm.flights);
-        //                return vm.flights;
-        //            });
-        //    },
-        //        getAdditionalInfo = function() {
-        //
-        //            //$scope.data = null ; //remove existing data
-        //            //var promises = [];
-        //            //angular.forEach(vm.flights,function(flight,key){
-        //            //
-        //            //    var result = $.ajax({
-        //            //        url: 'https://api.flightstats.com/flex/schedules/rest/v1/jsonp/flight/' +
-        //            //        '' + flight.airline + '/' +
-        //            //        '' + flight.number + '/departing/' +
-        //            //        '' + $filter('date')(flight.day, 'yyyy/MM/dd') + '?appId=' +
-        //            //        '' + config.appId + '&appKey=' +
-        //            //        '' + config.appKey + '',
-        //            //        dataType: 'jsonp',
-        //            //        crossDomain: true
-        //            //    });
-        //            //    promises.push(result);
-        //            //
-        //            //});
-        //            //$q.all(promises).then(function success(data){
-        //            //    console.log($scope.data); // Should all be here
-        //            //}, function failure(err){
-        //            //    // Can handle this is we want
-        //            //});
-        //
-        //            //angular.forEach(vm.flights, function(flight, key){
-        //            //    console.log('In foreach');
-        //            //    //BECAUSE FUCK CORS ORIGIN SHIT
-        //            //
-        //            //    $.ajax({
-        //            //        url: 'https://api.flightstats.com/flex/schedules/rest/v1/jsonp/flight/' +
-        //            //        '' + flight.airline + '/' +
-        //            //        '' + flight.number + '/departing/' +
-        //            //        '' + $filter('date')(flight.day, 'yyyy/MM/dd') + '?appId=' +
-        //            //        '' + config.appId + '&appKey=' +
-        //            //        '' + config.appKey + '',
-        //            //        dataType: 'jsonp',
-        //            //        crossDomain: true
-        //            //    }).then(function(result) {
-        //            //        console.log('Result: ', result);
-        //            //        $scope.promises.push(result);
-        //            //    });
-        //            //
-        //            //    //vm.promises.push(vm.data.status);
-        //            //
-        //            //    //vm.promises.push(flight = {
-        //            //    //    id              : flight.id,
-        //            //    //    departure       : data.responseJSON.appendix.airports[0].name + " (" + data.responseJSON.appendix.airports[0].iata +")",
-        //            //    //    arrival         : data.responseJSON.appendix.airports[1].name + " (" + data.responseJSON.appendix.airports[1].iata +")",
-        //            //    //    departureTime   : $filter('date')(data.responseJSON.scheduledFlights[0].departureTime, 'hh:mm a, MMM d'),
-        //            //    //    carrier         : data.responseJSON.scheduledFlights[0].carrierFsCode,
-        //            //    //    number          : data.responseJSON.scheduledFlights[0].flightNumber
-        //            //    //});
-        //            //
-        //            //    console.log('Promises: ', vm.promises);
-        //            //});
-        //
-        //        };
-        //
-        //    getFlights()
-        //        .then(getAdditionalInfo);
-        //
-        //    //console.log('Outside: ', getAdditionalInfo());
-        //
-        //}
-
-
-
         function getFlights() {
             var params = {};
             return getFlightsFactory
@@ -687,92 +717,177 @@
         function getFlightsSuccess(response, responseHeader) {
             //$log.success('getFlightsSuccess:', response);
             vm.data = response[0];
-            console.log('Retrieved own flights: ', vm.data.flights);
 
             getSchedules();
-
-            //angular.forEach(vm.data.flights, function(flight, key){
-            //    var params = {
-            //        id      : flight.id,
-            //        airline : flight.airline,
-            //        day     : $filter('date')(flight.day, 'yyyy/MM/dd'),
-            //        number  : flight.number
-            //    };
-            //
-            //    var responsePromise = scheduleFlightAPIFactory.scheduleFlightAPI(params);
-            //
-            //    responsePromise.success(function(data) {
-            //        console.log('scheduleFlightAPIFactory:success: ', data);
-            //        //console.log(data);
-            //
-            //        vm.overview.push(flight = {
-            //            id              : params.id,
-            //            departure       : data.appendix.airports[0].name + " (" + data.appendix.airports[0].iata +")",
-            //            arrival         : data.appendix.airports[1].name + " (" + data.appendix.airports[1].iata +")",
-            //            departureTime   : $filter('date')(data.scheduledFlights[0].departureTime, 'hh:mm a, MMM d'),
-            //            carrier         : data.scheduledFlights[0].carrierFsCode,
-            //            number          : data.scheduledFlights[0].flightNumber
-            //        });
-            //    });
-            //    responsePromise.error(function(data, status, headers, config) {
-            //        console.log('failed!!!!');
-            //    });
-            //
-            //    //vm.overview.push(flight);
-            //});
         }
 
         function getSchedules() {
-            console.log('getSchedules');
-            $scope.data = null ; //remove existing data
-            $scope.data = [];
+
+            //Test array
             vm.allFlightsData = [];
+            //Array to save flight from database
             vm.flights = [];
+
+            //Foreach to get API information for each flight from the user in the database
             angular.forEach(vm.data.flights,function(flight,key){
 
                 var result = $.ajax({
-                    //url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
-                    //'' + flight.airline + '/' +
-                    //'' + flight.number + '/dep/' +
-                    //'' + $filter('date')(flight.day, 'yyyy/MM/dd') + '?appId=' +
-                    //'' + config.appId + '&appKey=' +
-                    //'' + config.appKey + '',
                     url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
                     '' + flight.flightId + '?appId=' +
                     '' + config.appId + '&appKey=' +
                     '' + config.appKey + '',
                     dataType: 'jsonp',
-                    crossDomain: true,
-                    success: function(data) {
-                        console.log('data:', data);
-                        //return vm.flights.push(data);
-                        //
-                        //vm.flights.push(flight = {
-                        //    id                      : flight.id,
-                        //    departure               : data.appendix.airports[0].name + " (" + data.appendix.airports[0].iata +")",
-                        //    arrival                 : data.appendix.airports[1].name + " (" + data.appendix.airports[1].iata +")",
-                        //    departureTime           : $filter('date')(data.flightStatuses[0].departureDate.dateLocal, 'hh:mm a, MMM d'),
-                        //    actualDepartureTime     : $filter('date')(data.flightStatuses[0].operationalTimes.actualGateDeparture.dateLocal, 'hh:mm a, MMM d'),
-                        //    carrier                 : data.flightStatuses[0].carrierFsCode,
-                        //    number                  : data.flightStatuses[0].flightNumber,
-                        //    status                  : data.flightStatuses[0].status
-                        //});
+                    crossDomain: true
+                }).then (function successCallback (data, status, headers, config){
+                        //Empty array to make sure it's empty
+                        vm.currentFlightData = null;
+                        //Array to save API + database info for 1 flight
+                        vm.currentFlightData = {};
+                        //Store API data
+                        vm.currentFlightData.allData = data;
+                        //Store database id to go later to the details view
+                        vm.currentFlightData.databaseId = flight.id;
+                        //Push array with 1 flight to array with multiple flights
+                        vm.flights.push(vm.currentFlightData);
+                    },
+                    function errorCallback (){
+                        console.log("data not sent to API, new object is not created");
+                    });
 
-                        vm.flights.push(data);
-                    }
+                //Fill test array to make sure for each went well!
+                //Use this name for next $q.all
+                //console.log('check 1');
+                vm.allFlightsData.push(result);
+            });
+
+            $q.all(vm.allFlightsData).then(function success(data){
+                //console.log('vm.flights: ', vm.flights); // Should all be here
+
+
+                //Test array
+                vm.checkForEachQAll = [];
+                //Array to store other arrays with checked flight information
+                vm.allCheckedFlights = [];
+
+
+                //For each flight of the user in the database get the correct information
+                //Especially for the departure and arrival airport
+                angular.forEach(vm.flights,function(flight,key){
+
+                    //Get current departure and arrival code of flight
+                    //ex. BRU, JFK
+                    var depCode = null;
+                    var arrCode = null;
+                    depCode = flight.allData.flightStatus.departureAirportFsCode;
+                    //console.log('depCode:', key, depCode);
+                    arrCode = flight.allData.flightStatus.arrivalAirportFsCode;
+                    //console.log('arrCode:', key, arrCode);
+                    //++++
+
+                    //Get all the airports of the current flight
+                    //Connected flight can have multiple airports
+                    //other than the departure and arrival
+                    vm.allAirports = null;
+                    vm.allAirports = [];
+                    vm.allAirports = flight.allData.appendix.airports;
+                    //console.log('vm.allAirports:', vm.allAirports);
+                    //++++
+
+                    //Test array
+                    //vm.foreachCheckDataAirport = null;
+                    vm.foreachCheckDataAirport = [];
+
+                    //Temporary arrays
+                    vm.tempDepartureAirport = null;
+                    vm.tempDepartureAirport = {};
+                    //console.log('vm.tempDepartureAirport:', vm.tempDepartureAirport);
+                    vm.tempArrivalAirport = null;
+                    vm.tempArrivalAirport = {};
+                    //console.log('vm.tempArrivalAirport:', vm.tempArrivalAirport);
+
+
+                    //Loop to each airport of current flight and check if the
+                    //departure and arrival airports correspond, then push info
+                    //to correct place in array checkThisFlight
+                    angular.forEach(vm.allAirports, function(airport, key) {
+                        //console.log(key, airport);
+
+                        //Check if correspond with departureCode
+                        if ( airport.iata == depCode ) {
+                            vm.tempDepartureAirport = airport;
+                            //console.log('tempDepartureAirport: ', vm.tempDepartureAirport);
+                            //vm.checkThisFlight.departureAirport = vm.tempDepartureAirport;
+                        }
+                        //Check if correspond with arrivalCode
+                        else if ( airport.iata == arrCode ) {
+                            vm.tempArrivalAirport = airport;
+                            //console.log('tempArrivalAirport: ', vm.tempArrivalAirport);
+                            //vm.checkThisFlight.arrivalAirport = vm.tempArrivalAirport;
+                        }
+
+                        //console.log('vm.tempDepartureAirport:', key, vm.tempDepartureAirport);
+                        //console.log('vm.tempArrivalAirport:', key, vm.tempArrivalAirport);
+
+                        //Fill test array to make sure for each went well!
+                        //Use this name for next $q.all
+                        //console.log('check 2 = airport check');
+                        //vm.foreachCheckDataAirport.push(airport);
+                    });
+                    //$q.all(vm.foreachCheckDataAirport).then(function success(data) {
+                    //
+                    //}, function failure(err){
+                    //    // Can handle this is we want
+                    //});
+
+                    //console.log('should be after check 2');
+                    //Array to store all information to push to the complete array
+                    //In this array:
+                    // - all flight information about this flight:  'allFlightDetails'
+                    // - departure airport with its information     'departureAirport'
+                    // - arrival airport with its information       'arrivalAirport'
+                    vm.checkThisFlight = null;
+                    vm.checkThisFlight = {};
+
+                    vm.checkThisFlight.departureAirport     = null;
+                    vm.checkThisFlight.arrivalAirport       = null;
+                    vm.checkThisFlight.allFlightDetails     = null;
+                    vm.checkThisFlight.databaseFlightId     = null;
+
+                    //Place all current flight information in allFlightDetails
+                    vm.checkThisFlight.departureAirport     = vm.tempDepartureAirport;
+                    vm.checkThisFlight.arrivalAirport       = vm.tempArrivalAirport;
+                    vm.checkThisFlight.allFlightDetails     = flight.allData;
+                    vm.checkThisFlight.databaseFlightId     = flight.databaseId;
+
+                    //Push current checkThisFlight to allCheckedFlights
+                    //console.log('before push tot allCheckedFlights', vm.checkThisFlight);
+                    vm.allCheckedFlights.push(vm.checkThisFlight);
+                    //console.log('Test checkThisFlight (ONLY 2 TIMES)', key, vm.allCheckedFlights);
+
+                    //Fill test array to make sure for each went well!
+                    //Use this name for next $q.all
+                    //console.log('check 3');
+                    vm.checkForEachQAll.push(flight);
                 });
 
-                //console.log(result);
-                vm.allFlightsData.push(result);
+                $q.all(vm.checkForEachQAll).then(function success(data) {
+                    //console.log('allCheckedFlights out for each: ', vm.allCheckedFlights)
+                    angular.forEach(vm.allCheckedFlights, function(flight, key) {
+                       console.log(key, flight);
+                    });
+                }, function failure(err){
+                    // Can handle this is we want
+                });
 
-            });
-            $q.all(vm.allFlightsData).then(function success(data){
-                console.log('vm.flights: ', vm.flights); // Should all be here
                 //console.log($scope.data);
             }, function failure(err){
                 // Can handle this is we want
             });
 
+        }
+
+        function getCorrectData () {
+          console.log('getCorrectData: ', vm.flights)
         }
 
         function getSchedulesError(reason) {
@@ -787,117 +902,6 @@
 
 })();
 
-/**
- * @author    Seppe Beelprez
- * @copyright Copyright © 2015-2016 Artevelde University College Ghent
- * @license   Apache License, Version 2.0
- */
-;(function () {
-    'use strict';
-
-    angular.module('app.home')
-        .controller('HomeController', HomeController);
-
-    // Inject dependencies into constructor (needed when JS minification is applied).
-    HomeController.$inject = [
-        // Angular
-        '$log',
-        '$scope',
-        '$route',
-        '$rootScope',
-
-        // Custom
-        'GetAccountFactory'
-    ];
-
-    function HomeController(
-        // Angular
-        $log,
-        $scope,
-        $route,
-        $rootScope,
-
-        // Custom
-        GetAccountFactory
-    ) {
-        // ViewModel
-        // =========
-        var vm = this;
-        //$scope.accountApi = $rootScope.ownAPI + 'account';
-
-        // User Interface
-        // --------------
-        vm.$$ui = {
-            title: 'Home'
-        };
-
-        //vm.user = GetAccountFactory.getAccount($scope);
-        //
-        //vm.reloadRoute = function() {
-        //    $route.reload();
-        //    console.log('reload!')
-        //}
-    }
-
-})();
-
-/**
- * @author    Seppe Beelprez
- * @copyright Copyright © 2015-2016 Artevelde University College Ghent
- * @license   Apache License, Version 2.0
- */
-;(function () {
-    'use strict';
-
-    angular.module('app.home')
-        .config(Routes);
-
-    // Inject dependencies into constructor (needed when JS minification is applied).
-    Routes.$inject = [
-        // Angular
-        '$stateProvider',
-        '$urlRouterProvider',
-        '$locationProvider'
-    ];
-
-    function Routes(
-        // Angular
-        $stateProvider,
-        $urlRouterProvider,
-        $locationProvider
-    ) {
-        var getView = function( viewName ){
-            return '/views/' + viewName + '.view.html';
-        };
-
-        $urlRouterProvider.otherwise('/');
-
-        $stateProvider
-
-            .state('/landing', {
-                url: '/home',
-                views: {
-                    main: {
-                        controller: 'HomeController as vm',
-                        templateUrl: getView('home/home')
-                    }
-                }
-            })
-            .state('/', {
-                url: '/',
-                views: {
-                    main: {
-                        controller: 'HomeController as vm',
-                        templateUrl: getView('home/home')
-                    }
-                }
-            });
-
-        // use the HTML5 History API
-        $locationProvider.html5Mode(true);
-    }
-
-})();
 /**
  * @author    Seppe Beelprez
  * @copyright Copyright © 2014-2015 Artevelde University College Ghent
@@ -931,7 +935,9 @@
                         'airline'   : CreateFlight.airline,
                         'number'    : CreateFlight.number,
                         'day'       : CreateFlight.date,
-                        'flightId'  : CreateFlight.flightId
+                        'flightId'  : CreateFlight.flightId,
+                        'departure' : CreateFlight.departureCode,
+                        'arrival'   : CreateFlight.arrivalCode
                     })
                     .then (function successCallback (data, status, headers, config){
                             console.log ("data sent to API, new object created");

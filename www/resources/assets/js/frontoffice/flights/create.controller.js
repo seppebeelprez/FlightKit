@@ -115,8 +115,6 @@
                     vm.departureAirport = [];
                     vm.arrivalAirport = [];
 
-                    vm.test = 'test';
-
                     angular.forEach(vm.allAirports, function(airport, key) {
                         //console.log(key, airport);
                         if ( airport.iata == vm.flight.departureCode ) {
@@ -167,6 +165,7 @@
             console.log('createFlight: ', vm.checkCurrentFlight);
             vm.flight.flightId = vm.checkCurrentFlight[0].flightStatuses[0].flightId;
             vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
+            console.log('vm.flight: ', vm.flight);
 
             createFlightsFactory.createFlight(vm.flight);
 

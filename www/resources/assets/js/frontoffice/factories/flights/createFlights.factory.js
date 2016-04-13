@@ -31,7 +31,9 @@
                         'airline'   : CreateFlight.airline,
                         'number'    : CreateFlight.number,
                         'day'       : CreateFlight.date,
-                        'flightId'  : CreateFlight.flightId
+                        'flightId'  : CreateFlight.flightId,
+                        'departure' : CreateFlight.departureCode,
+                        'arrival'   : CreateFlight.arrivalCode
                     })
                     .then (function successCallback (data, status, headers, config){
                             console.log ("data sent to API, new object created");

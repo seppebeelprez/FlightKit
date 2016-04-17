@@ -85,3 +85,32 @@
     width: 90%;
   }
 }
+
+
+.angucomplete-dropdown {
+  position: absolute;
+  overflow-y: auto;
+  max-height: 200px;
+  z-index: 9999;
+  background-color: $white;
+  width: calc(100%);
+  padding: 16px;
+  margin-top: 24px;
+  margin-left: -16px;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+
+  .angucomplete-row {
+    font-size: 1.6rem;
+    padding: 8px 0;
+    border-bottom: 1px solid $accent_green;
+  }
+
+  .angucomplete-row:hover {
+    cursor: pointer;
+    color: $accent_green;
+  }
+
+  .highlight {
+    color: $accent_green;
+  }
+}

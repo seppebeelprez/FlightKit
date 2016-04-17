@@ -49,6 +49,14 @@
   background-color: $accent_green;
 }
 
+@media (max-width: 500px) {
+  .buttons_create {
+    .button_left {
+
+    }
+  }
+}
+
 
 
 
@@ -101,6 +109,20 @@
 .modal_add_button:hover {
   border: 1px solid $accent_green;
   background-color: $accent_green;
+}
+
+@media (max-width: 500px) {
+  .buttons_create_modal {
+    .button_left,
+    .button_right {
+      text-align: center;
+      margin-bottom: 16px;
+
+      .modal_btn {
+        min-width: 120px;
+      }
+    }
+  }
 }
 
 
@@ -156,3 +178,19 @@
   background-color: $accent_green;
 }
 
+
+
+// DETAIL AND CANCEL BUTTONS ON MODAL ON FLIGHTS/CREATE PAGE ON DUPLICATE
+.buttons_duplicate_modal {
+  margin-top: 32px;
+
+  .button_left,
+  .button_right {
+    text-align: center;
+    margin-bottom: 16px;
+
+    .modal_btn {
+      min-width: 120px;
+    }
+  }
+}

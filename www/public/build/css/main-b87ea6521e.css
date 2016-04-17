@@ -487,7 +487,7 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 /**
  * Hide element while making it readable for screen readers
  * Shamelessly borrowed from HTML5Boilerplate:
- * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-a7b74faab1.css#L119-L133
+ * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-b87ea6521e.css#L119-L133
  */
 .visually-hidden {
   border: 0;
@@ -533,6 +533,8 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
     width: 91.66666667%; }
   .col-xxs-12 {
     width: 100%; }
+  .col-xxs-offset-0 {
+    margin-left: 0; }
   .col-xxs-offset-1 {
     margin-left: 8.33333333%; }
   .col-xxs-offset-2 {
@@ -802,6 +804,15 @@ header .navbar-inverse .navbar-toggle:focus {
   border: 1px solid #33CC99;
   background-color: #33CC99; }
 
+@media (max-width: 500px) {
+  .buttons_create_modal .button_left,
+  .buttons_create_modal .button_right {
+    text-align: center;
+    margin-bottom: 16px; }
+    .buttons_create_modal .button_left .modal_btn,
+    .buttons_create_modal .button_right .modal_btn {
+      min-width: 120px; } }
+
 .buttons_error_modal {
   margin-top: 32px; }
   .buttons_error_modal .button_right {
@@ -841,6 +852,16 @@ header .navbar-inverse .navbar-toggle:focus {
 .modal_error_again_button:hover {
   border: 1px solid #33CC99;
   background-color: #33CC99; }
+
+.buttons_duplicate_modal {
+  margin-top: 32px; }
+  .buttons_duplicate_modal .button_left,
+  .buttons_duplicate_modal .button_right {
+    text-align: center;
+    margin-bottom: 16px; }
+    .buttons_duplicate_modal .button_left .modal_btn,
+    .buttons_duplicate_modal .button_right .modal_btn {
+      min-width: 120px; }
 
 .modal {
   background-color: transparent;
@@ -889,6 +910,27 @@ header .navbar-inverse .navbar-toggle:focus {
 @media only screen and (max-width: 500px) {
   .modal {
     width: 90%; } }
+
+.angucomplete-dropdown {
+  position: absolute;
+  overflow-y: auto;
+  max-height: 200px;
+  z-index: 9999;
+  background-color: #ffffff;
+  width: calc(100%);
+  padding: 16px;
+  margin-top: 24px;
+  margin-left: -16px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22); }
+  .angucomplete-dropdown .angucomplete-row {
+    font-size: 1.6rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #33CC99; }
+  .angucomplete-dropdown .angucomplete-row:hover {
+    cursor: pointer;
+    color: #33CC99; }
+  .angucomplete-dropdown .highlight {
+    color: #33CC99; }
 
 #app-layout {
   padding-bottom: 0 !important; }
@@ -1399,22 +1441,22 @@ header .navbar-inverse .navbar-toggle:focus {
     #flight_create_content .flight_create_subtitle {
       margin-bottom: 16px;
       padding: 0 16px; }
-    #flight_create_content .col-500 {
-      margin-left: 8.33333333%;
-      width: 83.33333333%; }
     #flight_create_content .flight_create_option.between {
       display: none; } }
 
 @media screen and (max-width: 320px) {
   #flight_create_content {
     padding-top: 16px; }
-    #flight_create_content .col-500, #flight_create_content .col-xxs-10 {
-      margin-left: 0;
-      width: 100%; }
     #flight_create_content .flight_create_intro {
       font-size: 2rem; }
     #flight_create_content .flight_create_subtitle {
-      font-size: 1.6rem; } }
+      font-size: 1.6rem; }
+    #flight_create_content .buttons_create .button_left {
+      padding-left: 0;
+      text-align: left; }
+    #flight_create_content .buttons_create .button_right {
+      padding-right: 0;
+      text-align: right; } }
 
 #flight_overview_content {
   padding-top: 32px; }
@@ -1444,6 +1486,9 @@ header .navbar-inverse .navbar-toggle:focus {
       display: inline-block;
       position: absolute;
       margin-left: 8px; }
+  #flight_overview_content .flight_scheduled .flight_delay {
+    color: #FF4F14;
+    font-weight: 400; }
   #flight_overview_content .flight_landed .fi_gate .fi_first {
     height: 22px !important; }
   #flight_overview_content .flight_landed .fi_gate .fi_remove a {

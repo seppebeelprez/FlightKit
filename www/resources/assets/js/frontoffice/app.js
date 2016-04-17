@@ -29,7 +29,7 @@
         ]);
 
     angular.module('app.home', ['ui.router', 'ngRoute']);
-    angular.module('app.flights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap']);
+    angular.module('app.flights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt']);
     angular.module('app.trips', ['ui.router']);
     angular.module('app.account', ['ui.router']);
 

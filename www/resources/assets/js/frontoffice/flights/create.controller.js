@@ -21,10 +21,11 @@
         '$q',
         '$uibModal',
         '$window',
+        '$http',
 
         //Custom
         'createFlightsFactory',
-        'scheduleFlightAPIFactory'
+        'getFlightsFactory'
     ];
 
     function FlightsCreateController(
@@ -38,10 +39,11 @@
         $q,
         $uibModal,
         $window,
+        $http,
 
         //Custom
         createFlightsFactory,
-        scheduleFlightAPIFactory
+        getFlightsFactory
     ) {
         //console.log('FlightsCreateController');
         // ViewModel
@@ -52,8 +54,12 @@
         // --------------
         vm.$$ix = {
             next        : createFlight,
-            confirm     : showModal
+            confirm     : showModal,
+            airline     : airlineSelected
         };
+
+        getFlights();
+        getAirlines();
 
         vm.animationsEnabled = true;
 
@@ -68,17 +74,51 @@
         // ----
         // vm.flight
         vm.flight = {};
+        vm.userFlights = {};
         vm.data = {};
+        vm.airlines = {};
+        vm.flight.airline = {};
 
         vm.flight.today = new Date();
 
 
-
         // Functions
         // =========
+
+        // Angular autocomplete
+        // -----
+        function getAirlines() {
+            $http.get('../json/airlines.json')
+                .then(function(data){
+                    vm.airlines = data.data.airlines;
+                    //console.log('airlines,', data.data.airlines);
+                });
+        }
+
+        function airlineSelected(selected) {
+            if (selected) {
+                console.log(selected);
+                vm.flight.airline = selected.description.iata;
+            } else {
+                console.log('cleared');
+            }
+        }
+
+        vm.localSearch = function(str) {
+            var matches = [];
+            vm.airlines.forEach(function(airline) {
+                var fullName = airline.name;
+                matches.push(fullName);
+            });
+            return matches;
+        };
+
+
         // Show popup
         // -----
         function showModal() {
+
+            //console.log('showModal', vm.flight);
 
             if($scope.form.$valid) {
 
@@ -103,7 +143,7 @@
                 //console.log(result);
                 vm.ArrayToCheckFlightData.push(check);
                 $q.all(vm.ArrayToCheckFlightData).then(function success(data){
-                    console.log('vm.checkCurrentFlight: ', vm.checkCurrentFlight);
+                    //console.log('vm.checkCurrentFlight: ', vm.checkCurrentFlight);
 
 
                     vm.flight.departureCode = vm.checkCurrentFlight[0].flightStatuses[0].departureAirportFsCode;
@@ -119,11 +159,11 @@
                         //console.log(key, airport);
                         if ( airport.iata == vm.flight.departureCode ) {
                             vm.departureAirport = airport;
-                            console.log('Start: ', vm.departureAirport);
+                            //console.log('Start: ', vm.departureAirport);
                         }
                         else if ( airport.iata == vm.flight.arrivalCode ) {
                             vm.arrivalAirport = airport;
-                            console.log('End: ', vm.arrivalAirport);
+                            //console.log('End: ', vm.arrivalAirport);
                         }
                     });
 
@@ -158,6 +198,26 @@
             }
         }
 
+        // Get already added flights
+        // -----
+        function getFlights() {
+            var params = {};
+            return getFlightsFactory
+                .query(
+                    params,
+                    getFlightsSuccess,
+                    getFlightsError);
+        }
+
+        function getFlightsError(reason) {
+            //$log.error('getFlightsError:', reason);
+        }
+        function getFlightsSuccess(response) {
+            //$log.success('getFlightsSuccess:', response);
+            vm.userFlights = response[0].flights;
+            console.log('vm.userFlights: ', vm.userFlights);
+        }
+
 
         // Create Flight
         // -----
@@ -167,7 +227,35 @@
             vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
             console.log('vm.flight: ', vm.flight);
 
-            createFlightsFactory.createFlight(vm.flight);
+
+            angular.forEach(vm.userFlights,function(flight,key){
+
+                console.log('vm.flight.id: ', vm.flight.flightId);
+                console.log('vm.userflight.id: ', flight.flightId);
+
+                //console.log(flight.flightId, key);
+                if (vm.flight.flightId == flight.flightId) {
+                    console.log('DUPLICATE: ', vm.flight.flightId, flight.flightId);
+
+                    var duplicateFlightModal = $uibModal.open({
+                        animation: vm.animationsEnabled,
+                        templateUrl: 'duplicateModal.html',
+                        scope: $scope
+                    });
+                    vm.$$ix.cancel = function () {
+                        duplicateFlightModal.dismiss('cancel');
+                    };
+
+                    vm.$$ix.detail = function () {
+                        duplicateFlightModal.dismiss('Go to detail: ', flight.flightId);
+                    };
+
+                }
+                else {
+                    //createFlightsFactory.createFlight(vm.flight);
+                }
+
+            });
 
             //console.log('All airports: ', vm.allAirports);
             //console.log('original flight: ', vm.flight);

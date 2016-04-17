@@ -6,10 +6,10 @@
     </md-toolbar>
 
     <md-content>
-        <div ng-repeat="flight in vm.allCheckedFlights | orderBy:'allFlightDetails.flightStatus.arrivalDate.dateLocal'" class="flights_overview col-xs-12">
+        <div ng-repeat="flight in vm.allCheckedFlights | orderBy:'-allFlightDetails.flightStatus.departureDate.dateLocal'" class="flights_overview col-xs-12">
 
             <!-- SCHEDULED START -->
-            <div ng-if="flight.allFlightDetails.flightStatus.status === 'S'">
+            <div ng-if="flight.allFlightDetails.flightStatus.status === 'S'" class="flight_scheduled">
                 <a href="flights/{{ flight.databaseFlightId }}">
                     <div class="flight_item col-xs-12">
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
@@ -36,21 +36,36 @@
                         </div>
 
                         <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
-                            <span class="fi_first">Estimated</span>
+
+                            <span class="fi_first" ng-if="flight.allFlightDetails.flightStatus.delays">
+                                Delayed
+                            </span>
+
+                            <span class="fi_first" ng-if="!flight.allFlightDetails.flightStatus.delays">
+                                Estimated
+                            </span>
+
                             <span>
-                                <p ng-if="flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture">
+                                <p class="flight_delay" ng-if="flight.allFlightDetails.flightStatus.delays">
+                                    {{ flight.allFlightDetails.flightStatus.delays.departureGateDelayMinutes }} min
+                                </p>
+
+                                <p ng-if="!flight.allFlightDetails.flightStatus.delays &&
+                                            flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture">
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture.dateLocal | date : 'hh:mm a' }},
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture.dateLocal | date : 'MMM d' }}
                                 </p>
 
-                                <p ng-if="!flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture
-                                          && flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture">
+                                <p ng-if="!flight.allFlightDetails.flightStatus.delays &&
+                                            !flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture
+                                            && flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture">
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'hh:mm a' }},
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'MMM d' }}
                                 </p>
 
-                                <p ng-if="!flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture
-                                          && !flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture">
+                                <p ng-if="!flight.allFlightDetails.flightStatus.delays &&
+                                            !flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture
+                                            && !flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture">
                                     -
                                 </p>
                             </span>
@@ -68,7 +83,7 @@
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
                             <span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>
                             <span>
-                                <i class="material-icons">flight_takeoff</i>
+                                <i class="material-icons">filter_drama</i>
                                 <p>{{ flight.arrivalAirport.name }} ({{ flight.arrivalAirport.iata }})</p>
                             </span>
                         </div>
@@ -84,17 +99,22 @@
                             <span class="fi_first">Arrival</span>
                             <span>
                                 <p>
-                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'hh:mm a' }},
-                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'MMM d' }}</p>
+                                    {{ flight.allFlightDetails.flightStatus.arrivalDate.dateLocal | date : 'hh:mm a' }},
+                                    {{ flight.allFlightDetails.flightStatus.arrivalDate.dateLocal | date : 'MMM d' }}</p>
                             </span>
                         </div>
 
                         <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
                             <span class="fi_first">Estimated</span>
                             <span>
-                                <p>
+                                <p ng-if="flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateArrival">
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateArrival.dateLocal | date : 'hh:mm a' }},
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateArrival.dateLocal | date : 'MMM d' }}</p>
+
+                                <p ng-if="!flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateArrival &&
+                                            flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateArrival">
+                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'hh:mm a' }},
+                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'MMM d' }}</p>
                             </span>
                         </div>
                     </div>
@@ -110,7 +130,7 @@
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
                             <span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>
                             <span>
-                                <i class="material-icons">flight_takeoff</i>
+                                <i class="material-icons">flight_land</i>
                                 <p>{{ flight.arrivalAirport.name }} ({{ flight.arrivalAirport.iata }})</p>
                             </span>
                         </div>

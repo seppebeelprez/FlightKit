@@ -26,6 +26,7 @@ elixir.config.bowerDir      = 'vendor/bower_components';
 var vendor = {
     angular         : elixir.config.bowerDir + '/angular/angular.js',
     angularModule   : {
+        alt         : elixir.config.bowerDir + '/angucomplete-alt/dist/angucomplete-alt.min.js',
         animate     : elixir.config.bowerDir + '/angular-animate/angular-animate.js',
         aria        : elixir.config.bowerDir + '/angular-aria/angular-aria.js',
         bootstrap   : elixir.config.bowerDir + '/angular-bootstrap/ui-bootstrap-tpls.min.js',
@@ -97,6 +98,7 @@ elixir(function(mix) {
 
         .scripts([
                 vendor.angular,
+                vendor.angularModule.alt,
                 vendor.angularModule.animate,
                 vendor.angularModule.aria,
                 vendor.angularModule.bootstrap,

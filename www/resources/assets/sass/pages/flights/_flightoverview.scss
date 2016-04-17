@@ -54,6 +54,13 @@
     }
   }
 
+  .flight_scheduled {
+    .flight_delay {
+      color: $warning_red;
+      font-weight: 400;
+    }
+  }
+
   .flight_landed {
 
     .fi_gate {

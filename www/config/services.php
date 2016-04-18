@@ -39,7 +39,7 @@ return [
     'facebook' => [
         'client_id'     => '1692779330963372',
         'client_secret' => 'e15eb7202a8b68ffca5f7c2996a0007a',
-        'redirect'      => 'http://www.flightkit.dev/callback',
+        'redirect'      => 'http://flightkit.dev/callback',
     ],
 
 ];

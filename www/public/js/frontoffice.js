@@ -449,13 +449,18 @@
             vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
             console.log('vm.flight: ', vm.flight);
 
+            vm.flightIdArray = [];
+
+            var checkDuplicate = false;
 
             angular.forEach(vm.userFlights,function(flight,key){
 
-                console.log('vm.flight.id: ', vm.flight.flightId);
-                console.log('vm.userflight.id: ', flight.flightId);
+                //console.log('vm.flight.id: ', vm.flight.flightId);
+                //console.log('vm.userflight.id: ', flight.flightId);
 
-                //console.log(flight.flightId, key);
+                vm.flightIdArray.push(flight);
+
+                ////console.log(flight.flightId, key);
                 if (vm.flight.flightId == flight.flightId) {
                     console.log('DUPLICATE: ', vm.flight.flightId, flight.flightId);
 
@@ -472,19 +477,51 @@
                         duplicateFlightModal.dismiss('Go to detail: ', flight.flightId);
                     };
 
+                    checkDuplicate = true;
+
                 }
-                else {
-                    //createFlightsFactory.createFlight(vm.flight);
-                }
+                //else if(checkDuplicate == true){
+                //    console.log('checkDuplicate = true!');
+                //}else {
+                //    console.log('checkDuplicate = false!')
+                //}
+                //else {
+                //    console.log('createFlight Entered');
+                //    createFlightsFactory.createFlight(vm.flight);
+                //    $window.location.href = '/flights';
+                //}
 
             });
+
+            if(checkDuplicate == true){
+                console.log('checkDuplicate = true!');
+            }else {
+                console.log('checkDuplicate = false!');
+                createFlightsFactory.createFlight(vm.flight);
+                $window.location.href = '/flights';
+            }
+
+            //console.log('checkduplicate array:', vm.flightIdArray);
+
+            //q.all(vm.flightIdArray).then(function success(data){
+            //    if(checkDuplicate == false) {
+            //        console.log('checkduplicate:', vm.flightIdArray);
+            //        console.log('you can create flight');
+            //    }
+            //}, function failure(err){
+            //    // Can handle this is we want
+            //});
+
 
             //console.log('All airports: ', vm.allAirports);
             //console.log('original flight: ', vm.flight);
             //
             //createFlightsFactory.createFlight(vm.flight);
             //$window.location.href = '/flights';
+
+            //console.log(vm.flightIdArray);
         }
+
 
         // Go Back
         // -----

@@ -252,7 +252,9 @@
 
                 }
                 else {
-                    //createFlightsFactory.createFlight(vm.flight);
+                    console.log("createFlight Entered");
+                    createFlightsFactory.createFlight(vm.flight);
+                    $window.location.href = '/flights';
                 }
 
             });

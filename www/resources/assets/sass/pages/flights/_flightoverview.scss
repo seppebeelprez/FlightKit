@@ -52,6 +52,7 @@
         }
       }
     }
+
   }
 
   .flight_scheduled {
@@ -78,6 +79,17 @@
 
         }
       }
+    }
+  }
+
+  .flight_removed {
+    text-align: center;
+    padding: 32px 32px 0 32px;
+
+    span {
+      font-weight: 300;
+      color: $white;
+      font-size: 1.4rem;
     }
   }
 }

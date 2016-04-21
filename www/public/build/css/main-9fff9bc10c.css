@@ -487,7 +487,7 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 /**
  * Hide element while making it readable for screen readers
  * Shamelessly borrowed from HTML5Boilerplate:
- * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-b87ea6521e.css#L119-L133
+ * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-9fff9bc10c.css#L119-L133
  */
 .visually-hidden {
   border: 0;
@@ -1493,6 +1493,13 @@ header .navbar-inverse .navbar-toggle:focus {
     height: 22px !important; }
   #flight_overview_content .flight_landed .fi_gate .fi_remove a {
     color: #ffffff; }
+  #flight_overview_content .flight_removed {
+    text-align: center;
+    padding: 32px 32px 0 32px; }
+    #flight_overview_content .flight_removed span {
+      font-weight: 300;
+      color: #ffffff;
+      font-size: 1.4rem; }
 
 @media screen and (max-width: 768px) {
   #flight_overview_content .flight_overview_intro {

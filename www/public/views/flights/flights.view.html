@@ -155,7 +155,8 @@
                         <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
                             <span class="fi_first"></span>
                             <span class="fi_remove">
-                                <a href="">remove flight</a>
+                                <!--<button ng-click="vm.$$ix.delete(flight.databaseFlightId)"></button>-->
+                                <a href="" ng-click="vm.$$ix.delete(flight.databaseFlightId)">remove flight</a>
                             </span>
                         </div>
                     </div>
@@ -164,133 +165,11 @@
             <!-- LANDED END -->
         </div>
 
-        <!--<div ng-repeat="flight in vm.flights | orderBy:'flightStatus.departureDate.dateLocal'" class="flights_overview col-xs-12">-->
+        <div class="flight_removed col-xs-12">
+            <span>
+                Arrived flights older then 3 days are removed because the data isn't available anymore!
+            </span>
+        </div>
 
-            <!--&lt;!&ndash; SCHEDULED &ndash;&gt;-->
-            <!--<div ng-if="flight.flightStatus.status === 'S'">-->
-                <!--<a href="flights/{{ flight.id }}">-->
-                    <!--<div class="flight_item col-xs-12">-->
-                        <!--&lt;!&ndash;<h3>{{ flight.id }}</h3>&ndash;&gt;-->
-                        <!--<div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">-->
-                            <!--<span>{{ flight.appendix.airports[1].name }} ({{ flight.appendix.airports[1].iata }})</span>-->
-                            <!--<span>-->
-                                <!--<i class="material-icons">flight_takeoff</i>-->
-                                <!--<p>{{ flight.appendix.airports[0].name }} ({{ flight.appendix.airports[0].iata }})</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Status</span>-->
-                            <!--<span>-->
-                                <!--<p>Scheduled</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Departure</span>-->
-                            <!--<span>-->
-                                <!--<p>{{ flight.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'hh:mm a' }},-->
-                                    <!--{{ flight.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'MMM d' }}</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Estimated</span>-->
-                            <!--<span>-->
-                                <!--<p ng-if="flight.flightStatus.operationalTimes.estimatedGateDeparture">{{ flight.flightStatus.operationalTimes.estimatedGateDeparture.dateLocal | date : 'hh:mm a' }},-->
-                                    <!--{{ flight.flightStatus.operationalTimes.estimatedGateDeparture.dateLocal | date : 'MMM d' }}</p>-->
-
-                                <!--<p ng-if="!flight.flightStatus.operationalTimes.estimatedGateDeparture-->
-                                          <!--&& flight.flightStatus.operationalTimes.scheduledGateDeparture">{{ flight.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'hh:mm a' }},-->
-                                    <!--{{ flight.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'MMM d' }}</p>-->
-
-                                <!--<p ng-if="!flight.flightStatus.operationalTimes.estimatedGateDeparture-->
-                                          <!--&& !flight.flightStatus.operationalTimes.scheduledGateDeparture">-</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</a>-->
-            <!--</div>-->
-
-
-
-            <!--&lt;!&ndash; IN THE AIR &ndash;&gt;-->
-            <!--<div ng-if="flight.flightStatus.status === 'A'">-->
-                <!--<a href="flights/{{ flight.id }}">-->
-                    <!--<div class="flight_item col-xs-12">-->
-                        <!--&lt;!&ndash;<h3>{{ flight.id }}</h3>&ndash;&gt;-->
-                        <!--<div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">-->
-                            <!--<span>{{ flight.appendix.airports[1].name }} ({{ flight.appendix.airports[0].iata }})</span>-->
-                            <!--<span>-->
-                                <!--<i class="material-icons">flight_takeoff</i>-->
-                                <!--<p>{{ flight.appendix.airports[0].name }} ({{ flight.appendix.airports[1].iata }})</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Status</span>-->
-                            <!--<span>-->
-                                <!--<p>In the air</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Arrival</span>-->
-                            <!--<span>-->
-                                <!--<p>{{ flight.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'hh:mm a' }},-->
-                                    <!--{{ flight.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'MMM d' }}</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Estimated</span>-->
-                            <!--<span>-->
-                                <!--<p>{{ flight.flightStatus.operationalTimes.estimatedGateArrival.dateLocal | date : 'hh:mm a' }},-->
-                                    <!--{{ flight.flightStatus.operationalTimes.estimatedGateArrival.dateLocal | date : 'MMM d' }}</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</a>-->
-            <!--</div>-->
-
-
-
-            <!--&lt;!&ndash; LANDED &ndash;&gt;-->
-            <!--<div ng-if="flight.flightStatus.status === 'L'" class="flight_landed">-->
-                <!--<a>-->
-                    <!--<div class="flight_item col-xs-12">-->
-                        <!--&lt;!&ndash;<h3>{{ flight.id }}</h3>&ndash;&gt;-->
-                        <!--<div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">-->
-                            <!--<span>{{ flight.appendix.airports[0].name }} ({{ flight.appendix.airports[0].iata }})</span>-->
-                            <!--<span>-->
-                                <!--<i class="material-icons">flight_takeoff</i>-->
-                                <!--<p>{{ flight.appendix.airports[1].name }} ({{ flight.appendix.airports[1].iata }})</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Status</span>-->
-                            <!--<span>-->
-                                <!--<p>Landed</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first">Arrived</span>-->
-                            <!--<span>-->
-                                <!--<p>{{ flight.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'hh:mm a' }}, {{ flight.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'MMM d' }}</p>-->
-                            <!--</span>-->
-                        <!--</div>-->
-
-                        <!--<div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">-->
-                            <!--<span class="fi_first"></span>-->
-                            <!--<span class="fi_remove">-->
-                                <!--<a href="">remove flight</a>-->
-                            <!--</span>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</a>-->
-            <!--</div>-->
-        <!--</div>-->
     </md-content>
 </div>

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Flights;
+namespace App\Http\Controllers\Trips;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 
-class FlightsController extends Controller
+class TripsController extends Controller
 {
     /**
      * Create a new controller instance.

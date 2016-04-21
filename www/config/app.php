@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://flightkit.dev'),
+    'url' => env('APP_URL', 'http://www.flightkit.dev'),
 
     /*
     |--------------------------------------------------------------------------

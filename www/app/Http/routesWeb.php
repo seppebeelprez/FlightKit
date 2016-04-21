@@ -17,9 +17,12 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group(['prefix' => 'flights'], function () {
         Route::resource('/', 'Flights\FlightsController@index');
-//        Route::resource('create', 'Flights\FlightsController@create');
         Route::resource('detail', 'Flights\FlightsController@detail');
-        Route::resource('detail', 'Flights\FlightsController@detail');
+    });
+
+    Route::group(['prefix' => 'trips'], function () {
+        Route::resource('/', 'Trips\TripsController@index');
+        Route::resource('detail', 'Trips\TripsController@detail');
     });
 
 //    Route::group(['prefix' => 'trips'], function () {

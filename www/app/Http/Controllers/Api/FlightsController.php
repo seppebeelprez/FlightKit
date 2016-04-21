@@ -114,4 +114,56 @@ class FlightsController extends Controller
             return redirect('/login');
         }
     }
+
+    /**
+     * Delete flight
+     *
+     * @param \Illuminate\Http\Response
+     */
+    public function destroy($flight_id){
+
+        $user_id = Auth::id();
+
+        $deleteFlight = DB::table('flight_user')
+          ->where('flight_id', $flight_id)
+          ->where('user_id', $user_id);
+
+        $deleteFlight->delete();
+
+        $pivotFlights = DB::table('flight_user')->where('flight_id', $flight_id)->get();
+
+//        return $pivotFlights;
+
+        //CHECK IF PIVOT TABLE STILL CONTAINS FLIGHTS
+        if ($pivotFlights == NULL) {
+
+            //DELETE RECORD ALSO FROM TABLE FLIGHTS
+            $getFlight = DB::table('flights')->where('id', $flight_id);
+            $getFlight->delete();
+        }
+
+    }
+
+    /**
+     * Delete outdated flight
+     *
+     * @param \Illuminate\Http\Response
+     */
+    public function deleteOutdated($flight_id){
+
+        $pivotOutdatedFlights = DB::table('flight_user')
+          ->where('flight_id', $flight_id)->get();
+        
+
+        foreach ($pivotOutdatedFlights as $pivotOutdatedFlight)
+        {
+            $flight = DB::table('flight_user')->where('flight_id', $pivotOutdatedFlight->flight_id);
+            $flight->delete();
+        }
+
+        $outdatedFlight = DB::table('flights')->where('id', $flight_id);
+        $outdatedFlight->delete();
+        
+
+    }
 }

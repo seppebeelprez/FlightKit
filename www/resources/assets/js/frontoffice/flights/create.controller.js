@@ -78,6 +78,7 @@
         vm.data = {};
         vm.airlines = {};
         vm.flight.airline = {};
+        vm.existingFlightDetailId = {};
 
         vm.flight.today = new Date();
 
@@ -143,43 +144,42 @@
                 //console.log(result);
                 vm.ArrayToCheckFlightData.push(check);
                 $q.all(vm.ArrayToCheckFlightData).then(function success(data){
-                    //console.log('vm.checkCurrentFlight: ', vm.checkCurrentFlight);
+                    console.log('vm.checkCurrentFlight: ', vm.checkCurrentFlight);
 
 
-                    vm.flight.departureCode = vm.checkCurrentFlight[0].flightStatuses[0].departureAirportFsCode;
-                    vm.flight.arrivalCode = vm.checkCurrentFlight[0].flightStatuses[0].arrivalAirportFsCode;
-
-                    vm.allAirports = [];
-                    vm.allAirports = vm.checkCurrentFlight[0].appendix.airports;
-
-                    vm.departureAirport = [];
-                    vm.arrivalAirport = [];
-
-                    angular.forEach(vm.allAirports, function(airport, key) {
-                        //console.log(key, airport);
-                        if ( airport.iata == vm.flight.departureCode ) {
-                            vm.departureAirport = airport;
-                            //console.log('Start: ', vm.departureAirport);
-                        }
-                        else if ( airport.iata == vm.flight.arrivalCode ) {
-                            vm.arrivalAirport = airport;
-                            //console.log('End: ', vm.arrivalAirport);
-                        }
-                    });
-
-
-                    if ( vm.checkCurrentFlight[0].error ) {
-                        if ( vm.checkCurrentFlight[0].error.httpStatusCode === 400) {
-                            var alertFlightModal = $uibModal.open({
-                                animation: vm.animationsEnabled,
-                                templateUrl: 'errorModal.html',
-                                scope: $scope
-                            });
-                            vm.$$ix.again = function () {
-                                alertFlightModal.dismiss('cancel');
-                            };
-                        }
+                    if ( vm.checkCurrentFlight[0].error || vm.checkCurrentFlight[0].flightStatuses[0] == null ) {
+                        var alertFlightModal = $uibModal.open({
+                            animation: vm.animationsEnabled,
+                            templateUrl: 'errorModal.html',
+                            scope: $scope
+                        });
+                        vm.$$ix.again = function () {
+                            alertFlightModal.dismiss('cancel');
+                        };
                     } else {
+
+                        vm.flight.departureCode = vm.checkCurrentFlight[0].flightStatuses[0].departureAirportFsCode;
+                        vm.flight.arrivalCode = vm.checkCurrentFlight[0].flightStatuses[0].arrivalAirportFsCode;
+
+                        vm.allAirports = [];
+                        vm.allAirports = vm.checkCurrentFlight[0].appendix.airports;
+
+                        vm.departureAirport = [];
+                        vm.arrivalAirport = [];
+
+                        angular.forEach(vm.allAirports, function(airport, key) {
+                            //console.log(key, airport);
+                            if ( airport.iata == vm.flight.departureCode ) {
+                                vm.departureAirport = airport;
+                                //console.log('Start: ', vm.departureAirport);
+                            }
+                            else if ( airport.iata == vm.flight.arrivalCode ) {
+                                vm.arrivalAirport = airport;
+                                //console.log('End: ', vm.arrivalAirport);
+                            }
+                        });
+
+
                         var checkFlightModal = $uibModal.open({
                             animation: vm.animationsEnabled,
                             templateUrl: 'confirmModal.html',
@@ -252,22 +252,13 @@
                     };
 
                     vm.$$ix.detail = function () {
+                        console.log('existingFlightDetailId: ', flight.flightId);
                         duplicateFlightModal.dismiss('Go to detail: ', flight.flightId);
                     };
 
                     checkDuplicate = true;
 
                 }
-                //else if(checkDuplicate == true){
-                //    console.log('checkDuplicate = true!');
-                //}else {
-                //    console.log('checkDuplicate = false!')
-                //}
-                //else {
-                //    console.log('createFlight Entered');
-                //    createFlightsFactory.createFlight(vm.flight);
-                //    $window.location.href = '/flights';
-                //}
 
             });
 
@@ -276,7 +267,7 @@
             }else {
                 console.log('checkDuplicate = false!');
                 createFlightsFactory.createFlight(vm.flight);
-                $window.location.href = '/flights';
+                //$window.location.href = '/flights';
             }
 
             //console.log('checkduplicate array:', vm.flightIdArray);

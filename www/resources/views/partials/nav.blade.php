@@ -25,7 +25,7 @@
                                 <a {{ (Request::is('flights*') ? 'class=active' : '') }} href="{{ url('/flights') }}">flights</a>
                             </li>
                             <li class="scrollToInsideLink">
-                                <a {{ (Request::is('trips*') ? 'class=active' : '') }} href="{{ url('/trips/overview') }}">trips</a>
+                                <a {{ (Request::is('trips*') ? 'class=active' : '') }} href="{{ url('/trips') }}">trips</a>
                             </li>
                             <li class="scrollToInsideLink">
                                 <a {{ (Request::is('account') ? 'class=active' : '') }} href="{{ url('/account') }}">account</a>

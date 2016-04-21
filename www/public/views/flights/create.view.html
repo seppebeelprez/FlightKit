@@ -138,10 +138,6 @@
                                         {{ vm.checkCurrentFlight[0].flightStatuses[0].operationalTimes.publishedArrival.dateLocal | date : 'MMM d' }}</span>
                 </div>
 
-                <div class="modal-info">
-                    <span>*If this isn't your flight you might check back again later, it's because this flight has multiple connections.</span>
-                </div>
-
                 <form class="form-horizontal">
                     <div class="row btn-col min-btn">
                         <div class="buttons_create_modal col-xs-12">
@@ -158,6 +154,10 @@
                         </div>
                     </div>
                 </form>
+
+                <div class="modal-info">
+                    <span>*If this isn't your flight you might check back again later, it's because this flight has multiple connections.</span>
+                </div>
             </div>
         </script>
 
@@ -188,7 +188,8 @@
         <script type="text/ng-template" id="duplicateModal.html">
             <div class="modal-body">
                 <div class="modal-title">
-                    <span>Oeps! This flight already exists!</span>
+                    <span>Oops! You already added this flight!</span>
+                    <!--<span ng-repeat="item in flight">{{ item }}</span>-->
                 </div>
                 <form class="form-horizontal">
                     <div class="row btn-col min-btn">

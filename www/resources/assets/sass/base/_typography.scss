@@ -6,6 +6,7 @@
 
 html {
   font-size: 10px;
+  outline: none;
 }
 
 body {
@@ -20,4 +21,10 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 
 .ngShow {
   color: $accent_red;
+  font-size: 1.4rem;
+}
+
+.angucomplete-row:active,
+.angucomplete-row:focus {
+  outline: none;
 }

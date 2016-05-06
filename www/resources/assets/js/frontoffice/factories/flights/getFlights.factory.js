@@ -27,7 +27,7 @@
         var url = config.api + 'flights';
 
         var paramDefaults = {
-            format    : 'json'
+            
         };
 
         var actions = {

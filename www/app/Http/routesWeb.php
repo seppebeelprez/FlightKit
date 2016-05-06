@@ -13,16 +13,16 @@ Route::group(['middleware' => 'web'], function () {
 //    Route::get('/home', 'MainController@index');
 //    Route::get('/account', 'Account\AccountController@index');
 //    Route::resource('/flights', 'Flights\FlightsController@index');
-//    Route::resource('/flights/detail', 'Flights\FlightsController@detail');
+//    Route::resource('/flights/detail/', 'Flights\FlightsController@detail');
 
     Route::group(['prefix' => 'flights'], function () {
         Route::resource('/', 'Flights\FlightsController@index');
-        Route::resource('detail', 'Flights\FlightsController@detail');
+        Route::resource('/detail', 'Flights\FlightsController@detail');
     });
 
     Route::group(['prefix' => 'trips'], function () {
         Route::resource('/', 'Trips\TripsController@index');
-        Route::resource('detail', 'Trips\TripsController@detail');
+//        Route::resource('detail', 'Trips\TripsController@detail');
     });
 
 //    Route::group(['prefix' => 'trips'], function () {

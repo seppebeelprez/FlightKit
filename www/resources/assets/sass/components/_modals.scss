@@ -7,6 +7,9 @@
   background-color: transparent;
   box-shadow: none;
   width: 64%;
+  position: absolute;
+  margin: 0 auto;
+  top: 128px;
 
   .modal-dialog {
     margin: 0;
@@ -16,6 +19,7 @@
       border-radius: 0;
       border: none;
       background-color: rgba(255,255,255,0.9);
+      padding: 24px 16px;
 
       .modal-body {
         padding: 0;
@@ -53,6 +57,7 @@
         }
 
         .modal-info {
+          margin-top: 16px;
           padding: 0 24px;
           text-align: center;
           color: #757575;
@@ -65,24 +70,31 @@
 
 @media only screen and (max-width: 1200px) {
   .modal {
+    top: 96px;
   }
 }
 
 @media only screen and (max-width: 992px) {
   .modal {
+    top: 64px;
     width: 80%;
   }
 }
 
 @media only screen and (max-width: 768px) {
   .modal {
+    top: 128px;
     width: 80%;
+    height: 420px;
+    max-height: 420px;
   }
 }
 
 @media only screen and (max-width: 500px) {
   .modal {
     width: 90%;
+    height: 420px;
+    max-height: 420px;
   }
 }
 

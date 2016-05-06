@@ -54,48 +54,68 @@ elixir(function(mix) {
         ).version( elixir.config.cssOutput + '/main.css')
 
         //CSS
-        .copy(
-            vendor.angularModule.material + 'angular-material.css',
-            elixir.config.cssOutput + '/angular.css'
-        )
-
-        .copy(
-            elixir.config.bowerDir + '/fontawesome/css/font-awesome.css',
-            elixir.config.cssOutput + '/font-awesome.css'
-        )
-
-        .copy(
-            elixir.config.bowerDir + '/Materialize/dist/css/materialize.min.css',
-            elixir.config.cssOutput + '/materialize.min.css'
-        )
-
-        //JS
-        .copy(
-            elixir.config.bowerDir + '/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
-            elixir.config.jsOutput + '/bootstrap.min.js'
-        )
-
-        .copy(
-            elixir.config.bowerDir + '/jquery/dist/jquery.min.js',
-            elixir.config.jsOutput + '/vendor.min.js'
-        )
+        // .copy(
+        //     vendor.angularModule.material + 'angular-material.css',
+        //     elixir.config.cssOutput + '/angular.css'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/fontawesome/css/font-awesome.css',
+        //     elixir.config.cssOutput + '/font-awesome.css'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/Materialize/dist/css/materialize.min.css',
+        //     elixir.config.cssOutput + '/materialize.min.css'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/material-design-lite/material.min.css',
+        //     elixir.config.cssOutput + '/material.min.css'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/material-design-lite/material.min.css.map',
+        //     elixir.config.cssOutput + '/material.min.css.map'
+        // )
+        //
+        // //JS
+        // .copy(
+        //     elixir.config.bowerDir + '/bootstrap-sass-official/assets/javascripts/bootstrap.min.js',
+        //     elixir.config.jsOutput + '/bootstrap.min.js'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/jquery/dist/jquery.min.js',
+        //     elixir.config.jsOutput + '/vendor.min.js'
+        // )
 
         .copy(
             elixir.config.assetsDir + '/js/custom',
             elixir.config.jsOutput + '/custom.js'
         )
 
-        .copy(
-            elixir.config.bowerDir + '/Materialize/dist/js/materialize.min.js',
-            elixir.config.jsOutput + '/materialize.min.js'
-        )
-
-        //FONTS
-        .copy(
-            elixir.config.bowerDir + '/fontawesome/fonts',
-            elixir.config.publicDir + '/fonts'
-        )
-
+        // .copy(
+        //     elixir.config.bowerDir + '/Materialize/dist/js/materialize.min.js',
+        //     elixir.config.jsOutput + '/materialize.min.js'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/material-design-lite/material.min.js',
+        //     elixir.config.jsOutput + '/material.min.js'
+        // )
+        //
+        // .copy(
+        //     elixir.config.bowerDir + '/material-design-lite/material.min.js.map',
+        //     elixir.config.jsOutput + '/material.min.js.map'
+        // )
+        //
+        // //FONTS
+        // .copy(
+        //     elixir.config.bowerDir + '/fontawesome/fonts',
+        //     elixir.config.publicDir + '/fonts'
+        // )
+        //
         .scripts([
                 vendor.angular,
                 vendor.angularModule.alt,

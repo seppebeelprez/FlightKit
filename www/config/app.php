@@ -219,7 +219,6 @@ return [
         'Html'      => Collective\Html\HtmlFacade::class,
         'OAuth'     => Artdarek\OAuth\Facade\OAuth::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class
-
     ],
 
 ];

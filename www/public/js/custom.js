@@ -35,6 +35,8 @@ jQuery(window).load(function() {
     jQuery(".preloader").fadeOut("fast");
 })
 
+
+
 /* =================================
  ===  STICKY NAV                 ====
  =================================== */
@@ -46,6 +48,7 @@ if (matchMedia('(max-width: 768px)').matches) {
         $(".navbar-toggle").click();
     });
 }
+
 
 
 /* =================================

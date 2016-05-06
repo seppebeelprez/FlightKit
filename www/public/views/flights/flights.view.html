@@ -1,4 +1,4 @@
-<div id="flight_overview_content" ng-cloak>
+<div id="flight_overview_content" ng-cloak ng-show="vm.allCheckedFlights">
     <md-toolbar>
         <div class="flight_overview_intro">
             {{vm.$$ui.title}}
@@ -10,7 +10,7 @@
 
             <!-- SCHEDULED START -->
             <div ng-if="flight.allFlightDetails.flightStatus.status === 'S'" class="flight_scheduled">
-                <a href="flights/{{ flight.databaseFlightId }}">
+                <a href="flights/detail/{{ flight.databaseFlightId }}" target="_self">
                     <div class="flight_item col-xs-12">
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
                             <span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>
@@ -66,7 +66,7 @@
                                 <p ng-if="!flight.allFlightDetails.flightStatus.delays &&
                                             !flight.allFlightDetails.flightStatus.operationalTimes.estimatedGateDeparture
                                             && !flight.allFlightDetails.flightStatus.operationalTimes.scheduledGateDeparture">
-                                    -
+                                    n/a
                                 </p>
                             </span>
                         </div>
@@ -77,7 +77,7 @@
 
             <!-- IN THE AIR START -->
             <div ng-if="flight.allFlightDetails.flightStatus.status === 'A'">
-                <a href="flights/{{ flight.databaseFlightId }}">
+                <a href="flights/detail/{{ flight.databaseFlightId }}" target="_self">
                     <div class="flight_item col-xs-12">
                         <!--<h3>{{ flight.id }}</h3>-->
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
@@ -124,7 +124,7 @@
 
             <!-- LANDED START -->
             <div ng-if="flight.allFlightDetails.flightStatus.status === 'L'" class="flight_landed">
-                <a  href="flights/{{ flight.databaseFlightId }}">
+                <a  href="flights/detail/{{ flight.databaseFlightId }}" target="_self">
                     <div class="flight_item col-xs-12">
                         <!--<h3>{{ flight.id }}</h3>-->
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
@@ -167,7 +167,7 @@
 
         <div class="flight_removed col-xs-12">
             <span>
-                Arrived flights older then 3 days are removed because the data isn't available anymore!
+                Arrived flights can be removed when the data isn't available anymore!
             </span>
         </div>
 

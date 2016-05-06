@@ -1,11 +1,1290 @@
 <div id="flight_detail_content" ng-cloak>
+
+    <div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>
+
+    <script type="text/ng-template" id="loading.html">
+        <div class="modal-body">
+            <div class="modal-table">
+                <div class="modal-cell">
+                    <img src="../../img/loader/preloader.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </script>
+
     <md-toolbar>
         <div class="flight_detail_intro">
-            Flight Detail
+            <div class="col-xs-10">
+                <div>
+                    <span class="flight_detail_intro_title">
+                        <!--EXAMPLE: UA998 | BRU - JFK-->
+                        {{ vm.flight.databaseflight.airline }}{{ vm.flight.databaseflight.number }} |
+                        {{ vm.flight.databaseflight.departure }} - {{ vm.flight.databaseflight.arrival }}
+                    </span>
+                </div>
+
+                <div>
+                    <span ng-if="vm.flight.apiflight.flightStatus.status === 'S'" class="flight_detail_intro_subtitle">
+                        Flight status: Scheduled
+                    </span>
+
+                    <span ng-if="vm.flight.apiflight.flightStatus.status === 'A'" class="flight_detail_intro_subtitle">
+                        Flight status: In air
+                    </span>
+
+                    <span ng-if="vm.flight.apiflight.flightStatus.status === 'L'" class="flight_detail_intro_subtitle">
+                        Flight status: Landed
+                    </span>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
+
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                    for="demo-menu-lower-right">
+                    <li class="mdl-menu__item item_favorite"><i class="material-icons">favorite</i> Add to trips</li>
+                    <li class="mdl-menu__item item_delete"><i class="material-icons">delete</i> Delete</li>
+                    <a href="" ng-click="vm.$$ix.refresh()"><li class="mdl-menu__item item_refresh"><i class="material-icons">refresh</i> Refresh</li></a>
+                </ul>
+            </div>
         </div>
     </md-toolbar>
 
     <md-content>
+        <div class="master_grid col-xs-12">
 
+            <div id="grid">
+
+                <!-- ------------ -->
+                <!-- IF SCHEDULED -->
+                <!-- ------------ -->
+                <div ng-if="vm.flight.apiflight.flightStatus.status === 'S'">
+
+                    <!-- -------------- -->
+                    <!-- ITEM DEPARTURE -->
+                    <!-- -------------- -->
+                    <div class="item item_departure">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Departure</span>
+                            </div>
+
+                            <div class="ic_body">
+                                <div class="ic_table">
+
+                                    <!-- AIRPORT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airport
+                                        </div>
+
+                                        <div class="ic_cell_right">
+                                            {{ vm.flight.apiDepAirport.name }} ({{ vm.flight.apiDepAirport.iata }}), </br>
+                                            {{ vm.flight.apiDepAirport.countryName }} ({{ vm.flight.apiDepAirport.countryCode }})
+                                        </div>
+                                    </div>
+
+                                    <!-- DEPARTURE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Departure
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.publishedDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- ESTIMATED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Estimated
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateDeparture &&
+                                                    vm.flight.apiflight.flightStatus.operationalTimes.publishedDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- DELAYED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Delayed
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes">
+                                            {{ vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes }} min
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes &&
+                                             vm.flight.apiflight.flightStatus.delays.departureRunwayDelayMinutes">
+                                            {{ vm.flight.apiflight.flightStatus.delays.departureRunwayDelayMinutes }} min
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes &&
+                                             !vm.flight.apiflight.flightStatus.delays.departureRunwayDelayMinutes">
+                                            On time
+                                        </div>
+                                    </div>
+
+                                    <!-- TERMINAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Terminal
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal">
+                                            {{ vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- GATE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Gate
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.airportResources.departureGate">
+                                            {{ vm.flight.apiflight.flightStatus.airportResources.departureGate }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.airportResources.departureGate">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ------------ -->
+                    <!-- ITEM ARRIVAL -->
+                    <!-- ------------ -->
+                    <div class="item item_arrival">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Arrival</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- AIRPORT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airport
+                                        </div>
+
+                                        <div class="ic_cell_right">
+                                            {{ vm.flight.apiArrAirport.name }} ({{ vm.flight.apiArrAirport.iata }}), </br>
+                                            {{ vm.flight.apiArrAirport.countryName }} ({{ vm.flight.apiArrAirport.countryCode }})
+                                        </div>
+                                    </div>
+
+                                    <!-- ARRIVAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Arrival
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.publishedArrival">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.publishedArrival.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.publishedArrival.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- ESTIMATED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Estimated
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateArrival">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.scheduledGateArrival.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- TERMINAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Terminal
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal">
+                                            {{ vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- GATE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Gate
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apiflight.flightStatus.airportResources.arrivalGate">
+                                            {{ vm.flight.apiflight.flightStatus.airportResources.arrivalGate }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.airportResources.arrivalGate">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ------------ -->
+                    <!-- ITEM WEATHER -->
+                    <!-- ------------ -->
+                    <div class="item item_weather">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Weather</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- DEPARTURE WEATHER -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_full">
+                                            {{ vm.flight.apiDepAirport.city }}
+                                        </div>
+
+                                        <div class="ic_cell_full ic_cell_temperature"
+                                             ng-if="vm.flight.apiDepWeather.main.temp">
+                                            <span>
+                                                <!--{{ vm.flight.apiDepWeather.main.temp | number:0 }} °C-->
+                                                {{ vm.$$ix.convertToCel(vm.flight.apiDepWeather.main.temp) | number:0 }} °C
+                                            </span>
+                                            <span>
+                                                <!--{{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.metar.temperatureCelsius)  | number:0 }} °F-->
+                                                {{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.main.temp) | number:0 }} °F
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_left ic_cell_weather_icon"
+                                             ng-if="vm.flight.apiDepWeather.weather[0].main">
+                                            <span>
+                                                <i class="wi {{ vm.flight.depWeatherIcon }}"></i>
+                                                <!--{{ vm.flight.depWeatherIcon }}-->
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_right ic_cell_weather_text">
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- ARRIVAL WEATHER -->
+                                    <div class="ic_cell ic_cell_weather">
+                                        <div class="ic_cell_full">
+                                            {{ vm.flight.apiArrAirport.city }}
+                                        </div>
+
+                                        <div class="ic_cell_full ic_cell_temperature"
+                                             ng-if="vm.flight.apiArrWeather.main.temp">
+                                            <span>
+                                                <!--{{ vm.flight.apiDepWeather.main.temp | number:0 }} °C-->
+                                                {{ vm.$$ix.convertToCel(vm.flight.apiArrWeather.main.temp) | number:0 }} °C
+                                            </span>
+                                            <span>
+                                                <!--{{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.metar.temperatureCelsius)  | number:0 }} °F-->
+                                                {{ vm.$$ix.convertToFah(vm.flight.apiArrWeather.main.temp) | number:0 }} °F
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_left ic_cell_weather_icon"
+                                             ng-if="vm.flight.apiArrWeather.weather[0].main">
+                                            <span>
+                                                <i class="wi {{ vm.flight.arrWeatherIcon }}"></i>
+                                                <!--{{ vm.flight.arrWeatherIcon }}-->
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_right ic_cell_weather_text">
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ----------- -->
+                    <!-- ITEM FLIGHT -->
+                    <!-- ----------- -->
+                    <div class="item item_flight">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Flight</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- DURATION -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Duration
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes">
+                                            {{ vm.$$ix.convert(vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes) }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- AIRCRAFT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Aircraft
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apiflight.appendix.equipments[0].name">
+                                            {{ vm.flight.apiflight.appendix.equipments[0].name }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.equipments[0].name">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- AIRLINE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airline
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apiflight.appendix.airlines[0].name &&
+                                                vm.flight.apiflight.appendix.airlines[0].iata">
+                                            {{ vm.flight.apiflight.appendix.airlines[0].name }}
+                                            ({{ vm.flight.apiflight.appendix.airlines[0].iata }})
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.airlines[0].name">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- IATA -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            IATA
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apiflight.appendix.equipments[0].iata">
+                                            {{ vm.flight.apiflight.appendix.equipments[0].iata }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.equipments[0].iata">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- TURBOPROP -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            TurboProp
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].turboProp &&
+                                             vm.flight.apiflight.appendix.equipments[0].turboProp == true">
+                                            yes
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].turboProp == false">
+                                            no
+                                        </div>
+                                    </div>
+
+                                    <!-- JET -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Jet
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].jet &&
+                                             vm.flight.apiflight.appendix.equipments[0].jet == true">
+                                            yes
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].jet &&
+                                             vm.flight.apiflight.appendix.equipments[0].jet == false">
+                                            no
+                                        </div>
+                                        <div ng-if="!vm.flight.apiflight.appendix.equipments[0].jet" class="ic_cell_right">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- PHONE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Phone
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apiflight.appendix.airlines[0].phoneNumber">
+                                            {{ vm.flight.apiflight.appendix.airlines[0].phoneNumber }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.airlines[0].phoneNumber">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- --------- -->
+                <!-- IF LANDED -->
+                <!-- --------- -->
+                <div ng-if="vm.flight.apiflight.flightStatus.status === 'L'">
+
+                    <!-- -------------- -->
+                    <!-- ITEM DEPARTURE -->
+                    <!-- -------------- -->
+                    <div class="item item_departure">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Departure</span>
+                            </div>
+
+                            <div class="ic_body">
+                                <div class="ic_table">
+
+                                    <!-- AIRPORT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airport
+                                        </div>
+
+                                        <div class="ic_cell_right">
+                                            {{ vm.flight.apiDepAirport.name }} ({{ vm.flight.apiDepAirport.iata }}), </br>
+                                            {{ vm.flight.apiDepAirport.countryName }} ({{ vm.flight.apiDepAirport.countryCode }})
+                                        </div>
+                                    </div>
+
+                                    <!-- DEPARTED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Departed
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture &&
+                                                    vm.flight.apiflight.flightStatus.operationalTimes.actualRunwayDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualRunwayDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualRunwayDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- DELAYED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Delayed
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.delays">
+                                            {{ vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes }} min
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.delays">
+                                            On time
+                                        </div>
+                                    </div>
+
+                                    <!-- TERMINAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Terminal
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal">
+                                            {{ vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- GATE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Gate
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.airportResources.departureGate">
+                                            {{ vm.flight.apiflight.flightStatus.airportResources.departureGate }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.airportResources.departureGate">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ------------ -->
+                    <!-- ITEM ARRIVAL -->
+                    <!-- ------------ -->
+                    <div class="item item_arrival">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Arrival</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- AIRPORT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airport
+                                        </div>
+
+                                        <div class="ic_cell_right">
+                                            {{ vm.flight.apiArrAirport.name }} ({{ vm.flight.apiArrAirport.iata }}), </br>
+                                            {{ vm.flight.apiArrAirport.countryName }} ({{ vm.flight.apiArrAirport.countryCode }})
+                                        </div>
+                                    </div>
+
+                                    <!-- ARRIVED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Arrived
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'MMM d' }}
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival &&
+                                                    vm.flight.apiflight.flightStatus.operationalTimes.estimatedRunwayArrival">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.estimatedRunwayArrival.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.estimatedRunwayArrival.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- TERMINAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Terminal
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                            ng-if="vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal">
+                                            {{ vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- GATE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Gate
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.airportResources.arrivalGate">
+                                            {{ vm.flight.apiflight.flightStatus.airportResources.arrivalGate }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.airportResources.arrivalGate">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ------------ -->
+                    <!-- ITEM WEATHER -->
+                    <!-- ------------ -->
+                    <div class="item item_weather">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Weather</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- DEPARTURE WEATHER -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_full">
+                                            {{ vm.flight.apiDepAirport.city }}
+                                        </div>
+
+                                        <div class="ic_cell_full ic_cell_temperature"
+                                            ng-if="vm.flight.apiDepWeather.main.temp">
+                                            <span>
+                                                <!--{{ vm.flight.apiDepWeather.main.temp | number:0 }} °C-->
+                                                {{ vm.$$ix.convertToCel(vm.flight.apiDepWeather.main.temp) | number:0 }} °C
+                                            </span>
+                                            <span>
+                                                <!--{{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.metar.temperatureCelsius)  | number:0 }} °F-->
+                                                {{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.main.temp) | number:0 }} °F
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_left ic_cell_weather_icon"
+                                             ng-if="vm.flight.apiDepWeather.weather[0].main">
+                                            <span>
+                                                <i class="wi {{ vm.flight.depWeatherIcon }}"></i>
+                                                <!--{{ vm.flight.depWeatherIcon }}-->
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_right ic_cell_weather_text">
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- ARRIVAL WEATHER -->
+                                    <div class="ic_cell ic_cell_weather">
+                                        <div class="ic_cell_full">
+                                            {{ vm.flight.apiArrAirport.city }}
+                                        </div>
+
+                                        <div class="ic_cell_full ic_cell_temperature"
+                                             ng-if="vm.flight.apiArrWeather.main.temp">
+                                            <span>
+                                                <!--{{ vm.flight.apiDepWeather.main.temp | number:0 }} °C-->
+                                                {{ vm.$$ix.convertToCel(vm.flight.apiArrWeather.main.temp) | number:0 }} °C
+                                            </span>
+                                            <span>
+                                                <!--{{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.metar.temperatureCelsius)  | number:0 }} °F-->
+                                                {{ vm.$$ix.convertToFah(vm.flight.apiArrWeather.main.temp) | number:0 }} °F
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_left ic_cell_weather_icon"
+                                             ng-if="vm.flight.apiArrWeather.weather[0].main">
+                                            <span>
+                                                <i class="wi {{ vm.flight.arrWeatherIcon }}"></i>
+                                                <!--{{ vm.flight.arrWeatherIcon }}-->
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_right ic_cell_weather_text">
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ----------- -->
+                    <!-- ITEM FLIGHT -->
+                    <!-- ----------- -->
+                    <div class="item item_flight">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Flight</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- DURATION -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Duration
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes">
+                                            {{ vm.$$ix.convert(vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes) }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- AIRCRAFT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Aircraft
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].name">
+                                            {{ vm.flight.apiflight.appendix.equipments[0].name }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.equipments[0].name">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- AIRLINE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airline
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.airlines[0].name &&
+                                                vm.flight.apiflight.appendix.airlines[0].iata">
+                                            {{ vm.flight.apiflight.appendix.airlines[0].name }}
+                                            ({{ vm.flight.apiflight.appendix.airlines[0].iata }})
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.airlines[0].name">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- IATA -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            IATA
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].iata">
+                                            {{ vm.flight.apiflight.appendix.equipments[0].iata }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.equipments[0].iata">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- TURBOPROP -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            TurboProp
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].turboProp &&
+                                             vm.flight.apiflight.appendix.equipments[0].turboProp == true">
+                                            yes
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].turboProp == false">
+                                            no
+                                        </div>
+                                    </div>
+
+                                    <!-- JET -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Jet
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].jet &&
+                                             vm.flight.apiflight.appendix.equipments[0].jet == true">
+                                            yes
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].jet &&
+                                             vm.flight.apiflight.appendix.equipments[0].jet == false">
+                                            no
+                                        </div>
+                                        <div ng-if="!vm.flight.apiflight.appendix.equipments[0].jet" class="ic_cell_right">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- PHONE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Phone
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.airlines[0].phoneNumber">
+                                            {{ vm.flight.apiflight.appendix.airlines[0].phoneNumber }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.airlines[0].phoneNumber">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- --------- -->
+                <!-- IF IN AIR -->
+                <!-- --------- -->
+                <div ng-if="vm.flight.apiflight.flightStatus.status === 'A'">
+
+                    <!-- -------------- -->
+                    <!-- ITEM DEPARTURE -->
+                    <!-- -------------- -->
+                    <div class="item item_departure">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Departure</span>
+                            </div>
+
+                            <div class="ic_body">
+                                <div class="ic_table">
+
+                                    <!-- AIRPORT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airport
+                                        </div>
+
+                                        <div class="ic_cell_right">
+                                            {{ vm.flight.apiDepAirport.name }} ({{ vm.flight.apiDepAirport.iata }}), </br>
+                                            {{ vm.flight.apiDepAirport.countryName }} ({{ vm.flight.apiDepAirport.countryCode }})
+                                        </div>
+                                    </div>
+
+                                    <!-- DEPARTED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Departed
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.operationalTimes.actualGateDeparture &&
+                                                    vm.flight.apiflight.flightStatus.operationalTimes.actualRunwayDeparture">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualRunwayDeparture.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualRunwayDeparture.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- DELAYED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Delayed
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes">
+                                            {{ vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes }} min
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.delays.departureGateDelayMinutes &&
+                                             vm.flight.apiflight.flightStatus.delays.departureRunwayDelayMinutes">
+                                            {{ vm.flight.apiflight.flightStatus.delays.departureRunwayDelayMinutes }} min
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.delays">
+                                            On time
+                                        </div>
+                                    </div>
+
+                                    <!-- TERMINAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Terminal
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal">
+                                            {{ vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apischeduleflight.scheduledFlights[0].departureTerminal">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- GATE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Gate
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.airportResources.departureGate">
+                                            {{ vm.flight.apiflight.flightStatus.airportResources.departureGate }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.airportResources.departureGate">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ------------ -->
+                    <!-- ITEM ARRIVAL -->
+                    <!-- ------------ -->
+                    <div class="item item_arrival">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Arrival</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- AIRPORT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airport
+                                        </div>
+
+                                        <div class="ic_cell_right">
+                                            {{ vm.flight.apiArrAirport.name }} ({{ vm.flight.apiArrAirport.iata }}), </br>
+                                            {{ vm.flight.apiArrAirport.countryName }} ({{ vm.flight.apiArrAirport.countryCode }})
+                                        </div>
+                                    </div>
+
+                                    <!-- ARRIVED -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Arrived
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'MMM d' }}
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.operationalTimes.actualGateArrival &&
+                                                    vm.flight.apiflight.flightStatus.operationalTimes.estimatedRunwayArrival">
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.estimatedRunwayArrival.dateLocal | date : 'hh:mm a' }},
+                                            {{ vm.flight.apiflight.flightStatus.operationalTimes.estimatedRunwayArrival.dateLocal | date : 'MMM d' }}
+                                        </div>
+                                    </div>
+
+                                    <!-- TERMINAL -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Terminal
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal">
+                                            {{ vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apischeduleflight.scheduledFlights[0].arrivalTerminal">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- GATE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Gate
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.airportResources.arrivalGate">
+                                            {{ vm.flight.apiflight.flightStatus.airportResources.arrivalGate }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.airportResources.arrivalGate">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ------------ -->
+                    <!-- ITEM WEATHER -->
+                    <!-- ------------ -->
+                    <div class="item item_weather">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Weather</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- DEPARTURE WEATHER -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_full">
+                                            {{ vm.flight.apiDepAirport.city }}
+                                        </div>
+
+                                        <div class="ic_cell_full ic_cell_temperature"
+                                             ng-if="vm.flight.apiDepWeather.main.temp">
+                                            <span>
+                                                <!--{{ vm.flight.apiDepWeather.main.temp | number:0 }} °C-->
+                                                {{ vm.$$ix.convertToCel(vm.flight.apiDepWeather.main.temp) | number:0 }} °C
+                                            </span>
+                                            <span>
+                                                <!--{{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.metar.temperatureCelsius)  | number:0 }} °F-->
+                                                {{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.main.temp) | number:0 }} °F
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_left ic_cell_weather_icon"
+                                             ng-if="vm.flight.apiDepWeather.weather[0].main">
+                                            <span>
+                                                <i class="wi {{ vm.flight.depWeatherIcon }}"></i>
+                                                <!--{{ vm.flight.depWeatherIcon }}-->
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_right ic_cell_weather_text">
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- ARRIVAL WEATHER -->
+                                    <div class="ic_cell ic_cell_weather">
+                                        <div class="ic_cell_full">
+                                            {{ vm.flight.apiArrAirport.city }}
+                                        </div>
+
+                                        <div class="ic_cell_full ic_cell_temperature"
+                                             ng-if="vm.flight.apiArrWeather.main.temp">
+                                            <span>
+                                                <!--{{ vm.flight.apiDepWeather.main.temp | number:0 }} °C-->
+                                                {{ vm.$$ix.convertToCel(vm.flight.apiArrWeather.main.temp) | number:0 }} °C
+                                            </span>
+                                            <span>
+                                                <!--{{ vm.$$ix.convertToFah(vm.flight.apiDepWeather.metar.temperatureCelsius)  | number:0 }} °F-->
+                                                {{ vm.$$ix.convertToFah(vm.flight.apiArrWeather.main.temp) | number:0 }} °F
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_left ic_cell_weather_icon"
+                                             ng-if="vm.flight.apiArrWeather.weather[0].main">
+                                            <span>
+                                                <i class="wi {{ vm.flight.arrWeatherIcon }}"></i>
+                                                <!--{{ vm.flight.arrWeatherIcon }}-->
+                                            </span>
+                                        </div>
+
+                                        <div class="ic_cell_right ic_cell_weather_text">
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ----------- -->
+                    <!-- ITEM FLIGHT -->
+                    <!-- ----------- -->
+                    <div class="item item_flight">
+                        <div class="i_content">
+                            <div class="ic_header">
+                                <span>Flight</span>
+                            </div>
+
+                            <div class="ic_body test1">
+                                <div class="ic_table">
+
+                                    <!-- DURATION -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Duration
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes">
+                                            {{ vm.$$ix.convert(vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes) }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.flightStatus.flightDurations.scheduledBlockMinutes">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- AIRCRAFT -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Aircraft
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].name">
+                                            {{ vm.flight.apiflight.appendix.equipments[0].name }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.equipments[0].name">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- AIRLINE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Airline
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.airlines[0].name &&
+                                                vm.flight.apiflight.appendix.airlines[0].iata">
+                                            {{ vm.flight.apiflight.appendix.airlines[0].name }}
+                                            ({{ vm.flight.apiflight.appendix.airlines[0].iata }})
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.airlines[0].name">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- IATA -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            IATA
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].iata">
+                                            {{ vm.flight.apiflight.appendix.equipments[0].iata }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.equipments[0].iata">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- TURBOPROP -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            TurboProp
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].turboProp &&
+                                             vm.flight.apiflight.appendix.equipments[0].turboProp == true">
+                                            yes
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].turboProp == false">
+                                            no
+                                        </div>
+                                    </div>
+
+                                    <!-- JET -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Jet
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].jet &&
+                                             vm.flight.apiflight.appendix.equipments[0].jet == true">
+                                            yes
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.equipments[0].jet &&
+                                             vm.flight.apiflight.appendix.equipments[0].jet == false">
+                                            no
+                                        </div>
+                                        <div ng-if="!vm.flight.apiflight.appendix.equipments[0].jet" class="ic_cell_right">
+                                            n/a
+                                        </div>
+                                    </div>
+
+                                    <!-- PHONE -->
+                                    <div class="ic_cell">
+                                        <div class="ic_cell_left">
+                                            Phone
+                                        </div>
+
+                                        <div class="ic_cell_right"
+                                             ng-if="vm.flight.apiflight.appendix.airlines[0].phoneNumber">
+                                            {{ vm.flight.apiflight.appendix.airlines[0].phoneNumber }}
+                                        </div>
+                                        <div class="ic_cell_right"
+                                             ng-if="!vm.flight.apiflight.appendix.airlines[0].phoneNumber">
+                                            n/a
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </md-content>
 </div>

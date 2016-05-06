@@ -24,7 +24,7 @@
         // Custom
         config
     ) {
-        var url = config.api + 'flights/:flight_id';
+        var url = config.api + 'flights/detail/:flight_id';
 
         var paramDefaults = {
             flight_id : '@id',
@@ -34,7 +34,7 @@
         var actions = {
             'query' : {
                 method : 'GET',
-                isArray: true
+                isArray: false
             }
         };
 

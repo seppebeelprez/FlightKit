@@ -11,7 +11,8 @@
         "laravelcollective/html": "^5.2",
         "barryvdh/laravel-ide-helper": "^2.1",
         "laravel/socialite": "^2.0",
-        "oriceon/oauth-5-laravel": "dev-master"
+        "oriceon/oauth-5-laravel": "dev-master",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

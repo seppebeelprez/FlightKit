@@ -7,23 +7,25 @@
     <title>FlightKit</title>
 
     <!-- Fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
+    {{--<link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>--}}
     {{--<link rel="stylesheet" href="/css/font-awesome.css">--}}
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
     @section('head-scripts')
         {!! Html::script('js/angular.js') !!}
         {!! Html::script('js/vendor.min.js') !!}
         {!! Html::script('js/bootstrap.min.js') !!}
-        {!! Html::script('js/materialize.min.js') !!}
+        {!! Html::script('js/angular-spinners.min.js') !!}
+        {!! Html::script('js/angular-busy.js') !!}
         {!! Html::script('js/frontoffice.js') !!}
     @show
 
-    {!! Html::style('css/materialize.min.css') !!}
+    {!! Html::style('css/material.min.css') !!}
+    {!! Html::style('css/weather-icons.min.css') !!}
     <link rel="stylesheet" href="{{ elixir('css/main.css') }}">
 
     <base href="/">
@@ -39,9 +41,9 @@
     </style>
 </head>
 <body id="app-layout">
-    <div class="preloader">
-        <div class="status">&nbsp;</div>
-    </div>
+    {{--<div class="preloader">--}}
+        {{--<div class="status">&nbsp;</div>--}}
+    {{--</div>--}}
 
     @include('partials.nav')
 
@@ -50,10 +52,11 @@
     </section>
 
     <!-- JavaScripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
      {{--<script src="{{ elixir('js/frontoffice.js') }}"></script>--}}
+
     @section('foot-scripts')
+        {!! Html::script('js/material.min.js') !!}
         {!! Html::script('js/custom.js') !!}
     @show
 

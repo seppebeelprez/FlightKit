@@ -431,7 +431,8 @@ body {
  * Basic typography style for copy text
  */
 html {
-  font-size: 10px; }
+  font-size: 10px;
+  outline: none; }
 
 body {
   color: #222;
@@ -442,7 +443,12 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
   box-shadow: none !important; }
 
 .ngShow {
-  color: #DA1C1C; }
+  color: rgba(218, 33, 33, 0.73);
+  font-size: 1.4rem; }
+
+.angucomplete-row:active,
+.angucomplete-row:focus {
+  outline: none; }
 
 /**
  * Clear inner floats
@@ -487,7 +493,7 @@ input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]),
 /**
  * Hide element while making it readable for screen readers
  * Shamelessly borrowed from HTML5Boilerplate:
- * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-9fff9bc10c.css#L119-L133
+ * https://github.com/h5bp/html5-boilerplate/blob/master/src/build//css/main-0147e759ae.css#L119-L133
  */
 .visually-hidden {
   border: 0;
@@ -587,21 +593,22 @@ header .navbar-header .navbar-brand {
     height: 50px;
     -webkit-backface-visibility: hidden; }
 
-header .navbar-inverse .navbar-nav li a {
-  color: white;
-  font-size: 1.6rem;
-  font-weight: 300;
-  padding-bottom: 14px; }
-
-header .navbar-inverse .navbar-nav li a:hover {
-  color: #30B996; }
-
-header .navbar-inverse .navbar-nav li a.active {
-  color: #30B996;
-  border-bottom: 2px solid #30B996; }
+header .navbar-inverse .navbar-nav {
+  margin-right: 0 !important; }
+  header .navbar-inverse .navbar-nav li a {
+    color: white;
+    font-size: 1.6rem;
+    font-weight: 300;
+    padding-bottom: 14px; }
+  header .navbar-inverse .navbar-nav li a:hover {
+    color: #30B996; }
+  header .navbar-inverse .navbar-nav li a.active {
+    color: #30B996;
+    border-bottom: 2px solid #30B996; }
 
 #main_content {
-  padding-top: 64px; }
+  padding-top: 64px;
+  padding-bottom: 32px; }
 
 header .sticky-navigation {
   background: rgba(0, 0, 0, 0.5);
@@ -764,10 +771,8 @@ header .navbar-inverse .navbar-toggle:focus {
   border: 1px solid #33CC99;
   background-color: #33CC99; }
 
-.buttons_create_modal {
-  margin-top: 32px; }
-  .buttons_create_modal .button_left {
-    text-align: right; }
+.buttons_create_modal .button_left {
+  text-align: right; }
 
 .modal_btn {
   padding: 8px 16px;
@@ -866,14 +871,18 @@ header .navbar-inverse .navbar-toggle:focus {
 .modal {
   background-color: transparent;
   box-shadow: none;
-  width: 64%; }
+  width: 64%;
+  position: absolute;
+  margin: 0 auto;
+  top: 128px; }
   .modal .modal-dialog {
     margin: 0;
     width: 100%; }
     .modal .modal-dialog .modal-content {
       border-radius: 0;
       border: none;
-      background-color: rgba(255, 255, 255, 0.9); }
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 24px 16px; }
       .modal .modal-dialog .modal-content .modal-body {
         padding: 0; }
         .modal .modal-dialog .modal-content .modal-body .modal-title {
@@ -895,21 +904,32 @@ header .navbar-inverse .navbar-toggle:focus {
             .modal .modal-dialog .modal-content .modal-body .modal-check p i {
               -webkit-transform: rotate(180deg); }
         .modal .modal-dialog .modal-content .modal-body .modal-info {
+          margin-top: 16px;
           padding: 0 24px;
           text-align: center;
           color: #757575; }
 
+@media only screen and (max-width: 1200px) {
+  .modal {
+    top: 96px; } }
+
 @media only screen and (max-width: 992px) {
   .modal {
+    top: 64px;
     width: 80%; } }
 
 @media only screen and (max-width: 768px) {
   .modal {
-    width: 80%; } }
+    top: 128px;
+    width: 80%;
+    height: 420px;
+    max-height: 420px; } }
 
 @media only screen and (max-width: 500px) {
   .modal {
-    width: 90%; } }
+    width: 90%;
+    height: 420px;
+    max-height: 420px; } }
 
 .angucomplete-dropdown {
   position: absolute;
@@ -976,7 +996,8 @@ header .navbar-inverse .navbar-toggle:focus {
           font-size: 1.8rem; }
         #home_content .home_options .home_option .home_option_bottom .home_option_bottom_right p {
           margin-bottom: 0;
-          font-size: 1.4rem; }
+          font-size: 1.4rem;
+          line-height: normal; }
 
 @media screen and (max-width: 768px) {
   .home_option_bottom_right {
@@ -1154,7 +1175,7 @@ header .navbar-inverse .navbar-toggle:focus {
       text-align: right; }
   .container_login .login_block .login_form .help-block {
     padding-left: 15px;
-    color: #DA1C1C;
+    color: rgba(218, 33, 33, 0.73);
     font-weight: 300;
     font-size: 1.4rem;
     font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif; }
@@ -1341,6 +1362,11 @@ header .navbar-inverse .navbar-toggle:focus {
     font-size: 2.4rem;
     font-weight: 300;
     margin-bottom: 64px; }
+  #flight_create_content .flight_create_options h5 {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    font-size: 16px;
+    font-weight: 300; }
   #flight_create_content .flight_create_options .full {
     background-color: rgba(255, 255, 255, 0.9); }
   #flight_create_content .flight_create_options .between {
@@ -1416,7 +1442,8 @@ header .navbar-inverse .navbar-toggle:focus {
     width: 100%;
     margin-bottom: 0;
     border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: transparent; }
   #flight_create_content .flight_create_options .flight_date input[type=date]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     display: none; }
@@ -1475,11 +1502,13 @@ header .navbar-inverse .navbar-toggle:focus {
     font-size: 1.6rem;
     font-weight: 300; }
     #flight_overview_content .flights_overview .flight_item a {
-      color: #ffffff !important; }
+      color: #ffffff !important;
+      font-weight: 300; }
     #flight_overview_content .flights_overview .flight_item span {
       margin-bottom: 8px;
       display: block; }
       #flight_overview_content .flights_overview .flight_item span p {
+        font-weight: 300;
         font-size: 1.4rem; }
     #flight_overview_content .flights_overview .flight_item .fi_place span p {
       margin-bottom: 0;
@@ -1558,3 +1587,169 @@ header .navbar-inverse .navbar-toggle:focus {
     #flight_overview_content .flight_item .fi_gate {
       padding-left: 0;
       padding-right: 0; } }
+
+#flight_detail_content {
+  padding-top: 16px;
+  font-weight: 300;
+  color: #ffffff; }
+  #flight_detail_content .spinner2 {
+    background-color: #ffffff;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    padding: calc((100vh - 128px) / 2) calc((100vw - 128px) / 2); }
+  #flight_detail_content .flight_detail_intro {
+    text-align: left;
+    color: #ffffff; }
+    #flight_detail_content .flight_detail_intro .flight_detail_intro_title {
+      font-size: 2.4rem; }
+    #flight_detail_content .flight_detail_intro .flight_detail_intro_subtitle {
+      font-size: 2rem; }
+    #flight_detail_content .flight_detail_intro .mdl-button {
+      float: right; }
+      #flight_detail_content .flight_detail_intro .mdl-button i {
+        font-size: 32px;
+        line-height: 32px;
+        width: 32px;
+        -webkit-transform: translate(-16px, -16px);
+        transform: translate(-16px, -16px); }
+      #flight_detail_content .flight_detail_intro .mdl-button i:hover {
+        background-color: transparent; }
+    #flight_detail_content .flight_detail_intro .mdl-button:hover {
+      background-color: transparent; }
+    #flight_detail_content .flight_detail_intro .mdl-menu__container {
+      right: 28px !important;
+      margin-top: 16px !important; }
+      #flight_detail_content .flight_detail_intro .mdl-menu__container .mdl-menu__outline {
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22) !important;
+        -webkit-animation-delay: 1.2s;
+        animation-delay: 1.2s; }
+      #flight_detail_content .flight_detail_intro .mdl-menu__container ul {
+        padding: 0; }
+        #flight_detail_content .flight_detail_intro .mdl-menu__container ul li i {
+          margin-right: 16px;
+          vertical-align: middle; }
+        #flight_detail_content .flight_detail_intro .mdl-menu__container ul li:nth-of-type(2) {
+          border-top: 1px solid #30B996;
+          border-bottom: 1px solid #30B996; }
+        #flight_detail_content .flight_detail_intro .mdl-menu__container ul a:hover {
+          text-decoration: none; }
+        #flight_detail_content .flight_detail_intro .mdl-menu__container ul .item_favorite {
+          color: #30B996; }
+        #flight_detail_content .flight_detail_intro .mdl-menu__container ul .item_delete {
+          color: rgba(218, 33, 33, 0.73); }
+        #flight_detail_content .flight_detail_intro .mdl-menu__container ul .item_refresh {
+          color: #0073AE; }
+  #flight_detail_content .modal-body {
+    background-color: #ffffff;
+    width: 100vw;
+    z-index: 9999;
+    height: 100%;
+    position: fixed !important; }
+    #flight_detail_content .modal-body .modal-table {
+      display: table;
+      width: 100%;
+      height: 100%; }
+      #flight_detail_content .modal-body .modal-table .modal-cell {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center; }
+  #flight_detail_content .master_grid {
+    padding: 16px 26px 64px 16px; }
+    #flight_detail_content .master_grid #grid {
+      -webkit-column-gap: 10px;
+      -webkit-column-fill: auto;
+      -moz-column-gap: 10px;
+      -moz-column-fill: auto;
+      -webkit-column-gap: 15px;
+      -moz-column-gap: 15px;
+      column-gap: 15px;
+      -webkit-column-fill: auto;
+      -moz-column-fill: auto;
+      column-fill: auto; }
+      #flight_detail_content .master_grid #grid .item {
+        width: 100%;
+        display: inline-block;
+        box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+        margin: 0 2px 15px;
+        -webkit-column-break-inside: avoid;
+        -moz-column-break-inside: avoid;
+        column-break-inside: avoid; }
+        #flight_detail_content .master_grid #grid .item .i_content {
+          height: 100%; }
+          #flight_detail_content .master_grid #grid .item .i_content .ic_header {
+            padding: 8px 16px;
+            background-color: rgba(0, 0, 0, 0.64); }
+            #flight_detail_content .master_grid #grid .item .i_content .ic_header span {
+              color: #ffffff;
+              font-size: 1.8rem; }
+          #flight_detail_content .master_grid #grid .item .i_content .ic_body {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0 16px 16px 16px;
+            color: rgba(0, 0, 0, 0.64);
+            font-size: 1.6rem;
+            font-weight: 400; }
+            #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table {
+              display: table;
+              min-height: 64px;
+              width: 100%; }
+              #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell {
+                display: table-cell;
+                vertical-align: middle;
+                width: 100%;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+                padding: 16px 0;
+                float: left; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_left, #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_right {
+                  display: inline-block; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_left {
+                  width: 39%;
+                  float: left; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_right {
+                  width: 60%; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_full {
+                  width: 100%; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(odd) {
+                  font-size: 5rem;
+                  padding-right: 16px;
+                  margin-right: 16px;
+                  border-right: 1px solid gray; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(even) {
+                  font-size: 2rem;
+                  vertical-align: top;
+                  margin-top: 8px !important;
+                  display: inline-block; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_icon {
+                  width: auto !important;
+                  margin-right: 16px; }
+                  #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_icon span:nth-of-type(odd) i {
+                    font-size: 10rem;
+                    margin-bottom: 16px; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_text {
+                  padding-top: 1rem;
+                  width: auto !important; }
+                  #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_text span {
+                    display: block; }
+    #flight_detail_content .master_grid .item img {
+      width: 100%; }
+
+@media screen and (min-width: 800px) {
+  #grid {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3; } }
+
+@media screen and (min-width: 600px) and (max-width: 799px) {
+  #grid {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2; } }
+
+@media screen and (max-width: 599px) {
+  #grid {
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1; } }

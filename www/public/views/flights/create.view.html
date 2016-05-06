@@ -17,12 +17,13 @@
         <form name="form" novalidate>
             <div class="flight_create_options">
 
-
                 <div class="col-lg-offset-0 col-lg-5 col-md-offset-0 col-md-5 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10 col-xxs-offset-1 col-xxs-10 col-500">
                     <div class="flight_create_option flight_airline full col-xs-12">
                         <h5>Airline</h5>
 
-                        <angucomplete-alt id="ex1"
+                        <!--<span ng-show="form.fAirline.$valid" class="valid-status valid">[VALID]</span><span class="valid-status invalid" ng-show="form.fAirline.$invalid">[INVALID]</span>-->
+
+                        <div angucomplete-alt name="fAirline"
                                           placeholder="Search airlines"
                                           pause="100"
                                           selected-object="vm.$$ix.airline"
@@ -30,15 +31,15 @@
                                           search-fields="name,iata"
                                           title-field="name"
                                           minlength="1"
-                                          input-class="form-control form-control-small"
-                                          match-class="highlight"/>
+                                          match-class="highlight"
+                                          field-required="true"
+                                          input-name="fAirline"
+                                          field-required="true"
+                                          autocomplete-required /></div>
 
-                        <!--<div class="padded-row">-->
-                            <!--<div angucomplete-alt id="ex1" placeholder="Search airlines" maxlength="50" pause="100"-->
-                                 <!--selected-object="vm.$$ix.country" local-data="vm.airlines" search-fields="iata" title-field="iata"-->
-                                 <!--minlength="1" input-class="form-control form-control-small" match-class="highlight" ng-model="vm.flight.airline">-->
-                            <!--</div>-->
-                        <!--</div>-->
+                        <div ng-show="form.$submitted" class="ngShow">
+                            <div ng-show="form.fAirline.$invalid">Select/click airline</div>
+                        </div>
                     </div>
                 </div>
 
@@ -142,14 +143,14 @@
                     <div class="row btn-col min-btn">
                         <div class="buttons_create_modal col-xs-12">
                             <div class="button_left col-xs-6 col-xxs-12">
-                                <input type="button" ng-click="vm.$$ix.cancel()" class="modal_btn modal_cancel_button" value="Cancel">
-                                <!--<a href="/" class="own_btn back_button" target="_self">BACK</a>-->
-                            </div>
-
-                            <div class="button_right col-xs-6 col-xxs-12">
                                 <!--<input type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self" value="NEXT">-->
                                 <input type="submit" ng-click="vm.$$ix.add()" class="modal_btn modal_add_button" value="Add">
                                 <!--<a href="" type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self">NEXT</a>-->
+                            </div>
+
+                            <div class="button_right col-xs-6 col-xxs-12">
+                                <input type="button" ng-click="vm.$$ix.cancel()" class="modal_btn modal_cancel_button" value="Cancel">
+                                <!--<a href="/" class="own_btn back_button" target="_self">BACK</a>-->
                             </div>
                         </div>
                     </div>

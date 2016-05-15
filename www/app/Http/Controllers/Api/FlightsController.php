@@ -49,93 +49,95 @@ class FlightsController extends Controller
     /**
      * Show detail flight
      *
-     * @param $id
+     * @param $airline
+     * @param $number
      */
-    public function show($id){
+    public function show($airline, $number){
         if (Auth::check())
         {
-
             $appID = env('FLIGHT_APPID');
             $appKEY = env('FLIGHT_APPKEY');
             $weatherKey = '71a17c7d27e3c0462f0798e88d8af51c';
 
 
             $dbflight = DB::table('flights')
-              ->where('id', $id)->get();
-
-            $flightId = $dbflight[0]->flightId;
-            $flightNumber = $dbflight[0]->number;
-            $flightAirline = $dbflight[0]->airline;
-            $flightDepCode = $dbflight[0]->departure;
-            $flightArrCode = $dbflight[0]->arrival;
+              ->where('airline', $airline)
+              ->where('number', $number)
+              ->get();
             
+            if($dbflight) {
 
-            $clientFlightApi = new Client();
-            $responseFlightApi = $clientFlightApi
-              ->get('https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/status/'
-                .$flightId.'?appId='.$appID.'&appKey='.$appKEY.'')->getBody();
+                $flightId = $dbflight[0]->flightId;
+                $flightNumber = $dbflight[0]->number;
+                $flightAirline = $dbflight[0]->airline;
 
 
-            $depAirport = $dbflight[0]->departure;
-            $arrAirport = $dbflight[0]->arrival;
+                $clientFlightApi = new Client();
+                $responseFlightApi = $clientFlightApi
+                  ->get('https://api.flightstats.com/flex/flightstatus/rest/v2/json/flight/status/'
+                    .$flightId.'?appId='.$appID.'&appKey='.$appKEY.'')->getBody();
 
-            $allAirports = json_decode($responseFlightApi)->appendix->airports;
 
-            $fullDepAirport = '';
-            $fullArrAirport = '';
+                $depAirport = $dbflight[0]->departure;
+                $arrAirport = $dbflight[0]->arrival;
 
-            foreach ($allAirports as $airport) {
-                if($airport->iata == $depAirport) {
-                    $fullDepAirport = $airport;
-                }elseif ($airport->iata == $arrAirport) {
-                    $fullArrAirport = $airport;
+                $allAirports = json_decode($responseFlightApi)->appendix->airports;
+
+                $fullDepAirport = '';
+                $fullArrAirport = '';
+
+                foreach ($allAirports as $airport) {
+                    if($airport->iata == $depAirport) {
+                        $fullDepAirport = $airport;
+                    }elseif ($airport->iata == $arrAirport) {
+                        $fullArrAirport = $airport;
+                    }
                 }
+
+
+                $responseFlightScheduleApi = [];
+                if(json_decode($responseFlightApi)->flightStatus->status == 'S' ||
+                  json_decode($responseFlightApi)->flightStatus->status == 'A' ||
+                  json_decode($responseFlightApi)->flightStatus->status == 'L')
+                {
+                    $dt = Carbon::parse($dbflight[0]->day);
+                    $year = $dt->year;
+                    $month = $dt->month;
+                    $day = $dt->day;
+
+                    $clientFlightScheduleApi = new Client();
+                    $responseFlightScheduleApi = $clientFlightScheduleApi
+                      ->get('https://api.flightstats.com/flex/schedules/rest/v1/json/flight/'
+                        .$flightAirline.'/'.$flightNumber.'/departing/'.$year.'/'.$month.'/'.$day.
+                        '?appId='.$appID.'&appKey='.$appKEY.'')
+                      ->getBody();
+                }
+
+                $flightDepCity = $fullDepAirport->city;
+                $flightArrCity = $fullArrAirport->city;
+
+                $clientDepWeather = new Client();
+                $responseDepWeather = $clientDepWeather
+                  ->get('http://api.openweathermap.org/data/2.5/weather?q='.$flightDepCity.'&appid='.$weatherKey.'')->getBody();
+
+                $clientArrWeather = new Client();
+                $responseArrWeather = $clientArrWeather
+                  ->get('http://api.openweathermap.org/data/2.5/weather?q='.$flightArrCity.'&appid='.$weatherKey.'')->getBody();
+
+
+                return [
+                  'dbflight' => $dbflight,
+                  'apiflight' => json_decode($responseFlightApi),
+                  'apischeduleflight' => json_decode($responseFlightScheduleApi),
+                  'apiDepAirport' => $fullDepAirport,
+                  'apiArrAirport' => $fullArrAirport,
+                  'apiDepWeather' => json_decode($responseDepWeather),
+                  'apiArrWeather' => json_decode($responseArrWeather)
+                ];
+
+            }else {
+                return redirect('/flights');
             }
-
-
-            $responseFlightScheduleApi = [];
-            if(json_decode($responseFlightApi)->flightStatus->status == 'S' ||
-              json_decode($responseFlightApi)->flightStatus->status == 'A' ||
-              json_decode($responseFlightApi)->flightStatus->status == 'L')
-            {
-                $dt = Carbon::parse($dbflight[0]->day);
-                $year = $dt->year;
-                $month = $dt->month;
-                $day = $dt->day;
-
-                $clientFlightScheduleApi = new Client();
-                $responseFlightScheduleApi = $clientFlightScheduleApi
-                  ->get('https://api.flightstats.com/flex/schedules/rest/v1/json/flight/'
-                    .$flightAirline.'/'.$flightNumber.'/departing/'.$year.'/'.$month.'/'.$day.
-                    '?appId='.$appID.'&appKey='.$appKEY.'')
-                  ->getBody();
-
-//                dd(json_decode($responseFlightScheduleApi));
-            }
-
-            $flightDepCity = $fullDepAirport->city;
-            $flightArrCity = $fullArrAirport->city;
-
-            $clientDepWeather = new Client();
-            $responseDepWeather = $clientDepWeather
-              ->get('http://api.openweathermap.org/data/2.5/weather?q='.$flightDepCity.'&appid='.$weatherKey.'')->getBody();
-
-            $clientArrWeather = new Client();
-            $responseArrWeather = $clientArrWeather
-              ->get('http://api.openweathermap.org/data/2.5/weather?q='.$flightArrCity.'&appid='.$weatherKey.'')->getBody();
-
-
-//            dd(json_decode($responseArrWeather));
-
-            return [
-              'dbflight' => $dbflight,
-              'apiflight' => json_decode($responseFlightApi),
-              'apischeduleflight' => json_decode($responseFlightScheduleApi),
-              'apiDepAirport' => $fullDepAirport,
-              'apiArrAirport' => $fullArrAirport,
-              'apiDepWeather' => json_decode($responseDepWeather),
-              'apiArrWeather' => json_decode($responseArrWeather)
-            ];
         }
         else
         {
@@ -220,9 +222,7 @@ class FlightsController extends Controller
         $deleteFlight->delete();
 
         $pivotFlights = DB::table('flight_user')->where('flight_id', $flight_id)->get();
-
-//        return $pivotFlights;
-
+        
         //CHECK IF PIVOT TABLE STILL CONTAINS FLIGHTS
         if ($pivotFlights == NULL) {
 
@@ -230,7 +230,6 @@ class FlightsController extends Controller
             $getFlight = DB::table('flights')->where('id', $flight_id);
             $getFlight->delete();
         }
-
     }
 
     /**
@@ -252,7 +251,5 @@ class FlightsController extends Controller
 
         $outdatedFlight = DB::table('flights')->where('id', $flight_id);
         $outdatedFlight->delete();
-        
-
     }
 }

@@ -1,33 +1,22 @@
 // -----------------------------------------------------------------------------
-// This file contains styles that are specific to the flight detail page.
+// This file contains styles that are specific to the trips detail page.
 // -----------------------------------------------------------------------------
 @import "../../themes/default";
 
-#flight_detail_content {
+#trip_detail_content {
   padding-top: 16px;
   font-weight: 300;
   color: $white;
 
-  .spinner2 {
-    background-color: $white;
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    padding: calc((100vh - 128px) / 2) calc((100vw - 128px) / 2);
-  }
-
-  .flight_detail_intro {
+  .trip_detail_intro {
     text-align: left;
     color: $white;
 
-    .flight_detail_intro_title {
+    .trip_detail_intro_title {
       font-size: 2.4rem;
     }
 
-    .flight_detail_intro_subtitle {
+    .trip_detail_intro_subtitle {
       font-size: 2rem;
     }
 
@@ -38,7 +27,7 @@
         font-size: 32px;
         line-height: 32px;
         width: 32px;
-        transform: translate(-16px,-16px);
+        transform: translate(-16px, -16px);
       }
 
       i:hover {
@@ -56,9 +45,9 @@
       margin-top: 16px !important;
 
       .mdl-menu__outline {
-        box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22) !important;
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22) !important;
         -webkit-animation-delay: 1.2s;
-        -moz-animation-delay:1.2s;
+        -moz-animation-delay: 1.2s;
         animation-delay: 1.2s;
       }
 
@@ -111,7 +100,6 @@
   .modal-body {
     background-color: $white;
     width: 100vw;
-    //height: 100vh;
     z-index: 9999;
     height: 100%;
     position: fixed !important;
@@ -143,7 +131,6 @@
       .item {
         width: 100%;
         display: inline-block;
-        //background: $white_opacity;
         box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
         margin: 0 2px 15px;
         -webkit-column-break-inside: avoid;
@@ -164,7 +151,6 @@
 
           .ic_body {
             background-color: rgba(255, 255, 255, 0.9);
-            //height: 100px;
             padding: 0 16px 0 16px;
             color: $black_opacity;
             font-size: 1.6rem;
@@ -237,8 +223,116 @@
                     display: block;
                   }
                 }
+
+                .ic_cell_sunriseset {
+                  span {
+                    display: inline-block;
+
+                    i {
+
+                    }
+                  }
+
+                  span:nth-of-type(odd) {
+                    border-right: 1px solid $black_opacity_24;
+                    padding-right: 10px;
+                  }
+
+                  span:nth-of-type(even) {
+                    margin-left: 4px;
+                  }
+                }
+
+                .ic_cell_forecast {
+                  display: flex;
+
+                  span:nth-of-type(1) {
+                    width: 50%;
+                  }
+
+                  span:nth-of-type(2) {
+                    width: 10%;
+                  }
+
+                  span:nth-of-type(3) {
+                    width: 40%;
+                    text-align: right;
+                  }
+                }
+
+                .ic_cell_local_date {
+                  i {
+                    vertical-align: bottom;
+                    margin-right: 8px;
+                  }
+                }
+
+                .ic_cell_local_time {
+                  i {
+                    vertical-align: bottom;
+                    margin-right: 8px;
+                  }
+                  span {
+                    font-size: 1rem;
+                  }
+                }
+
+                .ic_cell_local_zone {
+                  i {
+                    vertical-align: bottom;
+                    margin-right: 8px;
+                  }
+                }
+
+                .ic_cell_converter {
+
+                  .ic_cell_converter_fields {
+                    //display: flex;
+
+                    .mdl-select__input {
+                      width: 100%;
+                      height: 40px;
+                    }
+
+                    .currencyBetween {
+                      button {
+                        outline: none !important;
+                        width: 100%;
+                        text-align: center;
+                        display: block;
+                        margin: 8px 0;
+                        border: none;
+                        height: 36px;
+                        background-color: $main_green;
+
+                        i {
+                          vertical-align: middle;
+                          color: $white;
+                        }
+                      }
+                    }
+                  }
+
+                  input {
+                    outline: none !important;
+                    width: 100%;
+                    height: 32px;
+                    color: $white;
+                    background-color: $main_green;
+                    border: none !important;
+                    margin: 4px 0;
+                  }
+
+                  .currencyChanged {
+                    border-top: 2px solid $main_green;
+                    margin-top: 12px;
+                    padding-top: 12px;
+                  }
+                }
               }
 
+              .ic_cell_temp_main,
+              .ic_cell_sunriseset_main,
               .ic_cell:last-of-type {
                 border-bottom: none !important;
               }

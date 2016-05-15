@@ -21,6 +21,7 @@
         {!! Html::script('js/bootstrap.min.js') !!}
         {!! Html::script('js/angular-spinners.min.js') !!}
         {!! Html::script('js/angular-busy.js') !!}
+        {!! Html::script('js/money.min.js') !!}
         {!! Html::script('js/frontoffice.js') !!}
     @show
 

@@ -1,7 +1,30 @@
-<div id="flight_overview_content" ng-cloak ng-show="vm.allCheckedFlights">
+<div id="flight_overview_content" ng-cloak>
+
+    <!--<div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>-->
+
+    <!--<script type="text/ng-template" id="loading.html">-->
+        <!--<div class="modal-body">-->
+            <!--<div class="modal-table">-->
+                <!--<div class="modal-cell">-->
+                    <!--<img src="../../img/loader/preloader.gif" alt="">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</script>-->
+
     <md-toolbar>
         <div class="flight_overview_intro">
-            {{vm.$$ui.title}}
+            <div class="col-xs-10">
+                <span class="flight_overview_intro_title">
+                    {{vm.$$ui.title}}
+                </span>
+            </div>
+
+            <div class="col-xs-2">
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <a href="flights/create"><i class="material-icons">add</i></a>
+                </button>
+            </div>
         </div>
     </md-toolbar>
 
@@ -10,7 +33,7 @@
 
             <!-- SCHEDULED START -->
             <div ng-if="flight.allFlightDetails.flightStatus.status === 'S'" class="flight_scheduled">
-                <a href="flights/detail/{{ flight.databaseFlightId }}" target="_self">
+                <a  href="flights/detail/{{ flight.databaseFlight.database.airline }}/{{ flight.databaseFlight.database.number }}" target="_self">
                     <div class="flight_item col-xs-12">
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
                             <span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>
@@ -77,7 +100,7 @@
 
             <!-- IN THE AIR START -->
             <div ng-if="flight.allFlightDetails.flightStatus.status === 'A'">
-                <a href="flights/detail/{{ flight.databaseFlightId }}" target="_self">
+                <a  href="flights/detail/{{ flight.databaseFlight.database.airline }}/{{ flight.databaseFlight.database.number }}" target="_self">
                     <div class="flight_item col-xs-12">
                         <!--<h3>{{ flight.id }}</h3>-->
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
@@ -124,7 +147,7 @@
 
             <!-- LANDED START -->
             <div ng-if="flight.allFlightDetails.flightStatus.status === 'L'" class="flight_landed">
-                <a  href="flights/detail/{{ flight.databaseFlightId }}" target="_self">
+                <a  href="flights/detail/{{ flight.databaseFlight.database.airline }}/{{ flight.databaseFlight.database.number }}" target="_self">
                     <div class="flight_item col-xs-12">
                         <!--<h3>{{ flight.id }}</h3>-->
                         <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">

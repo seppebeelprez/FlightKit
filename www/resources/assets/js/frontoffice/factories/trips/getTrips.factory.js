@@ -5,11 +5,11 @@
  */
 ;(function () { 'use strict';
 
-    angular.module('app.flights')
-        .factory('detailFlightsFactory', detailFlightsFactory);
+    angular.module('app.trips')
+        .factory('getTripsFactory', getTripsFactory);
 
     // Inject dependencies into constructor (needed when JS minification is applied).
-    detailFlightsFactory.$inject = [
+    getTripsFactory.$inject = [
         // Angular
         '$resource',
 
@@ -17,25 +17,23 @@
         'config'
     ];
 
-    function detailFlightsFactory(
+    function getTripsFactory(
         // Angular
         $resource,
 
         // Custom
         config
     ) {
-        var url = config.api + 'flights/detail/:airline/:number';
+        var url = config.api + 'trips';
 
         var paramDefaults = {
-            airline : '@airline',
-            number  : '@number',
-            format  : 'json'
+            
         };
 
         var actions = {
             'query' : {
                 method : 'GET',
-                isArray: false
+                isArray: true
             }
         };
 

@@ -30,7 +30,7 @@
 
     angular.module('app.home', ['ui.router', 'ngRoute']);
     angular.module('app.flights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'angularSpinners', 'cgBusy']);
-    angular.module('app.trips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial']);
+    angular.module('app.trips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy']);
     angular.module('app.account', ['ui.router']);
 
     angular.module('app.factories', ['ui.router']);
@@ -78,8 +78,8 @@
 
     angular.module('app')
         .constant('config', {
-            appId : 'dbb6ea9e',
-            appKey : '5bf1b2bedbd8e63dc1b3221cbd834c2c',
+            appId : '8ea22765',
+            appKey : 'f25a316d50feb48ecde4d35e5d235985',
             api : 'api/v1/'
         });
 })();
@@ -276,11 +276,13 @@
         vm.$$ix = {
             next        : createFlight,
             confirm     : showModal,
-            airline     : airlineSelected
+            airline     : airlineSelected,
+            airport     : airportSelected
         };
 
         getFlights();
         getAirlines();
+        getAirports();
 
         vm.animationsEnabled = true;
 
@@ -288,7 +290,7 @@
         // --------------
         vm.$$ui = {
             title: 'Create a flight',
-            subtitle: 'Select your airline, flight number and date.'
+            subtitle: 'Select your airline, airport, flight number and date.'
         };
 
         // Data
@@ -298,7 +300,9 @@
         vm.userFlights = {};
         vm.data = {};
         vm.airlines = {};
+        vm.airports = {};
         vm.flight.airline = {};
+        vm.flight.airport = {};
         vm.existingFlightDetailId = {};
 
         vm.flight.today = new Date();
@@ -313,7 +317,7 @@
             $http.get('../json/airlines.json')
                 .then(function(data){
                     vm.airlines = data.data.airlines;
-                    //console.log('airlines,', data.data.airlines);
+                    // console.log('airlines,', data.data.airlines);
                 });
         }
 
@@ -326,21 +330,37 @@
             }
         }
 
-        vm.localSearch = function(str) {
-            var matches = [];
-            vm.airlines.forEach(function(airline) {
-                var fullName = airline.name;
-                matches.push(fullName);
-            });
-            return matches;
-        };
+        // vm.localSearch = function(str) {
+        //     console.log('localSearch');
+        //     var matches = [];
+        //     vm.airlines.forEach(function(airline) {
+        //         var fullName = airline.name;
+        //         matches.push(fullName);
+        //     });
+        //     return matches;
+        // };
 
+        function getAirports() {
+            $http.get('../json/airports.json')
+                .then(function(data){
+                    vm.airports = data.data.airports;
+                    // console.log('airports,', data.data.airports);
+                });
+        }
+
+        function airportSelected(selected) {
+            if (selected) {
+                console.log(selected);
+                vm.flight.airport = selected.description.iata;
+            } else {
+                console.log('cleared');
+            }
+        }
 
         // Show popup
         // -----
         function showModal() {
 
-            //console.log('showModal', vm.flight);
 
             if($scope.form.$valid) {
 
@@ -353,7 +373,7 @@
                     '' + vm.flight.number + '/dep/' +
                     '' + $filter('date')(vm.flight.today, 'yyyy/MM/dd') + '?appId=' +
                     '' + config.appId + '&appKey=' +
-                    '' + config.appKey + '',
+                    '' + config.appKey + '&airport=' + vm.flight.airport + '',
                     dataType: 'jsonp',
                     crossDomain: true,
                     success: function(data) {
@@ -454,12 +474,8 @@
 
             angular.forEach(vm.userFlights,function(flight,key){
 
-                //console.log('vm.flight.id: ', vm.flight.flightId);
-                //console.log('vm.userflight.id: ', flight.flightId);
-
                 vm.flightIdArray.push(flight);
 
-                ////console.log(flight.flightId, key);
                 if (vm.flight.flightId == flight.flightId) {
                     console.log('DUPLICATE: ', vm.flight.flightId, flight.flightId);
 
@@ -478,9 +494,7 @@
                     };
 
                     checkDuplicate = true;
-
                 }
-
             });
 
             if(checkDuplicate == true){
@@ -488,28 +502,7 @@
             }else {
                 console.log('checkDuplicate = false!');
                 createFlightsFactory.createFlight(vm.flight);
-                //$window.location.href = '/flights';
             }
-
-            //console.log('checkduplicate array:', vm.flightIdArray);
-
-            //q.all(vm.flightIdArray).then(function success(data){
-            //    if(checkDuplicate == false) {
-            //        console.log('checkduplicate:', vm.flightIdArray);
-            //        console.log('you can create flight');
-            //    }
-            //}, function failure(err){
-            //    // Can handle this is we want
-            //});
-
-
-            //console.log('All airports: ', vm.allAirports);
-            //console.log('original flight: ', vm.flight);
-            //
-            //createFlightsFactory.createFlight(vm.flight);
-            //$window.location.href = '/flights';
-
-            //console.log(vm.flightIdArray);
         }
 
 
@@ -543,9 +536,15 @@
         '$window',
         '$http',
         '$filter',
+        '$uibModal',
+        '$q',
 
         //Custom
-        'detailFlightsFactory'
+        'detailFlightsFactory',
+        'deleteFlightsFactory',
+        'createTripsFactory',
+        'getTripsFactory',
+        'deleteTripsFactory'
     ];
 
     function FlightsDetailController(
@@ -557,9 +556,15 @@
         $window,
         $http,
         $filter,
+        $uibModal,
+        $q,
 
         //Custom
-        detailFlightsFactory
+        detailFlightsFactory,
+        deleteFlightsFactory,
+        createTripsFactory,
+        getTripsFactory,
+        deleteTripsFactory
     ) {
         // ViewModel
         // =========
@@ -575,60 +580,50 @@
         };
 
         vm.flight = {};
-
-        // $scope.loading = true;
-
-        // vm.getData = function () {
-        //     // spinnerService.show('booksSpinner');
-        //
-        //     getDetailFlight();
-        //
-        // };
-
-        // vm.weather = {
-        //     Drizzle: 'wi-sleet',
-        //     Rain: 'wi-sleet'
-        // };
+        vm.trip = {};
 
         vm.weather = [
-            {name:'Clouds', icon:'wi-cloudy'},
-            {name:'Dust/sand whirls', icon:'wi-rain'},
-            {name:'Dust storm', icon:'wi-sleet'},
-            {name:'Fog', icon:'wi-fog'},
-            {name:'Funnel cloud', icon:'wi-sleet'},
-            {name:'Hail', icon:'wi-sleet'},
-            {name:'Haze', icon:'wi-sleet'},
-            {name:'Ice crystals', icon:'wi-sleet'},
-            {name:'Ice pellets', icon:'wi-sleet'},
-            {name:'Mist', icon:'wi-rain'},
+            {name:'Clear', icon:'wi-day-sunny'},
             {name:'Rain', icon:'wi-rain'},
-            {name:'Sand', icon:'wi-sleet'},
-            {name:'Sand storm', icon:'wi-sleet'},
-            {name:'Small hail', icon:'wi-sleet'},
-            {name:'Smoke/fumes', icon:'wi-sleet'},
-            {name:'Snow', icon:'wi-sleet'},
-            {name:'Snow grains', icon:'wi-sleet'},
-            {name:'Spray', icon:'wi-sleet'},
-            {name:'Squalls', icon:'wi-sleet'},
-            {name:'Unknown precipitation', icon:'wi-sleet'},
-            {name:'Volcanic ash', icon:'wi-volcano'},
-            {name:'Widespread dust', icon:'wi-sleet'}
+            {name:'Clouds', icon:'wi-cloudy'},
+            {name:'Atmosphere', icon:'wi-fog'},
+            {name:'Snow', icon:'wi-snow'},
+            {name:'Drizzle', icon:'wi-showers'},
+            {name:'Thunderstorm', icon:'wi-thunderstorm'},
+            {name:'Extreme', icon:'wi-hurricane'}
         ];
 
+        vm.checkIfTrip = null;
 
         // User Interaction
         // --------------
         vm.$$ix = {
             refresh: refresh,
+            delete: deleteModal,
+            favorite: addToTrips,
+            removefavorite: deleteFromTripsModal,
             convert: convertMins,
             convertToCel: convertToCel,
             convertToFah: convertToFah
         };
 
+        vm.animationsEnabled = true;
+
+        // Functions
+        // --------------
+        function refresh() {
+            console.log('refresh');
+            $window.location.reload();
+        }
+
+        function deleteFlight($id) {
+            console.log('deleteFlight: ', $id);
+            deleteFlightsFactory.deleteFlight($id);
+        }
+
         function convertMins(minutes) {
             var hours = Math.floor( minutes / 60);
             var mins = minutes % 60;
-            console.log('convertMins: ', hours, mins);
             var time = hours + 'h' + mins + 'm';
             return time;
         }
@@ -643,17 +638,11 @@
             return fah;
         }
 
-        console.log($stateParams.id);
-        
-        function refresh() {
-            console.log('refresh');
-            $window.location.reload();
-        }
-
         function getDetailFlight() {
             // console.log('getDetailFlight');
             var params = {
-                flight_id : $stateParams.id
+                airline : $stateParams.airline,
+                number  : $stateParams.number
             };
 
             return vm.getData = detailFlightsFactory.query(params, getDetailFlightSuccess, getDetailFlightError);
@@ -681,9 +670,142 @@
             var arrWeatherValue = $filter('filter')(vm.weather, {name: response.apiArrWeather.weather[0].main}, true);
             vm.flight.arrWeatherIcon = arrWeatherValue[0].icon;
 
-            console.log(vm.flight.apiDepWeather, vm.flight.apiArrWeather);
-            console.log(response.apiDepWeather.weather[0].main, response.apiArrWeather.weather[0].main);
-            console.log(vm.flight.depWeatherIcon, vm.flight.arrWeatherIcon);
+            // console.log(vm.flight.apiDepWeather, vm.flight.apiArrWeather);
+            // console.log(response.apiDepWeather.weather[0].main, response.apiArrWeather.weather[0].main);
+            // console.log(vm.flight.depWeatherIcon, vm.flight.arrWeatherIcon);
+
+            getTrips();
+        }
+
+        function addToTrips() {
+            // console.log('createTrip');
+            // console.log('vm.trip to add: ', vm.flight.databaseflight.arrival);
+
+            vm.tripIdArray = [];
+            var checkDuplicate = false;
+
+            angular.forEach(vm.userTrips,function(trip,key){
+            
+                vm.tripIdArray.push(trip);
+            
+                if (vm.flight.databaseflight.arrival == trip.airport) {
+                    // console.log('DUPLICATE: ', vm.flight.databaseflight.arrival, trip.airport);
+            
+                    var duplicateTripModal = $uibModal.open({
+                        animation: vm.animationsEnabled,
+                        templateUrl: 'duplicateModal.html',
+                        scope: $scope
+                    });
+                    vm.$$ix.cancel = function () {
+                        duplicateTripModal.dismiss('cancel');
+                    };
+                    
+                    vm.$$ix.detail = function () {
+                        // console.log('existingTripDetailId: ', trip.id);
+                        duplicateTripModal.dismiss('Go to detail: ', trip.id);
+                    };
+                    checkDuplicate = true;
+                }
+            });
+            
+            if(checkDuplicate == true){
+                console.log('checkDuplicate = true!');
+            }else {
+                console.log('checkDuplicate = false!');
+                vm.trip.airport = vm.flight.databaseflight.arrival;
+                var createTrips = createTripsFactory.createTrip(vm.trip);
+
+                $q.all(createTrips).then(function success(data){
+                    vm.checkIfTrip = true;
+                });
+
+                var addedToTripsModal = $uibModal.open({
+                    animation: vm.animationsEnabled,
+                    templateUrl: 'addedToTripsModal.html',
+                    scope: $scope
+                });
+                vm.$$ix.cancel = function () {
+                    addedToTripsModal.dismiss('cancel');
+                    getTrips();
+                };
+            }
+        }
+        
+        function removeFromTrips($airport) {
+            var searchTrip = $filter('filter')(vm.userTrips, {airport: $airport}, true);
+            var deleteTrip = deleteTripsFactory.deleteTrip(searchTrip[0].id);
+
+            $q.all(deleteTrip).then(function success(data){
+                getTrips();
+            });
+        }
+
+        // Get already added trips
+        // -----
+        function getTrips() {
+            console.log('getTrips');
+            var params = {};
+            return getTripsFactory
+                .query(
+                    params,
+                    getTripsSuccess,
+                    getTripsError);
+        }
+
+        function getTripsError(reason) {
+            //$log.error('getTripsError:', reason);
+        }
+        function getTripsSuccess(response) {
+            vm.userTrips = response[0].trips;
+            console.log('vm.userTrips: ', vm.userTrips);
+
+            var checkIfTrip = $filter('filter')(vm.userTrips, {airport: vm.flight.databaseflight.arrival}, true);
+
+            $q.all(checkIfTrip).then(function success(data){
+                if(checkIfTrip.length > 0) {
+                    vm.checkIfTrip = true;
+                }else {
+                    vm.checkIfTrip = false;
+                }
+                console.log(vm.checkIfTrip);
+            });
+        }
+
+
+        // Show delete modal popup
+        // -----
+        function deleteModal() {
+            var deleteFlightModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'deleteModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                deleteFlightModal.dismiss('cancel');
+            };
+            vm.$$ix.deleteFlight = function ($id) {
+                deleteFlightModal.close(true);
+                console.log($id);
+                deleteFlight($id);
+            };
+        }
+
+        function deleteFromTripsModal() {
+            var deleteTripModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'deleteFromTripsModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                deleteTripModal.dismiss('cancel');
+            };
+            vm.$$ix.deleteTrip = function ($airport) {
+                vm.checkIfTrip = false;
+                console.log(vm.checkIfTrip);
+                deleteTripModal.close(true);
+                console.log($airport);
+                removeFromTrips($airport);
+            };
         }
     }
 
@@ -740,8 +862,8 @@
                     }
                 }
             })
-            .state('/flights/detail/:id', {
-                url: '/flights/detail/:id',
+            .state('/flights/detail/:airline/:number', {
+                url: '/flights/detail/:airline/:number',
                 views: {
                     main: {
                         controller: 'FlightsDetailController as vm',
@@ -778,7 +900,6 @@
         //Custom
         'getFlightsFactory',
         'deleteFlightsFactory',
-        // 'scheduleFlightAPIFactory',
         'config'
     ];
 
@@ -801,15 +922,11 @@
         var vm = this;
 
         getFlights();
-        //vm.overview = getSchedules();
-
-        //$scope.promises = [];
-
+        
         // User Interface
         // --------------
         vm.$$ui = {
-            title: 'Flights Overview',
-            subtitle: 'Overview of your added flights!'
+            title: 'Flights Overview'
         };
 
         // User Interaction
@@ -866,7 +983,7 @@
                         //Store API data
                         vm.currentFlightData.allData = data;
                         //Store database id to go later to the details view
-                        vm.currentFlightData.databaseId = flight.id;
+                        vm.currentFlightData.database = flight;
                         //Push array with 1 flight to array with multiple flights
                         vm.flights.push(vm.currentFlightData);
                         // console.log('vm.currentFlightData: ', vm.currentFlightData);
@@ -882,7 +999,7 @@
             });
 
             $q.all(vm.allFlightsData).then(function success(data){
-                //console.log('vm.flights: ', vm.flights); // Should all be here
+                console.log('vm.flights: ', vm.flights); // Should all be here
 
 
                 //Test array
@@ -896,8 +1013,8 @@
                 angular.forEach(vm.flights,function(flight,key){
 
                     if (flight.allData.error) {
-                        console.log('404 remove flight: ', flight.databaseId);
-                        deleteFlightsFactory.deleteOutdatedFlight(flight.databaseId);
+                        console.log('404 remove flight: ', flight.database.id);
+                        deleteFlightsFactory.deleteOutdatedFlight(flight.database.id);
                     }
                     else {
                         // console.log('found flight');
@@ -979,13 +1096,13 @@
                         vm.checkThisFlight.departureAirport     = null;
                         vm.checkThisFlight.arrivalAirport       = null;
                         vm.checkThisFlight.allFlightDetails     = null;
-                        vm.checkThisFlight.databaseFlightId     = null;
+                        vm.checkThisFlight.databaseFlight       = null;
 
                         //Place all current flight information in allFlightDetails
                         vm.checkThisFlight.departureAirport     = vm.tempDepartureAirport;
                         vm.checkThisFlight.arrivalAirport       = vm.tempArrivalAirport;
                         vm.checkThisFlight.allFlightDetails     = flight.allData;
-                        vm.checkThisFlight.databaseFlightId     = flight.databaseId;
+                        vm.checkThisFlight.databaseFlight       = flight;
 
                         //Push current checkThisFlight to allCheckedFlights
                         //console.log('before push tot allCheckedFlights', vm.checkThisFlight);
@@ -1157,6 +1274,462 @@
     'use strict';
 
     angular.module('app.trips')
+        .controller('TripsCreateController', TripsCreateController);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    TripsCreateController.$inject = [
+        // Angular
+        '$log',
+        '$state',
+        '$location',
+        '$filter',
+        'config',
+        '$scope',
+        '$q',
+        '$uibModal',
+        '$window',
+        '$http',
+
+        //Custom
+        'createTripsFactory',
+        'getTripsFactory'
+    ];
+
+    function TripsCreateController(
+        // Angular
+        $log,
+        $state,
+        $location,
+        $filter,
+        config,
+        $scope,
+        $q,
+        $uibModal,
+        $window,
+        $http,
+
+        //Custom
+        createTripsFactory,
+        getTripsFactory
+
+    ) {
+        // ViewModel
+        // =========
+        var vm = this;
+
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            next        : createTrip,
+            airport     : airportSelected
+        };
+
+        getTrips();
+        getAirports();
+
+        vm.animationsEnabled = true;
+
+        // User Interface
+        // --------------
+        vm.$$ui = {
+            title: 'Create a trip',
+            subtitle: 'Select your airport and get information about your destination.'
+        };
+
+        // Data
+        // ----
+        // vm.trip
+        vm.trip = {};
+        vm.airports = {};
+        vm.trip.airport = {};
+        vm.existingTripDetailId = {};
+
+
+        // Functions
+        // =========
+
+        // Angular autocomplete
+        // -----
+        function getAirports() {
+            $http.get('../json/airports.json')
+                .then(function(data){
+                    vm.airports = data.data.airports;
+                    console.log('airports,', data.data.airports);
+                });
+        }
+        function airportSelected(selected) {
+            if (selected) {
+                console.log(selected);
+                vm.trip.airport = selected.description.iata;
+            } else {
+                console.log('cleared');
+            }
+        }
+
+        // Show popup
+        // -----
+
+
+        // Get already added trips
+        // -----
+        function getTrips() {
+            var params = {};
+            return getTripsFactory
+                .query(
+                    params,
+                    getTripsSuccess,
+                    getTripsError);
+        }
+
+        function getTripsError(reason) {
+            //$log.error('getTripsError:', reason);
+        }
+        function getTripsSuccess(response) {
+            //$log.success('getTripsSuccess:', response);
+            vm.userTrips = response[0].trips;
+            console.log('vm.userTrips: ', vm.userTrips);
+        }
+
+        // Create Trip
+        // -----
+        function createTrip() {
+            console.log('createTrip');
+            console.log('vm.trip: ', vm.trip);
+
+            vm.tripIdArray = [];
+            var checkDuplicate = false;
+
+            angular.forEach(vm.userTrips,function(trip,key){
+
+                vm.tripIdArray.push(trip);
+
+                if (vm.trip.airport == trip.airport) {
+                    console.log('DUPLICATE: ', vm.trip.airport, trip.airport);
+
+                    var duplicateTripModal = $uibModal.open({
+                        animation: vm.animationsEnabled,
+                        templateUrl: 'duplicateModal.html',
+                        scope: $scope
+                    });
+                    vm.$$ix.cancel = function () {
+                        duplicateTripModal.dismiss('cancel');
+                    };
+
+                    vm.$$ix.detail = function () {
+                        console.log('existingTripDetailId: ', trip.id);
+                        duplicateTripModal.dismiss('Go to detail: ', trip.id);
+                        $window.location.href = '/trips/detail/' + vm.trip.airport;
+                    };
+                    checkDuplicate = true;
+                }
+            });
+
+            if(checkDuplicate == true){
+                console.log('checkDuplicate = true!');
+            }else {
+                console.log('checkDuplicate = false!');
+                var createTrips = createTripsFactory.createTrip(vm.trip);
+
+                $q.all(createTrips).then(function success(data){
+                    $window.location.href = '/trips/detail/' + vm.trip.airport;
+                });
+            }
+        }
+
+        // Go Back
+        // -----
+        vm.go = function ( path ) {
+            $location.path( path );
+        };
+    }
+
+})();
+
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
+    angular.module('app.trips')
+        .controller('TripsDetailController', TripsDetailController);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    TripsDetailController.$inject = [
+        // Angular
+        '$log',
+        '$scope',
+        '$state',
+        '$stateParams',
+        '$window',
+        '$http',
+        '$filter',
+        '$uibModal',
+        '$q',
+
+        //Custom
+        'detailTripsFactory',
+        'deleteTripsFactory'
+    ];
+
+    function TripsDetailController(
+        // Angular
+        $log,
+        $scope,
+        $state,
+        $stateParams,
+        $window,
+        $http,
+        $filter,
+        $uibModal,
+        $q,
+
+        //Custom
+        detailTripsFactory,
+        deleteTripsFactory
+    ) {
+        // ViewModel
+        // =========
+        var vm = this;
+
+        getDetailTrip();
+        getCurrency();
+
+        // User Interface
+        // --------------
+        vm.$$ui = {
+            title: 'Trip Detail',
+            subtitle: 'Detail trip!'
+        };
+
+        vm.trip = {};
+
+        vm.weather = [
+            {name:'Clear', icon:'wi-day-sunny'},
+            {name:'Rain', icon:'wi-rain'},
+            {name:'Clouds', icon:'wi-cloudy'},
+            {name:'Atmosphere', icon:'wi-fog'},
+            {name:'Snow', icon:'wi-snow'},
+            {name:'Drizzle', icon:'wi-showers'},
+            {name:'Thunderstorm', icon:'wi-thunderstorm'},
+            {name:'Extreme', icon:'wi-hurricane'}
+        ];
+
+        console.log($stateParams);
+
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            refresh: refresh,
+            delete: deleteModal,
+            // addToTrips: addToTrips,
+            convert: convertMins,
+            convertToCel: convertToCel,
+            convertToFah: convertToFah,
+            convertValuta: convertValuta,
+            reverseValuta: reverseValuta
+            // currencySecond: currencySecondSelected
+        };
+        
+        vm.animationsEnabled = true;
+        vm.currency = {};
+        vm.currency.selectFirst = '';
+        vm.currency.selectSecond = '';
+
+        // Functions
+        // --------------
+        function refresh() {
+            console.log('refresh');
+            $window.location.reload();
+        }
+
+        function deleteTrip($id) {
+            console.log('deleteTrip: ', $id);
+
+            var deleteTrip = deleteTripsFactory.deleteTrip($id);
+
+            $q.all(deleteTrip).then(function success(data){
+                $window.location.href = '/trips';
+            });
+        }
+
+        function getCurrency() {
+            $http.get('../json/currency2.json')
+                .then(function(data){
+                    vm.trip.currency = data.data;
+                    console.log('currency,', vm.trip.currency);
+                });
+        }
+
+        function reverseValuta() {
+            if(vm.currency.selectFirst && vm.currency.selectSecond ) {
+                var oldFirst = vm.currency.selectFirst.code;
+                var oldSecond = vm.currency.selectSecond.code;
+
+                vm.currency.selectFirst.code = oldSecond;
+                vm.currency.selectSecond.code = oldFirst;
+
+                convertValuta();
+            }
+        }
+
+        function convertValuta() {
+            if(vm.currency.selectFirst && vm.currency.selectSecond ) {
+
+                vm.currencyArray = [];
+
+                var check = $.ajax({
+                    url: "https://api.fixer.io/latest",
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    success: function(data) {
+                        // console.log('data', data);
+                    }
+                });
+                vm.currencyArray.push(check);
+
+                $q.all(vm.currencyArray).then(function success(data){
+                    fx.rates = data[0].rates;
+                    // console.log(fx.rates);
+                    // console.log(vm.currency.selectFirst.code, vm.currency.selectSecond.code);
+
+                    if(vm.currency.selectFirst.code == "EUR" && vm.currency.selectSecond.code != "EUR"){
+                        var rate = fx(1).to(vm.currency.selectSecond.code);
+                        vm.currency.currencyChanged = rate.toFixed(2);
+                    }else if(vm.currency.selectSecond.code == "EUR" && vm.currency.selectFirst.code != "EUR"){
+                        var rate2 = fx(1).to(vm.currency.selectFirst.code);
+                        vm.currency.currencyChanged = (1 / rate2).toFixed(2);
+                    }else if(vm.currency.selectFirst.code === vm.currency.selectSecond.code){
+                        vm.currency.currencyChanged = (1.00).toFixed(2);
+                    }
+                    else {
+                        var rate3= fx(1).from(vm.currency.selectFirst.code).to(vm.currency.selectSecond.code);
+                        vm.currency.currencyChanged = rate3.toFixed(2);
+                    }
+                });
+            }
+        }
+
+        function convertMins(minutes) {
+            var hours = Math.floor( minutes / 60);
+            var mins = minutes % 60;
+            var time = hours + 'h' + mins + 'm';
+            return time;
+        }
+
+        function convertToCel(temperature) {
+            var cel = temperature - 273.15;
+            return cel;
+        }
+
+        function convertToFah(temperature) {
+            var fah = (temperature - 273.15) * 9.0 / 5.0 + 32;
+            return fah;
+        }
+
+        var toUTCDate = function(date){
+            var _utc = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+            return _utc;
+        };
+
+        var millisToUTCDate = function(millis){
+            return toUTCDate(new Date(millis));
+        };
+
+        function getDetailTrip() {
+            var params = {
+                trip_airport : $stateParams.airport
+            };
+
+            return vm.getData = detailTripsFactory.query(params, getDetailTripSuccess, getDetailTripError);
+        }
+
+        function getDetailTripError(reason) {
+            $log.error('getDetailFlightError:', reason);
+        }
+        function getDetailTripSuccess(response, responseHeader) {
+            // vm.data = response;
+            // console.log('succes: ', response);
+            vm.trip.databasetrip = response.dbtrip;
+            vm.trip.apitrip = response.apitrip;
+            vm.trip.apiweather = response.apiweather;
+            vm.trip.apiforecast = response.apiforecast;
+            vm.trip.forecast = {};
+
+            var weatherValue = $filter('filter')(vm.weather, {name: response.apiweather.weather[0].main}, true);
+            vm.trip.weatherIcon = weatherValue[0].icon;
+
+            var sunrise = (vm.trip.apiweather.sys.sunrise + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
+            var sunset = (vm.trip.apiweather.sys.sunset + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
+            
+            vm.trip.apiweather.sys.sunrise = sunrise;
+            vm.trip.apiweather.sys.sunset = sunset;
+
+            //FORECAST 1 DAY FUTURE
+            vm.trip.forecast.day1 = {};
+            vm.trip.forecast.day1.date = (vm.trip.apiforecast.list[1].dt + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
+            var weatherValueDay1 = $filter('filter')(vm.weather, {name: vm.trip.apiforecast.list[1].weather[0].main}, true);
+            vm.trip.forecast.day1.weatherIcon = weatherValueDay1[0].icon;
+            vm.trip.forecast.day1.minTemp = convertToCel(vm.trip.apiforecast.list[1].temp.min);
+            vm.trip.forecast.day1.maxTemp = convertToCel(vm.trip.apiforecast.list[1].temp.max);
+
+            //FORECAST 2 DAY FUTURE
+            vm.trip.forecast.day2 = {};
+            vm.trip.forecast.day2.date = (vm.trip.apiforecast.list[2].dt + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
+            var weatherValueDay2 = $filter('filter')(vm.weather, {name: vm.trip.apiforecast.list[2].weather[0].main}, true);
+            vm.trip.forecast.day2.weatherIcon = weatherValueDay2[0].icon;
+            vm.trip.forecast.day2.minTemp = convertToCel(vm.trip.apiforecast.list[2].temp.min);
+            vm.trip.forecast.day2.maxTemp = convertToCel(vm.trip.apiforecast.list[2].temp.max);
+
+            //FORECAST 3 DAY FUTURE
+            vm.trip.forecast.day3 = {};
+            vm.trip.forecast.day3.date = (vm.trip.apiforecast.list[3].dt + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
+            var weatherValueDay3 = $filter('filter')(vm.weather, {name: vm.trip.apiforecast.list[3].weather[0].main}, true);
+            vm.trip.forecast.day3.weatherIcon = weatherValueDay3[0].icon;
+            vm.trip.forecast.day3.minTemp = convertToCel(vm.trip.apiforecast.list[3].temp.min);
+            vm.trip.forecast.day3.maxTemp = convertToCel(vm.trip.apiforecast.list[3].temp.max);
+            
+            // console.log(vm.trip);
+
+        }
+
+
+        vm.toUTCDate = toUTCDate;
+        vm.millisToUTCDate = millisToUTCDate;
+
+        // Show delete modal popup
+        // -----
+        function deleteModal() {
+            console.log(vm.trip);
+            var deleteTripModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'deleteModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                deleteTripModal.dismiss('cancel');
+            };
+            vm.$$ix.deleteTrip = function ($id) {
+                deleteTripModal.close(true);
+                console.log($id);
+                deleteTrip($id);
+            };
+        }
+    }
+
+})();
+
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
+    angular.module('app.trips')
         .controller('TripsOverviewController', TripsOverviewController);
 
     // Inject dependencies into constructor (needed when JS minification is applied).
@@ -1169,6 +1742,8 @@
         '$q',
 
         //Custom
+        'getTripsFactory',
+        'deleteTripsFactory',
         'config'
     ];
 
@@ -1181,26 +1756,129 @@
         $q,
 
         //Custom
+        getTripsFactory,
+        deleteTripsFactory,
         config
     ) {
         // ViewModel
         // =========
         var vm = this;
 
+        getTrips();
+
         // User Interface
         // --------------
         vm.$$ui = {
-            title: 'Trips Overview',
-            subtitle: 'Not available right now!'
+            title: 'Trips Overview'
         };
 
         // User Interaction
         // --------------
         vm.$$ix = {
-
+            // delete: deleteTrip
         };
 
+        //Array to stack all trip with api info
+        // vm.trips = [];
+        //Fake array to complete $q.all
+        // vm.databaseTrips = {};
 
+        function getTrips() {
+            var params = {};
+            return getTripsFactory
+                .query(
+                    params,
+                    getTripsSuccess,
+                    getTripsError);
+        }
+
+        function getTripsError(reason) {
+            $log.error('getFlightsError:', reason);
+        }
+        function getTripsSuccess(response, responseHeader) {
+            vm.databaseTrips = response[0];
+            console.log('1: ', vm.databaseTrips);
+
+            //Test array
+            vm.allTripsData = [];
+            //Array to save trips from database
+            vm.trips = [];
+
+            angular.forEach(vm.databaseTrips.trips,function(trip,key){
+
+                console.log(trip);
+
+                var result = $.ajax({
+                    url: 'https://api.flightstats.com/flex/airports/rest/v1/jsonp/iata/' +
+                    '' + trip.airport + '?appId=' +
+                    '' + config.appId + '&appKey=' +
+                    '' + config.appKey + '',
+                    dataType: 'jsonp',
+                    crossDomain: true
+                }).then (function successCallback (data, status, headers, config){
+                        //Empty array to make sure it's empty
+                        vm.currentTripData = null;
+                        //Array to save API + database info for 1 trip
+                        vm.currentTripData = {};
+                        //Store API data
+                        vm.currentTripData.allData = data[0];
+                        //Store database id to go later to the details view
+                        vm.currentTripData.databaseId = trip.id;
+                        vm.currentTripData.dbtrip = trip;
+
+                        //Push array with 1 flight to array with multiple trips
+                        vm.trips.push(vm.currentTripData);
+                    },
+                    function errorCallback (){
+                        console.log("data not sent to API, new object is not created");
+                    });
+
+                vm.allTripsData.push(result);
+
+            });
+
+            $q.all(vm.allTripsData).then(function success(data){
+                console.log('[2]: ', vm.trips);
+            });
+
+            
+
+            // var apiKey = 's48vh9gfa7bbya2cy53sbe8w';
+            // $.ajax({
+            //     type:'GET',
+            //     // dataType: 'jsonp',
+            //     // crossDomain: true,
+            //     url:"https://api.gettyimages.com:443/v3/search/images/creative?orientations=Horizontal&page=1&page_size=1&phrase=london&sort_order=most_popular",
+            //     beforeSend: function (request)
+            //     {
+            //         request.setRequestHeader("Api-Key", apiKey);
+            //     }
+            // }).then (function successCallback (data, status, headers, config){
+            //         console.log('success: ', data)
+            //     },
+            //     function errorCallback (){
+            //         console.log("data not sent to API, new object is not created");
+            //     });
+
+            // $.ajax(
+            //     {
+            //         type:'GET',
+            //         url:"https://api.gettyimages.com:443/v3/search/images/creative?orientations=Horizontal&page=1&page_size=1&phrase=london&sort_order=most_popular",
+            //         beforeSend: function (request)
+            //         {
+            //             request.setRequestHeader("Api-Key", apiKey);
+            //
+            //
+            //         }})
+            //     .done(function(data){
+            //         console.log("Success with data", data)
+            //
+            //         $("#output").append("<img src='" + data.images[0].display_sizes[0].uri + "'/>");
+            //     })
+            //     .fail(function(data){
+            //         alert(JSON.stringify(data,2))
+            //     });
+        }
     }
 
 })();
@@ -1256,8 +1934,8 @@
                     }
                 }
             })
-            .state('/trips/', {
-                url: '/trips/:trip_id',
+            .state('/trips/detail/:airport', {
+                url: '/trips/detail/:airport',
                 views: {
                     main: {
                         controller: 'TripsDetailController as vm',
@@ -1399,11 +2077,12 @@
         // Custom
         config
     ) {
-        var url = config.api + 'flights/detail/:flight_id';
+        var url = config.api + 'flights/detail/:airline/:number';
 
         var paramDefaults = {
-            flight_id : '@id',
-            format    : 'json'
+            airline : '@airline',
+            number  : '@number',
+            format  : 'json'
         };
 
         var actions = {
@@ -1556,6 +2235,224 @@
         //return $resource(url, paramDefaults, actions);
 
 
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2014-2015 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.trips')
+        .factory('createTripsFactory', createTripsFactory);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    createTripsFactory.$inject = [
+        '$http',
+        'config',
+        '$state',
+        '$window'
+    ];
+
+    function createTripsFactory(
+        $http,
+        config,
+        $state,
+        $window
+    ) {
+        return {
+
+            createTrip : function(CreateTrip) {
+                console.log('TripFactory.createTrip');
+                $http.post(config.api + 'trips',
+                    {
+                        'airport'   : CreateTrip.airport
+                    })
+                    .then (function successCallback (data, status, headers, config){
+                            console.log ("data sent to API, new object created");
+                            // $window.location.href = '/trips';
+                        },
+                        function errorCallback (){
+                            console.log("data not sent to API, new object is not created");
+                        });
+            }
+        }
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2014-2015 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.trips')
+        .factory('deleteTripsFactory', deleteTripsFactory);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    deleteTripsFactory.$inject = [
+        '$http',
+        'config',
+        '$state',
+        '$window'
+    ];
+
+    function deleteTripsFactory(
+        $http,
+        config,
+        $state,
+        $window
+    ) {
+        return {
+
+            deleteTrip : function(id) {
+                console.log('deleteTripsFactory.deleteTrip: ', id);
+                $http.delete(config.api + 'trips/' + id)
+                    .then (function successCallback (data, status, headers, config){
+                            console.log ("get pivot trips: ", data);
+                        },
+                        function errorCallback (){
+                            console.log("trips not deleted");
+                        });
+            }
+        }
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2014-2015 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.trips')
+        .factory('detailTripsFactory', detailTripsFactory);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    detailTripsFactory.$inject = [
+        // Angular
+        '$resource',
+
+        // Custom
+        'config'
+    ];
+
+    function detailTripsFactory(
+        // Angular
+        $resource,
+
+        // Custom
+        config
+    ) {
+        var url = config.api + 'trips/detail/:trip_airport';
+
+        var paramDefaults = {
+            trip_airport : '@airport',
+            format    : 'json'
+        };
+
+        var actions = {
+            'query' : {
+                method : 'GET',
+                isArray: false
+            }
+        };
+
+        return $resource(url, paramDefaults, actions);
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2014-2015 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.trips')
+        .factory('getTripImagesFactory', getTripImagesFactory);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    getTripImagesFactory.$inject = [
+        '$http',
+        'config',
+        '$state',
+        '$window'
+    ];
+
+    function getTripImagesFactory(
+        $http,
+        config,
+        $state,
+        $window
+    ) {
+
+        // var apiKey = 's48vh9gfa7bbya2cy53sbe8w';
+        $http.defaults.headers.common['Api-Key'] = 's48vh9gfa7bbya2cy53sbe8w';
+        
+        return {
+            
+            tripImages : function(GetTripImage) {
+                console.log('TripFactory.createTrip');
+                $http.get('https://api.gettyimages.com:443/v3/search/images/creative?orientations=Horizontal&page=1&page_size=1&phrase=london&sort_order=most_popular',
+                    {
+
+                    })
+                    .then (function successCallback (data, status, headers, config){
+                            console.log ("Image retrieved: ", data.data.images[0].display_sizes[0].uri);
+                        },
+                        function errorCallback (){
+                            console.log("Image not retrieved!");
+                        });
+            }
+        }
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2014-2015 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.trips')
+        .factory('getTripsFactory', getTripsFactory);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    getTripsFactory.$inject = [
+        // Angular
+        '$resource',
+
+        // Custom
+        'config'
+    ];
+
+    function getTripsFactory(
+        // Angular
+        $resource,
+
+        // Custom
+        config
+    ) {
+        var url = config.api + 'trips';
+
+        var paramDefaults = {
+            
+        };
+
+        var actions = {
+            'query' : {
+                method : 'GET',
+                isArray: true
+            }
+        };
+
+        return $resource(url, paramDefaults, actions);
     }
 
 })();

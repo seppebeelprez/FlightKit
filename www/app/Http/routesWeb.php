@@ -17,15 +17,11 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::group(['prefix' => 'flights'], function () {
         Route::resource('/', 'Flights\FlightsController@index');
-        Route::resource('/detail', 'Flights\FlightsController@detail');
+        Route::get('/detail/{airline}/{number}', 'Flights\FlightsController@detail');
     });
 
     Route::group(['prefix' => 'trips'], function () {
         Route::resource('/', 'Trips\TripsController@index');
-//        Route::resource('detail', 'Trips\TripsController@detail');
+        Route::resource('/detail', 'Trips\TripsController@detail');
     });
-
-//    Route::group(['prefix' => 'trips'], function () {
-//        Route::resource('overview', 'Trips\TripsController@index');
-//    });
 });

@@ -49,8 +49,8 @@
                     }
                 }
             })
-            .state('/trips/', {
-                url: '/trips/:trip_id',
+            .state('/trips/detail/:airport', {
+                url: '/trips/detail/:airport',
                 views: {
                     main: {
                         controller: 'TripsDetailController as vm',

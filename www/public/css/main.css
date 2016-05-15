@@ -774,6 +774,9 @@ header .navbar-inverse .navbar-toggle:focus {
 .buttons_create_modal .button_left {
   text-align: right; }
 
+.buttons_create_modal .button_center {
+  text-align: center; }
+
 .modal_btn {
   padding: 8px 16px;
   border: 1px solid transparent;
@@ -951,6 +954,139 @@ header .navbar-inverse .navbar-toggle:focus {
     color: #33CC99; }
   .angucomplete-dropdown .highlight {
     color: #33CC99; }
+
+.mdl-select {
+  outline: none !important;
+  position: relative;
+  font-size: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 300px;
+  max-width: 100%;
+  margin: 0;
+  padding: 20px 0;
+  background-color: bisque !important; }
+
+.mdl-select__input::after {
+  background-color: #3f51b5;
+  bottom: 20px;
+  content: '';
+  height: 2px;
+  left: 45%;
+  position: absolute;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  width: 10px; }
+
+.mdl-select__input {
+  display: inline-block;
+  font-size: 16px;
+  margin: 0;
+  padding: 4px 0;
+  width: 100%;
+  background: 16px;
+  text-align: left;
+  color: inherit;
+  border: none !important;
+  background-color: white !important;
+  min-height: 32px !important;
+  height: 32px; }
+
+select {
+  outline: none; }
+
+.mdl-select.is-focused .mdl-select__input {
+  outline: none; }
+
+.mdl-select.is-invalid .mdl-select__input {
+  border-color: #de3226;
+  box-shadow: none; }
+
+.mdl-select.is-disabled .mdl-select__input {
+  background-color: transparent;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.12); }
+
+.mdl-select__label {
+  bottom: 0;
+  color: rgba(0, 0, 0, 0.26);
+  font-size: 16px;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 24px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left; }
+
+.mdl-select.is-dirty .mdl-select__label {
+  visibility: hidden; }
+
+.mdl-select--floating-label .mdl-textfield__label {
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+
+.mdl-select--floating-label.is-focused .mdl-select__label,
+.mdl-select--floating-label.is-dirty .mdl-select__label {
+  color: #3f51b5;
+  font-size: 12px;
+  top: 4px;
+  visibility: visible; }
+
+.mdl-select--floating-label.is-focused .mdl-select__expandable-holder .mdl-select__label,
+.mdl-select--floating-label.is-dirty .mdl-select__expandable-holder .mdl-select__label {
+  top: -16px; }
+
+.mdl-select--floating-label.is-invalid .mdl-select__label {
+  color: #de3226;
+  font-size: 12px; }
+
+.mdl-select__label:after {
+  background-color: #3f51b5;
+  bottom: 20px;
+  content: '';
+  height: 2px;
+  left: 45%;
+  position: absolute;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  width: 10px; }
+
+.mdl-select.is-focused .mdl-select__label:after {
+  left: 0;
+  visibility: visible;
+  width: 100%; }
+
+.mdl-select.is-invalid .mdl-select__label:after {
+  background-color: #de3226; }
+
+.mdl-select__error {
+  color: #de3226;
+  position: absolute;
+  font-size: 12px;
+  margin-top: 3px;
+  visibility: hidden; }
+
+.mdl-select.is-invalid .mdl-select__error {
+  visibility: visible; }
+
+.mdl-select__expandable-holder {
+  display: inline-block;
+  position: relative;
+  margin-left: 32px;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-block;
+  max-width: 0.1px; }
+
+.mdl-select.is-focused .mdl-select__expandable-holder, .mdl-select.is-dirty .mdl-select__expandable-holder {
+  max-width: 600px; }
+
+.mdl-select__expandable-holder .mdl-select__label:after {
+  bottom: 0; }
 
 #app-layout {
   padding-bottom: 0 !important; }
@@ -1486,38 +1622,80 @@ header .navbar-inverse .navbar-toggle:focus {
       text-align: right; } }
 
 #flight_overview_content {
-  padding-top: 32px; }
+  padding-top: 16px; }
   #flight_overview_content .flight_overview_intro {
-    text-align: center;
     color: #ffffff;
     font-size: 3rem;
     font-weight: 300;
-    margin-bottom: 64px; }
-  #flight_overview_content .flights_overview .flight_item {
-    background-color: rgba(0, 0, 0, 0.24);
-    color: #ffffff !important;
-    margin-bottom: 16px;
-    padding-top: 16px;
-    padding-bottom: 8px;
-    font-size: 1.6rem;
-    font-weight: 300; }
-    #flight_overview_content .flights_overview .flight_item a {
+    text-align: left; }
+    #flight_overview_content .flight_overview_intro .col-xs-10 {
+      margin-bottom: 16px; }
+    #flight_overview_content .flight_overview_intro .mdl-button {
+      float: right; }
+      #flight_overview_content .flight_overview_intro .mdl-button a {
+        color: #ffffff; }
+      #flight_overview_content .flight_overview_intro .mdl-button i {
+        font-size: 32px;
+        line-height: 32px;
+        width: 32px;
+        -webkit-transform: translate(-16px, -16px);
+        transform: translate(-16px, -16px); }
+      #flight_overview_content .flight_overview_intro .mdl-button i:hover {
+        background-color: transparent; }
+    #flight_overview_content .flight_overview_intro .mdl-button:hover {
+      background-color: transparent; }
+    #flight_overview_content .flight_overview_intro .mdl-menu__container {
+      right: 28px !important;
+      margin-top: 16px !important; }
+      #flight_overview_content .flight_overview_intro .mdl-menu__container .mdl-menu__outline {
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22) !important;
+        -webkit-animation-delay: 1.2s;
+        animation-delay: 1.2s; }
+      #flight_overview_content .flight_overview_intro .mdl-menu__container ul {
+        padding: 0; }
+        #flight_overview_content .flight_overview_intro .mdl-menu__container ul li i {
+          margin-right: 16px;
+          vertical-align: middle; }
+        #flight_overview_content .flight_overview_intro .mdl-menu__container ul li:nth-of-type(2) {
+          border-top: 1px solid #30B996;
+          border-bottom: 1px solid #30B996; }
+        #flight_overview_content .flight_overview_intro .mdl-menu__container ul a:hover {
+          text-decoration: none; }
+        #flight_overview_content .flight_overview_intro .mdl-menu__container ul .item_favorite {
+          color: #30B996; }
+        #flight_overview_content .flight_overview_intro .mdl-menu__container ul .item_delete {
+          color: rgba(218, 33, 33, 0.73); }
+        #flight_overview_content .flight_overview_intro .mdl-menu__container ul .item_refresh {
+          color: #0073AE; }
+  #flight_overview_content .flights_overview_list {
+    padding-top: 16px; }
+  #flight_overview_content .flights_overview {
+    padding-right: 28px; }
+    #flight_overview_content .flights_overview .flight_item {
+      background-color: rgba(0, 0, 0, 0.24);
       color: #ffffff !important;
+      margin-bottom: 16px;
+      padding-top: 16px;
+      padding-bottom: 8px;
+      font-size: 1.6rem;
       font-weight: 300; }
-    #flight_overview_content .flights_overview .flight_item span {
-      margin-bottom: 8px;
-      display: block; }
-      #flight_overview_content .flights_overview .flight_item span p {
-        font-weight: 300;
-        font-size: 1.4rem; }
-    #flight_overview_content .flights_overview .flight_item .fi_place span p {
-      margin-bottom: 0;
-      display: inline-block;
-      position: absolute;
-      margin-left: 8px; }
+      #flight_overview_content .flights_overview .flight_item a {
+        color: #ffffff !important;
+        font-weight: 300; }
+      #flight_overview_content .flights_overview .flight_item span {
+        margin-bottom: 8px;
+        display: block; }
+        #flight_overview_content .flights_overview .flight_item span p {
+          font-weight: 300;
+          font-size: 1.4rem; }
+      #flight_overview_content .flights_overview .flight_item .fi_place span p {
+        margin-bottom: 0;
+        display: inline-block;
+        position: absolute;
+        margin-left: 8px; }
   #flight_overview_content .flight_scheduled .flight_delay {
-    color: #FF4F14;
-    font-weight: 400; }
+    color: #F77043;
+    font-weight: 500 !important; }
   #flight_overview_content .flight_landed .fi_gate .fi_first {
     height: 22px !important; }
   #flight_overview_content .flight_landed .fi_gate .fi_remove a {
@@ -1530,37 +1708,27 @@ header .navbar-inverse .navbar-toggle:focus {
       color: #ffffff;
       font-size: 1.4rem; }
 
-@media screen and (max-width: 768px) {
-  #flight_overview_content .flight_overview_intro {
-    margin-bottom: 32px; } }
-
 @media screen and (min-width: 501px) and (max-width: 600px) {
-  #flight_overview_content {
-    padding-top: 32px; }
-    #flight_overview_content .flight_overview_intro {
-      margin-bottom: 32px; }
-    #flight_overview_content .flight_item {
-      padding-bottom: 16px; }
-      #flight_overview_content .flight_item .fi_first {
-        min-width: 80px; }
-      #flight_overview_content .flight_item .fi_dep {
-        margin-top: 16px; }
-      #flight_overview_content .flight_item .fi_dep span,
-      #flight_overview_content .flight_item .fi_ter span,
-      #flight_overview_content .flight_item .fi_gate span {
-        display: inline-block;
-        margin-bottom: 0; }
-        #flight_overview_content .flight_item .fi_dep span p,
-        #flight_overview_content .flight_item .fi_ter span p,
-        #flight_overview_content .flight_item .fi_gate span p {
-          margin-left: 8px;
-          margin-bottom: 4px; } }
+  #flight_overview_content .flight_item {
+    padding-bottom: 16px; }
+    #flight_overview_content .flight_item .fi_first {
+      min-width: 80px; }
+    #flight_overview_content .flight_item .fi_dep {
+      margin-top: 16px; }
+    #flight_overview_content .flight_item .fi_dep span,
+    #flight_overview_content .flight_item .fi_ter span,
+    #flight_overview_content .flight_item .fi_gate span {
+      display: inline-block;
+      margin-bottom: 0; }
+      #flight_overview_content .flight_item .fi_dep span p,
+      #flight_overview_content .flight_item .fi_ter span p,
+      #flight_overview_content .flight_item .fi_gate span p {
+        margin-left: 8px;
+        margin-bottom: 4px; } }
 
 @media screen and (max-width: 500px) {
   #flight_overview_content {
     padding-top: 32px; }
-    #flight_overview_content .flight_overview_intro {
-      margin-bottom: 16px; }
     #flight_overview_content .flight_item {
       padding-bottom: 16px; }
       #flight_overview_content .flight_item .fi_first {
@@ -1688,7 +1856,7 @@ header .navbar-inverse .navbar-toggle:focus {
               font-size: 1.8rem; }
           #flight_detail_content .master_grid #grid .item .i_content .ic_body {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 0 16px 16px 16px;
+            padding: 0 16px 0 16px;
             color: rgba(0, 0, 0, 0.64);
             font-size: 1.6rem;
             font-weight: 400; }
@@ -1712,16 +1880,18 @@ header .navbar-inverse .navbar-toggle:focus {
                   width: 60%; }
                 #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_full {
                   width: 100%; }
-                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(odd) {
-                  font-size: 5rem;
-                  padding-right: 16px;
-                  margin-right: 16px;
-                  border-right: 1px solid gray; }
-                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(even) {
-                  font-size: 2rem;
-                  vertical-align: top;
-                  margin-top: 8px !important;
-                  display: inline-block; }
+                #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature {
+                  margin-bottom: 16px; }
+                  #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(odd) {
+                    font-size: 5rem;
+                    padding-right: 16px;
+                    margin-right: 16px;
+                    border-right: 1px solid gray; }
+                  #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(even) {
+                    font-size: 2rem;
+                    vertical-align: top;
+                    margin-top: 8px !important;
+                    display: inline-block; }
                 #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_icon {
                   width: auto !important;
                   margin-right: 16px; }
@@ -1733,8 +1903,461 @@ header .navbar-inverse .navbar-toggle:focus {
                   width: auto !important; }
                   #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_text span {
                     display: block; }
+              #flight_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell:last-of-type {
+                border-bottom: none !important; }
     #flight_detail_content .master_grid .item img {
       width: 100%; }
+
+.deleteModalDetail .modal-title {
+  margin-bottom: 32px; }
+
+@media screen and (min-width: 800px) {
+  #grid {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3; } }
+
+@media screen and (min-width: 600px) and (max-width: 799px) {
+  #grid {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2; } }
+
+@media screen and (max-width: 599px) {
+  #grid {
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1; } }
+
+#trip_create_content {
+  padding-top: 32px; }
+  #trip_create_content .trip_create_intro {
+    text-align: center;
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: 300; }
+  #trip_create_content .trip_create_subtitle {
+    text-align: center;
+    color: #ffffff;
+    font-size: 2.4rem;
+    font-weight: 300;
+    margin-bottom: 64px; }
+  #trip_create_content .trip_create_options h5 {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    font-size: 16px;
+    font-weight: 300; }
+  #trip_create_content .trip_create_options .full {
+    background-color: rgba(255, 255, 255, 0.9); }
+  #trip_create_content .trip_create_options .trip_create_option {
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 8px 16px 16px 16px; }
+  #trip_create_content .trip_create_options .trip_airport {
+    /* Remove focus */
+    /* Hide label */
+    /* Use custom arrow */ }
+    #trip_create_content .trip_create_options .trip_airport select {
+      font-weight: 300;
+      font-family: inherit;
+      background-color: transparent;
+      width: 100%;
+      padding: 4px 0;
+      font-size: 16px;
+      color: rgba(0, 0, 0, 0.26);
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+    #trip_create_content .trip_create_options .trip_airport select:focus {
+      outline: none;
+      border-bottom: 1px solid #30B996 !important;
+      box-shadow: none !important; }
+    #trip_create_content .trip_create_options .trip_airport .mdl-selectfield label {
+      display: none; }
+    #trip_create_content .trip_create_options .trip_airport .mdl-selectfield select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none; }
+    #trip_create_content .trip_create_options .trip_airport .mdl-selectfield {
+      font-family: 'Helvetica','Arial',sans-serif;
+      position: relative; }
+      #trip_create_content .trip_create_options .trip_airport .mdl-selectfield:after {
+        position: absolute;
+        top: 0.75em;
+        right: 0.5em;
+        /* Styling the down arrow */
+        width: 0;
+        height: 0;
+        padding: 0;
+        content: '';
+        border-left: .25em solid transparent;
+        border-right: .25em solid transparent;
+        border-top: 0.375em solid rgba(0, 0, 0, 0.12);
+        pointer-events: none; }
+  #trip_create_content .trip_create_options .trip_airport input {
+    margin-bottom: 0;
+    font-weight: 300;
+    font-size: 16px;
+    display: block;
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.26);
+    outline: none;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+  #trip_create_content .trip_create_options .button_left {
+    text-align: right; }
+
+@media screen and (max-width: 768px) {
+  #trip_create_content .trip_create_subtitle {
+    margin-bottom: 32px; }
+  #trip_create_content .buttons_create {
+    margin-top: 32px; } }
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+  #trip_create_content {
+    padding-top: 32px; }
+    #trip_create_content .trip_create_subtitle {
+      margin-bottom: 64px; } }
+
+@media screen and (max-width: 500px) {
+  #trip_create_content {
+    padding-top: 32px; }
+    #trip_create_content .trip_create_subtitle {
+      margin-bottom: 16px;
+      padding: 0 16px; } }
+
+@media screen and (max-width: 320px) {
+  #trip_create_content {
+    padding-top: 16px; }
+    #trip_create_content .trip_create_intro {
+      font-size: 2rem; }
+    #trip_create_content .trip_create_subtitle {
+      font-size: 1.6rem; }
+    #trip_create_content .buttons_create .button_left {
+      padding-left: 0;
+      text-align: left; }
+    #trip_create_content .buttons_create .button_right {
+      padding-right: 0;
+      text-align: right; } }
+
+#trip_overview_content {
+  padding-top: 16px; }
+  #trip_overview_content .col-xxs-12 {
+    padding-right: 0 !important; }
+  #trip_overview_content .trip_overview_intro {
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: 300;
+    text-align: left; }
+    #trip_overview_content .trip_overview_intro .col-xs-10 {
+      margin-bottom: 16px; }
+    #trip_overview_content .trip_overview_intro .mdl-button {
+      float: right; }
+      #trip_overview_content .trip_overview_intro .mdl-button a {
+        color: #ffffff; }
+      #trip_overview_content .trip_overview_intro .mdl-button i {
+        font-size: 32px;
+        line-height: 32px;
+        width: 32px;
+        -webkit-transform: translate(-16px, -16px);
+        transform: translate(-16px, -16px); }
+      #trip_overview_content .trip_overview_intro .mdl-button i:hover {
+        background-color: transparent; }
+    #trip_overview_content .trip_overview_intro .mdl-button:hover {
+      background-color: transparent; }
+    #trip_overview_content .trip_overview_intro .mdl-menu__container {
+      right: 28px !important;
+      margin-top: 16px !important; }
+      #trip_overview_content .trip_overview_intro .mdl-menu__container .mdl-menu__outline {
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22) !important;
+        -webkit-animation-delay: 1.2s;
+        animation-delay: 1.2s; }
+  #trip_overview_content .trips_overview_list {
+    padding-top: 16px; }
+  #trip_overview_content .trips_overview {
+    padding-right: 28px; }
+    #trip_overview_content .trips_overview .trip_item {
+      background-color: rgba(0, 0, 0, 0.24);
+      color: #ffffff !important;
+      margin-bottom: 16px;
+      padding-top: 16px;
+      padding-bottom: 8px;
+      font-size: 1.6rem;
+      font-weight: 300; }
+      #trip_overview_content .trips_overview .trip_item a {
+        color: #ffffff !important;
+        font-weight: 300; }
+      #trip_overview_content .trips_overview .trip_item span {
+        margin-bottom: 8px;
+        display: block; }
+        #trip_overview_content .trips_overview .trip_item span p {
+          font-weight: 300;
+          font-size: 1.4rem; }
+      #trip_overview_content .trips_overview .trip_item .ti_place .ti_time {
+        text-align: right; }
+  #trip_overview_content .flight_removed {
+    text-align: center;
+    padding: 32px 32px 0 32px; }
+    #trip_overview_content .flight_removed span {
+      font-weight: 300;
+      color: #ffffff;
+      font-size: 1.4rem; }
+
+@media screen and (max-width: 600px) {
+  #trip_overview_content .trips_overview .trip_item .ti_place .ti_time {
+    text-align: left; } }
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+  #flight_overview_content .flight_item {
+    padding-bottom: 16px; }
+    #flight_overview_content .flight_item .fi_first {
+      min-width: 80px; }
+    #flight_overview_content .flight_item .fi_dep {
+      margin-top: 16px; }
+    #flight_overview_content .flight_item .fi_dep span,
+    #flight_overview_content .flight_item .fi_ter span,
+    #flight_overview_content .flight_item .fi_gate span {
+      display: inline-block;
+      margin-bottom: 0; }
+      #flight_overview_content .flight_item .fi_dep span p,
+      #flight_overview_content .flight_item .fi_ter span p,
+      #flight_overview_content .flight_item .fi_gate span p {
+        margin-left: 8px;
+        margin-bottom: 4px; } }
+
+@media screen and (max-width: 500px) {
+  #flight_overview_content {
+    padding-top: 32px; }
+    #flight_overview_content .flight_item {
+      padding-bottom: 16px; }
+      #flight_overview_content .flight_item .fi_first {
+        min-width: 80px; }
+      #flight_overview_content .flight_item .fi_dep {
+        margin-top: 16px; }
+      #flight_overview_content .flight_item .fi_dep span,
+      #flight_overview_content .flight_item .fi_ter span,
+      #flight_overview_content .flight_item .fi_gate span {
+        display: inline-block;
+        margin-bottom: 0; }
+        #flight_overview_content .flight_item .fi_dep span p,
+        #flight_overview_content .flight_item .fi_ter span p,
+        #flight_overview_content .flight_item .fi_gate span p {
+          margin-left: 8px;
+          margin-bottom: 4px; } }
+
+@media screen and (max-width: 320px) {
+  #flight_overview_content {
+    padding-top: 16px; }
+    #flight_overview_content .flight_item .fi_place,
+    #flight_overview_content .flight_item .fi_dep,
+    #flight_overview_content .flight_item .fi_ter,
+    #flight_overview_content .flight_item .fi_gate {
+      padding-left: 0;
+      padding-right: 0; } }
+
+#trip_detail_content {
+  padding-top: 16px;
+  font-weight: 300;
+  color: #ffffff; }
+  #trip_detail_content .trip_detail_intro {
+    text-align: left;
+    color: #ffffff; }
+    #trip_detail_content .trip_detail_intro .trip_detail_intro_title {
+      font-size: 2.4rem; }
+    #trip_detail_content .trip_detail_intro .trip_detail_intro_subtitle {
+      font-size: 2rem; }
+    #trip_detail_content .trip_detail_intro .mdl-button {
+      float: right; }
+      #trip_detail_content .trip_detail_intro .mdl-button i {
+        font-size: 32px;
+        line-height: 32px;
+        width: 32px;
+        -webkit-transform: translate(-16px, -16px);
+        transform: translate(-16px, -16px); }
+      #trip_detail_content .trip_detail_intro .mdl-button i:hover {
+        background-color: transparent; }
+    #trip_detail_content .trip_detail_intro .mdl-button:hover {
+      background-color: transparent; }
+    #trip_detail_content .trip_detail_intro .mdl-menu__container {
+      right: 28px !important;
+      margin-top: 16px !important; }
+      #trip_detail_content .trip_detail_intro .mdl-menu__container .mdl-menu__outline {
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22) !important;
+        -webkit-animation-delay: 1.2s;
+        animation-delay: 1.2s; }
+      #trip_detail_content .trip_detail_intro .mdl-menu__container ul {
+        padding: 0; }
+        #trip_detail_content .trip_detail_intro .mdl-menu__container ul li i {
+          margin-right: 16px;
+          vertical-align: middle; }
+        #trip_detail_content .trip_detail_intro .mdl-menu__container ul li:nth-of-type(2) {
+          border-top: 1px solid #30B996;
+          border-bottom: 1px solid #30B996; }
+        #trip_detail_content .trip_detail_intro .mdl-menu__container ul a:hover {
+          text-decoration: none; }
+        #trip_detail_content .trip_detail_intro .mdl-menu__container ul .item_favorite {
+          color: #30B996; }
+        #trip_detail_content .trip_detail_intro .mdl-menu__container ul .item_delete {
+          color: rgba(218, 33, 33, 0.73); }
+        #trip_detail_content .trip_detail_intro .mdl-menu__container ul .item_refresh {
+          color: #0073AE; }
+  #trip_detail_content .modal-body {
+    background-color: #ffffff;
+    width: 100vw;
+    z-index: 9999;
+    height: 100%;
+    position: fixed !important; }
+    #trip_detail_content .modal-body .modal-table {
+      display: table;
+      width: 100%;
+      height: 100%; }
+      #trip_detail_content .modal-body .modal-table .modal-cell {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center; }
+  #trip_detail_content .master_grid {
+    padding: 16px 26px 64px 16px; }
+    #trip_detail_content .master_grid #grid {
+      -webkit-column-gap: 10px;
+      -webkit-column-fill: auto;
+      -moz-column-gap: 10px;
+      -moz-column-fill: auto;
+      -webkit-column-gap: 15px;
+      -moz-column-gap: 15px;
+      column-gap: 15px;
+      -webkit-column-fill: auto;
+      -moz-column-fill: auto;
+      column-fill: auto; }
+      #trip_detail_content .master_grid #grid .item {
+        width: 100%;
+        display: inline-block;
+        box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+        margin: 0 2px 15px;
+        -webkit-column-break-inside: avoid;
+        -moz-column-break-inside: avoid;
+        column-break-inside: avoid; }
+        #trip_detail_content .master_grid #grid .item .i_content {
+          height: 100%; }
+          #trip_detail_content .master_grid #grid .item .i_content .ic_header {
+            padding: 8px 16px;
+            background-color: rgba(0, 0, 0, 0.64); }
+            #trip_detail_content .master_grid #grid .item .i_content .ic_header span {
+              color: #ffffff;
+              font-size: 1.8rem; }
+          #trip_detail_content .master_grid #grid .item .i_content .ic_body {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0 16px 0 16px;
+            color: rgba(0, 0, 0, 0.64);
+            font-size: 1.6rem;
+            font-weight: 400; }
+            #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table {
+              display: table;
+              min-height: 64px;
+              width: 100%; }
+              #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell {
+                display: table-cell;
+                vertical-align: middle;
+                width: 100%;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+                padding: 16px 0;
+                float: left; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_left, #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_right {
+                  display: inline-block; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_left {
+                  width: 39%;
+                  float: left; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_right {
+                  width: 60%; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_full {
+                  width: 100%; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature {
+                  margin-bottom: 16px; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(odd) {
+                    font-size: 5rem;
+                    padding-right: 16px;
+                    margin-right: 16px;
+                    border-right: 1px solid gray; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_temperature span:nth-of-type(even) {
+                    font-size: 2rem;
+                    vertical-align: top;
+                    margin-top: 8px !important;
+                    display: inline-block; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_icon {
+                  width: auto !important;
+                  margin-right: 16px; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_icon span:nth-of-type(odd) i {
+                    font-size: 10rem;
+                    margin-bottom: 16px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_text {
+                  padding-top: 1rem;
+                  width: auto !important; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_weather_text span {
+                    display: block; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_sunriseset span {
+                  display: inline-block; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_sunriseset span:nth-of-type(odd) {
+                  border-right: 1px solid rgba(0, 0, 0, 0.24);
+                  padding-right: 10px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_sunriseset span:nth-of-type(even) {
+                  margin-left: 4px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_forecast {
+                  display: -webkit-flex;
+                  display: -ms-flexbox;
+                  display: flex; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_forecast span:nth-of-type(1) {
+                    width: 50%; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_forecast span:nth-of-type(2) {
+                    width: 10%; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_forecast span:nth-of-type(3) {
+                    width: 40%;
+                    text-align: right; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_local_date i {
+                  vertical-align: bottom;
+                  margin-right: 8px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_local_time i {
+                  vertical-align: bottom;
+                  margin-right: 8px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_local_time span {
+                  font-size: 1rem; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_local_zone i {
+                  vertical-align: bottom;
+                  margin-right: 8px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_converter .ic_cell_converter_fields .mdl-select__input {
+                  width: 100%;
+                  height: 40px; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_converter .ic_cell_converter_fields .currencyBetween button {
+                  outline: none !important;
+                  width: 100%;
+                  text-align: center;
+                  display: block;
+                  margin: 8px 0;
+                  border: none;
+                  height: 36px;
+                  background-color: #30B996; }
+                  #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_converter .ic_cell_converter_fields .currencyBetween button i {
+                    vertical-align: middle;
+                    color: #ffffff; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_converter input {
+                  outline: none !important;
+                  width: 100%;
+                  height: 32px;
+                  color: #ffffff;
+                  background-color: #30B996;
+                  border: none !important;
+                  margin: 4px 0; }
+                #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell .ic_cell_converter .currencyChanged {
+                  border-top: 2px solid #30B996;
+                  margin-top: 12px;
+                  padding-top: 12px; }
+              #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell_temp_main,
+              #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell_sunriseset_main,
+              #trip_detail_content .master_grid #grid .item .i_content .ic_body .ic_table .ic_cell:last-of-type {
+                border-bottom: none !important; }
+    #trip_detail_content .master_grid .item img {
+      width: 100%; }
+
+.deleteModalDetail .modal-title {
+  margin-bottom: 32px; }
 
 @media screen and (min-width: 800px) {
   #grid {

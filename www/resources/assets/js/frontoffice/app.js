@@ -30,7 +30,7 @@
 
     angular.module('app.home', ['ui.router', 'ngRoute']);
     angular.module('app.flights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'angularSpinners', 'cgBusy']);
-    angular.module('app.trips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial']);
+    angular.module('app.trips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy']);
     angular.module('app.account', ['ui.router']);
 
     angular.module('app.factories', ['ui.router']);

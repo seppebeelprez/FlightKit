@@ -44,8 +44,9 @@
 
                 <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
                     for="demo-menu-lower-right">
-                    <li class="mdl-menu__item item_favorite"><i class="material-icons">favorite</i> Add to trips</li>
-                    <li class="mdl-menu__item item_delete"><i class="material-icons">delete</i> Delete</li>
+                    <a ng-if="vm.checkIfTrip == true" href="" ng-click="vm.$$ix.removefavorite()"><li class="mdl-menu__item item_favorite"><i class="material-icons">favorite_border</i> Remove from trips</li></a>
+                    <a ng-if="vm.checkIfTrip == false" href="" ng-click="vm.$$ix.favorite()"><li class="mdl-menu__item item_favorite"><i class="material-icons">favorite</i> Add to trips</li></a>
+                    <a href="" ng-click="vm.$$ix.delete()"><li class="mdl-menu__item item_delete"><i class="material-icons">delete</i> Delete</li></a>
                     <a href="" ng-click="vm.$$ix.refresh()"><li class="mdl-menu__item item_refresh"><i class="material-icons">refresh</i> Refresh</li></a>
                 </ul>
             </div>
@@ -122,7 +123,7 @@
                                     <!-- DELAYED -->
                                     <div class="ic_cell">
                                         <div class="ic_cell_left">
-                                            Delayed
+                                            Delays
                                         </div>
 
                                         <div class="ic_cell_right"
@@ -533,7 +534,7 @@
                                     <!-- DELAYED -->
                                     <div class="ic_cell">
                                         <div class="ic_cell_left">
-                                            Delayed
+                                            Delays
                                         </div>
 
                                         <div class="ic_cell_right"
@@ -733,8 +734,8 @@
                                         </div>
 
                                         <div class="ic_cell_right ic_cell_weather_text">
-                                            <span>{{ vm.flight.apiDepWeather.weather[0].main }} </span>
-                                            <span>{{ vm.flight.apiDepWeather.weather[0].description }}</span>
+                                            <span>{{ vm.flight.apiArrWeather.weather[0].main }} </span>
+                                            <span>{{ vm.flight.apiArrWeather.weather[0].description }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -933,7 +934,7 @@
                                     <!-- DELAYED -->
                                     <div class="ic_cell">
                                         <div class="ic_cell_left">
-                                            Delayed
+                                            Delays
                                         </div>
 
                                         <div class="ic_cell_right"
@@ -1286,5 +1287,99 @@
                 </div>
             </div>
         </div>
+
+        <!-- DELETE MODAL -->
+        <script type="text/ng-template" id="deleteModal.html">
+            <div class="modal-body deleteModalDetail">
+                <div class="modal-title">
+                    <span>Are you sure you want to delete this flight.</span>
+                </div>
+
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_create_modal col-xs-12">
+                            <div class="button_left col-xs-6 col-xxs-12">
+                                <!--<input type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self" value="NEXT">-->
+                                <input type="submit" ng-click="vm.$$ix.cancel()" class="modal_btn modal_add_button" value="No">
+                                <!--<a href="" type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self">NEXT</a>-->
+                            </div>
+
+                            <div class="button_right col-xs-6 col-xxs-12">
+                                <input type="button" ng-click="vm.$$ix.deleteFlight(vm.flight.databaseflight.id)" class="modal_btn modal_cancel_button" value="Yes">
+                                <!--<a href="/" class="own_btn back_button" target="_self">BACK</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+
+        <!-- ADD TO TRIPS MODAL -->
+        <script type="text/ng-template" id="addedToTripsModal.html">
+            <div class="modal-body deleteModalDetail">
+                <div class="modal-title">
+                    <span>{{ vm.flight.apiArrAirport.name }} ({{ vm.flight.apiArrAirport.iata }}) was successfully added to your trips!</span>
+                </div>
+
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_create_modal col-xs-12">
+                            <div class="button_center col-xs-12">
+                                <input type="submit" ng-click="vm.$$ix.cancel()" class="modal_btn modal_add_button" value="Ok">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+
+        <!-- DUPLICATE ADD TO TRIPS MODAL -->
+        <script type="text/ng-template" id="duplicateModal.html">
+            <div class="modal-body">
+                <div class="modal-title">
+                    <span>Oops! You already added this trip!</span>
+                </div>
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_duplicate_modal col-xs-12">
+                            <div class="button_left col-xs-12">
+                                <input type="button" ng-click="vm.$$ix.cancel()" class="modal_btn modal_cancel_button" value="Cancel">
+                            </div>
+
+                            <div class="button_right col-xs-12">
+                                <input type="submit" ng-click="vm.$$ix.detail()" class="modal_btn_error modal_error_again_button" value="Go to trip">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+
+        <!-- DELETE FROM FAVORITES MODAL -->
+        <script type="text/ng-template" id="deleteFromTripsModal.html">
+            <div class="modal-body deleteModalDetail">
+                <div class="modal-title">
+                    <span>Are you sure you want to remove this trip from your favorite destinations.</span>
+                </div>
+
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_create_modal col-xs-12">
+                            <div class="button_left col-xs-6 col-xxs-12">
+                                <!--<input type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self" value="NEXT">-->
+                                <input type="submit" ng-click="vm.$$ix.cancel()" class="modal_btn modal_add_button" value="No">
+                                <!--<a href="" type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self">NEXT</a>-->
+                            </div>
+
+                            <div class="button_right col-xs-6 col-xxs-12">
+                                <input type="button" ng-click="vm.$$ix.deleteTrip(vm.flight.databaseflight.arrival)" class="modal_btn modal_cancel_button" value="Yes">
+                                <!--<a href="/" class="own_btn back_button" target="_self">BACK</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+
     </md-content>
 </div>

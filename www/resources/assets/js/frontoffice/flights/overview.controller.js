@@ -21,7 +21,6 @@
         //Custom
         'getFlightsFactory',
         'deleteFlightsFactory',
-        // 'scheduleFlightAPIFactory',
         'config'
     ];
 
@@ -44,15 +43,11 @@
         var vm = this;
 
         getFlights();
-        //vm.overview = getSchedules();
-
-        //$scope.promises = [];
-
+        
         // User Interface
         // --------------
         vm.$$ui = {
-            title: 'Flights Overview',
-            subtitle: 'Overview of your added flights!'
+            title: 'Flights Overview'
         };
 
         // User Interaction
@@ -109,7 +104,7 @@
                         //Store API data
                         vm.currentFlightData.allData = data;
                         //Store database id to go later to the details view
-                        vm.currentFlightData.databaseId = flight.id;
+                        vm.currentFlightData.database = flight;
                         //Push array with 1 flight to array with multiple flights
                         vm.flights.push(vm.currentFlightData);
                         // console.log('vm.currentFlightData: ', vm.currentFlightData);
@@ -125,7 +120,7 @@
             });
 
             $q.all(vm.allFlightsData).then(function success(data){
-                //console.log('vm.flights: ', vm.flights); // Should all be here
+                console.log('vm.flights: ', vm.flights); // Should all be here
 
 
                 //Test array
@@ -139,8 +134,8 @@
                 angular.forEach(vm.flights,function(flight,key){
 
                     if (flight.allData.error) {
-                        console.log('404 remove flight: ', flight.databaseId);
-                        deleteFlightsFactory.deleteOutdatedFlight(flight.databaseId);
+                        console.log('404 remove flight: ', flight.database.id);
+                        deleteFlightsFactory.deleteOutdatedFlight(flight.database.id);
                     }
                     else {
                         // console.log('found flight');
@@ -222,13 +217,13 @@
                         vm.checkThisFlight.departureAirport     = null;
                         vm.checkThisFlight.arrivalAirport       = null;
                         vm.checkThisFlight.allFlightDetails     = null;
-                        vm.checkThisFlight.databaseFlightId     = null;
+                        vm.checkThisFlight.databaseFlight       = null;
 
                         //Place all current flight information in allFlightDetails
                         vm.checkThisFlight.departureAirport     = vm.tempDepartureAirport;
                         vm.checkThisFlight.arrivalAirport       = vm.tempArrivalAirport;
                         vm.checkThisFlight.allFlightDetails     = flight.allData;
-                        vm.checkThisFlight.databaseFlightId     = flight.databaseId;
+                        vm.checkThisFlight.databaseFlight       = flight;
 
                         //Push current checkThisFlight to allCheckedFlights
                         //console.log('before push tot allCheckedFlights', vm.checkThisFlight);

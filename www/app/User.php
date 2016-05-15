@@ -39,4 +39,15 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Flight::class)->withPivot('flight_id', 'user_id');
     }
+
+    /**
+     * One-to-Many.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * A user has many trips
+     */
+    public function trips()
+    {
+        return $this->belongsToMany(Trip::class)->withPivot('trip_id', 'user_id');
+    }
 }

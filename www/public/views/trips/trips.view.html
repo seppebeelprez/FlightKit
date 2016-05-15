@@ -1,9 +1,41 @@
-<div id="flight_overview_content" ng-cloak>
+<div id="trip_overview_content" ng-cloak>
     <md-toolbar>
-        <div class="flight_overview_intro">
-            {{vm.$$ui.title}}</br>
+        <div class="trip_overview_intro">
+            <div class="col-xs-10">
+                <span class="trip_overview_intro_title">
+                    {{vm.$$ui.title}}
+                </span>
+            </div>
 
-            {{vm.$$ui.subtitle}}
+            <div class="col-xs-2">
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <a href="trips/create"><i class="material-icons">add</i></a>
+                </button>
+            </div>
         </div>
     </md-toolbar>
+
+    <md-content>
+        <div ng-repeat="trip in vm.trips | orderBy:'airport'" class="trips_overview col-xs-12">
+            <!--{{ trip }}-->
+
+            <a href="trips/detail/{{ trip.dbtrip.airport }}" target="_self">
+                <div class="trip_item col-xs-12">
+                    <div class="ti_place col-lg-5 col-md-5 col-sm-5 col-xs-5 col-xxs-12 col-500">
+                        <span>{{ trip.allData.name }} ({{ trip.allData.iata }})</span>
+                    </div>
+                    <div class="ti_place col-lg-5 col-md-5 col-sm-5 col-xs-5 col-xxs-12 col-500">
+                        <span>{{ trip.allData.city }}, {{ trip.allData.countryName }}</span>
+                    </div>
+                    <div class="ti_place col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                        <span class="ti_time">{{ trip.allData.localTime | date : 'hh:mm a' }}</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div id="output">
+
+        </div>
+    </md-content>
 </div>

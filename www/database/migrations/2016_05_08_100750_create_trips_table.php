@@ -3,13 +3,13 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFlightsTable extends Migration
+class CreateTripsTable extends Migration
 {
-    const MODEL = 'flight';
+    const MODEL = 'trip';
     const TABLE = self::MODEL.'s';
     const PRIMARY_KEY = 'id';
     const FOREIGN_KEY = self::MODEL.'_'.self::PRIMARY_KEY;
-
+    
     /**
      * Run the migrations.
      *
@@ -20,12 +20,7 @@ class CreateFlightsTable extends Migration
         Schema::create(self::TABLE, function (Blueprint $table) {
             // Data
             $table->increments(self::PRIMARY_KEY);
-            $table->string('airline');
-            $table->integer('number');
-            $table->date('day');
-            $table->integer('flightId');
-            $table->string('departure')->nullable();
-            $table->string('arrival')->nullable();
+            $table->string('airport');
         });
     }
 

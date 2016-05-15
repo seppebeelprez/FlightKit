@@ -1,16 +1,19 @@
 // -----------------------------------------------------------------------------
-// This file contains styles that are specific to the flight overview page.
+// This file contains styles that are specific to the trip overview page.
 // -----------------------------------------------------------------------------
 @import "../../themes/default";
 
-#flight_overview_content {
+#trip_overview_content {
   padding-top: 16px;
 
-  .flight_overview_intro {
+  .col-xxs-12 {
+    padding-right: 0 !important;
+  }
+
+  .trip_overview_intro {
     color: $white;
     font-size: 3rem;
     font-weight: 300;
-    //margin-bottom: 64px;
     text-align: left;
 
     .col-xs-10 {
@@ -51,61 +54,17 @@
         -moz-animation-delay:1.2s;
         animation-delay: 1.2s;
       }
-
-      ul {
-        padding: 0;
-
-        li {
-          i {
-            margin-right: 16px;
-            vertical-align: middle;
-          }
-        }
-
-        li:nth-of-type(2) {
-          border-top: 1px solid $main_green;
-          border-bottom: 1px solid $main_green;
-        }
-
-        a:hover {
-          text-decoration: none;
-        }
-
-        .item_favorite {
-          color: $main_green;
-        }
-        //.item_favorite:hover {
-        //  background-color: $main_green;
-        //  color: $white;
-        //}
-
-        .item_delete {
-          color: $accent_red;
-        }
-        //.item_delete:hover {
-        //  background-color: $accent_red;
-        //  color: $white;
-        //}
-
-        .item_refresh {
-          color: $main_blue;
-        }
-        //.item_refresh:hover {
-        //  background-color: $main_blue;
-        //  color: $white;
-        //}
-      }
     }
   }
 
-  .flights_overview_list {
+  .trips_overview_list {
     padding-top: 16px;
   }
 
-  .flights_overview {
+  .trips_overview {
     padding-right: 28px;
 
-    .flight_item {
+    .trip_item {
       background-color: $black_opacity_24;
       color: $white !important;
       margin-bottom: 16px;
@@ -129,44 +88,10 @@
         }
       }
 
-      .fi_place {
+      .ti_place {
 
-        span {
-
-          p {
-            margin-bottom: 0;
-            display: inline-block;
-            position: absolute;
-            margin-left: 8px;
-          }
-        }
-      }
-    }
-
-  }
-
-  .flight_scheduled {
-    .flight_delay {
-      color: $warning_red;
-      font-weight: 500 !important;
-    }
-  }
-
-  .flight_landed {
-
-    .fi_gate {
-
-      .fi_first {
-        height: 22px !important;
-      }
-
-      .fi_remove {
-        a {
-          color: $white;
-        }
-
-        a:hover {
-
+        .ti_time {
+          text-align: right;
         }
       }
     }
@@ -180,6 +105,20 @@
       font-weight: 300;
       color: $white;
       font-size: 1.4rem;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #trip_overview_content {
+    .trips_overview {
+      .trip_item {
+        .ti_place {
+          .ti_time {
+            text-align: left;
+          }
+        }
+      }
     }
   }
 }

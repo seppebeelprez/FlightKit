@@ -8,8 +8,8 @@
 
     angular.module('app')
         .constant('config', {
-            appId : 'dbb6ea9e',
-            appKey : '5bf1b2bedbd8e63dc1b3221cbd834c2c',
+            appId : '8ea22765',
+            appKey : 'f25a316d50feb48ecde4d35e5d235985',
             api : 'api/v1/'
         });
 })();

@@ -27,7 +27,8 @@
 // 5. Components
 @import
   'components/buttons',
-  'components/modals';
+  'components/modals',
+  'components/select';
 
 // 6. Page-specific styles
 @import
@@ -36,7 +37,10 @@
   'pages/signup',
   'pages/flights/flightcreate',
   'pages/flights/flightoverview',
-  'pages/flights/flightdetail';
+  'pages/flights/flightdetail',
+  'pages/trips/tripcreate',
+  'pages/trips/tripoverview',
+  'pages/trips/tripdetail';
 
 // 7. Themes
 @import

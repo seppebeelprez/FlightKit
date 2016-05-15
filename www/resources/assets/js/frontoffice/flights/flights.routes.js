@@ -49,8 +49,8 @@
                     }
                 }
             })
-            .state('/flights/detail/:id', {
-                url: '/flights/detail/:id',
+            .state('/flights/detail/:airline/:number', {
+                url: '/flights/detail/:airline/:number',
                 views: {
                     main: {
                         controller: 'FlightsDetailController as vm',

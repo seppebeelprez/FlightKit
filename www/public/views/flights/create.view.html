@@ -17,14 +17,14 @@
         <form name="form" novalidate>
             <div class="flight_create_options">
 
-                <div class="col-lg-offset-0 col-lg-5 col-md-offset-0 col-md-5 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10 col-xxs-offset-1 col-xxs-10 col-500">
+                <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-1 col-sm-5 col-xs-offset-1 col-xs-10 col-xxs-offset-1 col-xxs-10 col-500">
                     <div class="flight_create_option flight_airline full col-xs-12">
                         <h5>Airline</h5>
 
                         <!--<span ng-show="form.fAirline.$valid" class="valid-status valid">[VALID]</span><span class="valid-status invalid" ng-show="form.fAirline.$invalid">[INVALID]</span>-->
 
                         <div angucomplete-alt name="fAirline"
-                                          placeholder="Search airlines"
+                                          placeholder="Select airline"
                                           pause="100"
                                           selected-object="vm.$$ix.airline"
                                           local-data="vm.airlines"
@@ -43,37 +43,42 @@
                     </div>
                 </div>
 
+                <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-0 col-sm-5 col-xs-offset-1 col-xs-10 col-xxs-offset-1 col-xxs-10 col-500">
+                    <div class="flight_create_option flight_airline full col-xs-12">
+                        <h5>Airports</h5>
 
-                <!--<div class="col-lg-offset-0 col-lg-5 col-md-offset-0 col-md-5 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10 col-xxs-offset-1 col-xxs-10">-->
-                    <!--<div class="flight_create_option flight_airline full col-xs-12">-->
-                        <!--<h5>Airline</h5>-->
+                        <!--<span ng-show="form.fAirline.$valid" class="valid-status valid">[VALID]</span><span class="valid-status invalid" ng-show="form.fAirline.$invalid">[INVALID]</span>-->
 
-                        <!--&lt;!&ndash; Standard Select &ndash;&gt;-->
-                        <!--&lt;!&ndash;<div class="mdl-selectfield">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label>Standard Select</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<select class="browser-default" ng-model="vm.flight.airline" name="fAirline" required="">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option value="" disabled>Choose your airline</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option value="1" selected>Option 1</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option value="2">Option 2</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option value="3">Option 3</option>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<input type="text" ng-model="vm.flight.airline" name="fAirline" placeholder="Choose your airline" required="">&ndash;&gt;-->
-                        <!--&lt;!&ndash;<div ng-show="form.$submitted" class="ngShow">&ndash;&gt;-->
-                            <!--&lt;!&ndash;<div ng-show="form.fAirline.$error.required">Airline required</div>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <div angucomplete-alt name="fAirport"
+                             placeholder="Select departure airport"
+                             pause="100"
+                             selected-object="vm.$$ix.airport"
+                             local-data="vm.airports"
+                             search-fields="name,iata"
+                             title-field="name"
+                             minlength="1"
+                             match-class="highlight"
+                             field-required="true"
+                             input-name="fAirport"
+                             field-required="true"
+                             autocomplete-required /></div>
+
+                    <div ng-show="form.$submitted" class="ngShow">
+                        <div ng-show="form.fAirport.$invalid">Select/click airport</div>
+                    </div>
+                </div>
+                </div>
+
+
+                <!--<div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-xxs-12">-->
+                    <!--<div class="flight_create_option between col-xs-12">-->
+                        <!--<p>-->
+                            <!--<i class="material-icons">all_inclusive</i>-->
+                        <!--</p>-->
                     <!--</div>-->
                 <!--</div>-->
 
-                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-xxs-12">
-                    <div class="flight_create_option between col-xs-12">
-                        <p>
-                            <i class="material-icons">all_inclusive</i>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-lg-offset-0 col-lg-3 col-md-offset-0 col-md-3 col-sm-offset-2 col-sm-4 col-xs-offset-1 col-xs-5 col-xxs-offset-1 col-xxs-5 col-500">
+                <div class="col-lg-offset-3 col-lg-3 col-md-offset-3 col-md-3 col-sm-offset-1 col-sm-5 col-xs-offset-1 col-xs-5 col-xxs-offset-1 col-xxs-5 col-500">
                     <div class="flight_create_option flight_number full col-xs-12">
                         <h5>Flight number</h5>
                         <input type="number" ng-model="vm.flight.number" name="fNumber" placeholder="Enter your number" required="">
@@ -84,7 +89,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-offset-0 col-lg-3 col-md-3 col-sm-4 col-xs-5 col-xxs-5 col-500">
+                <div class="col-lg-offset-0 col-lg-3 col-md-3 col-sm-offset-0 col-sm-5 col-xs-5 col-xxs-5 col-500">
                     <div class="flight_create_option flight_date full col-xs-12">
                         <h5>Date</h5>
                         <input type="date" ng-model="vm.flight.today" name="fDate" class="datepicker" required=""
@@ -121,6 +126,7 @@
             </div>
         </form>
 
+        <!-- CONFIRM MODAL -->
         <script type="text/ng-template" id="confirmModal.html">
             <div class="modal-body">
                 <div class="modal-title">
@@ -128,13 +134,13 @@
                 </div>
 
                 <div class="modal-check">
-                    <span class="loc">{{ vm.departureAirport.name }}, ({{ vm.departureAirport.iata }})</span>
+                    <span class="loc">{{ vm.departureAirport.name }}, ({{ vm.departureAirport.iata }}), {{ vm.departureAirport.city }}</span>
                     <span class="date">{{ vm.checkCurrentFlight[0].flightStatuses[0].operationalTimes.publishedDeparture.dateLocal | date : 'hh:mm a' }},
                                         {{ vm.checkCurrentFlight[0].flightStatuses[0].operationalTimes.publishedDeparture.dateLocal | date : 'MMM d' }}</span>
 
                     <p><i class="material-icons">flight</i></p>
 
-                    <span class="loc">{{ vm.arrivalAirport.name }}, ({{ vm.arrivalAirport.iata }})</span>
+                    <span class="loc">{{ vm.arrivalAirport.name }}, ({{ vm.arrivalAirport.iata }}), {{ vm.arrivalAirport.city }}</span>
                     <span class="date">{{ vm.checkCurrentFlight[0].flightStatuses[0].operationalTimes.publishedArrival.dateLocal | date : 'hh:mm a' }},
                                         {{ vm.checkCurrentFlight[0].flightStatuses[0].operationalTimes.publishedArrival.dateLocal | date : 'MMM d' }}</span>
                 </div>
@@ -162,6 +168,7 @@
             </div>
         </script>
 
+        <!-- ERROR MODAL -->
         <script type="text/ng-template" id="errorModal.html">
             <div class="modal-body">
                 <div class="modal-title">
@@ -186,6 +193,8 @@
             </div>
         </script>
 
+
+        <!-- DUPLICATE MODAL -->
         <script type="text/ng-template" id="duplicateModal.html">
             <div class="modal-body">
                 <div class="modal-title">

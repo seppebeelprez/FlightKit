@@ -1,0 +1,74 @@
+<div id="trip_create_content" ng-cloak>
+    <md-toolbar>
+        <div class="trip_create_intro">
+            {{vm.$$ui.title}}
+        </div>
+
+        <div class="trip_create_subtitle">
+            {{vm.$$ui.subtitle}}
+        </div>
+    </md-toolbar>
+
+    <md-content>
+
+        <form name="form" novalidate>
+            <div class="trip_create_options">
+
+                <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 col-xxs-offset-1 col-xxs-10 col-500">
+                    <div class="trip_create_option trip_airport full col-xs-12">
+                        <h5>Airports</h5>
+
+                        <div angucomplete-alt name="fAirport"
+                             placeholder="Select departure airport"
+                             pause="100"
+                             selected-object="vm.$$ix.airport"
+                             local-data="vm.airports"
+                             search-fields="name,iata"
+                             title-field="name"
+                             minlength="1"
+                             match-class="highlight"
+                             field-required="true"
+                             input-name="fAirport"
+                             field-required="true"
+                             autocomplete-required /></div>
+
+                    <div ng-show="form.$submitted" class="ngShow">
+                        <div ng-show="form.fAirport.$invalid">Select/click airport</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons_create col-xs-12">
+                <div class="button_left col-xs-6">
+                    <input type="button" ng-click="vm.go('/')" class="own_btn back_button" target="_self" value="BACK">
+                </div>
+
+                <div class="button_right col-xs-6">
+                    <input type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" value="NEXT">
+                </div>
+            </div>
+        </form>
+
+        <script type="text/ng-template" id="duplicateModal.html">
+            <div class="modal-body">
+                <div class="modal-title">
+                    <span>Oops! You already added this trip!</span>
+                </div>
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_duplicate_modal col-xs-12">
+
+                            <div class="button_left col-xs-12">
+                                <input type="button" ng-click="vm.$$ix.cancel()" class="modal_btn modal_cancel_button" value="Cancel">
+                            </div>
+
+                            <div class="button_right col-xs-12">
+                                <input type="submit" ng-click="vm.$$ix.detail()" class="modal_btn_error modal_error_again_button" value="Go to trip">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+    </md-content>
+</div>

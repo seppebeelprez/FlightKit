@@ -1,16 +1,16 @@
 <div id="flight_overview_content" ng-cloak>
 
-    <!--<div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>-->
+    <div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>
 
-    <!--<script type="text/ng-template" id="loading.html">-->
-        <!--<div class="modal-body">-->
-            <!--<div class="modal-table">-->
-                <!--<div class="modal-cell">-->
-                    <!--<img src="../../img/loader/preloader.gif" alt="">-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</script>-->
+    <script type="text/ng-template" id="loading.html">
+        <div class="modal-body">
+            <div class="modal-table">
+                <div class="modal-cell">
+                    <img src="../../img/loader/preloader.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </script>
 
     <md-toolbar>
         <div class="flight_overview_intro">
@@ -165,27 +165,61 @@
                             </span>
                         </div>
 
-                        <div class="fi_ter col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                        <div class="fi_ter col-lg-3 col-md-3 col-sm-3 col-xs-3 col-xxs-12 col-500">
                             <span class="fi_first">Arrived</span>
-                            <span>
+                            <span ng-if="flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival">
                                 <p>
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'hh:mm a' }},
                                     {{ flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'MMM d' }}
                                 </p>
                             </span>
+                            <span ng-if="!flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival
+                                    && flight.allFlightDetails.flightStatus.operationalTimes.actualRunwayArrival">
+                                <p>
+                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.actualRunwayArrival.dateLocal | date : 'hh:mm a' }},
+                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.actualRunwayArrival.dateLocal | date : 'MMM d' }}
+                                </p>
+                        </span>
                         </div>
 
-                        <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                        <div class="fi_gate col-lg-1 col-md-1 col-sm-1 col-xs-1 col-xxs-12 col-500">
                             <span class="fi_first"></span>
                             <span class="fi_remove">
-                                <!--<button ng-click="vm.$$ix.delete(flight.databaseFlightId)"></button>-->
-                                <a href="" ng-click="vm.$$ix.delete(flight.databaseFlightId)">remove flight</a>
+                                <a href="" ng-click="vm.$$ix.delete(flight.databaseFlight.database.id)"><i class="material-icons">delete</i></a>
                             </span>
                         </div>
                     </div>
                 </a>
             </div>
             <!-- LANDED END -->
+
+            <!-- CANCELLED START -->
+            <div ng-if="flight.allFlightDetails.flightStatus.status === 'C'" class="flight_landed">
+                <div class="flight_item col-xs-12">
+                    <div class="fi_place col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-12 col-500">
+                        <span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>
+                            <span>
+                                <i class="material-icons">flight_land</i>
+                                <p>{{ flight.arrivalAirport.name }} ({{ flight.arrivalAirport.iata }})</p>
+                            </span>
+                    </div>
+
+                    <div class="fi_dep col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                        <span class="fi_first">Status</span>
+                        <span>
+                            <p>Cancelled</p>
+                        </span>
+                    </div>
+
+                    <div class="fi_gate col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-12 col-500">
+                        <span class="fi_first"></span>
+                            <span class="fi_remove">
+                                <a href="" ng-click="vm.$$ix.delete(flight.databaseFlight.database.id)"><i class="material-icons">delete</i></a>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <!-- CANCELLED END -->
         </div>
 
         <div class="flight_removed col-xs-12">
@@ -193,6 +227,29 @@
                 Arrived flights can be removed when the data isn't available anymore!
             </span>
         </div>
+
+        <!-- DELETE MODAL -->
+        <script type="text/ng-template" id="deleteModal.html">
+            <div class="modal-body deleteModalDetail">
+                <div class="modal-title">
+                    <span>Are you sure you want to remove this flight?</span>
+                </div>
+
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_create_modal col-xs-12">
+                            <div class="button_left col-xs-6 col-xxs-12">
+                                <input type="submit" ng-click="vm.$$ix.cancel()" class="modal_btn modal_add_button" value="No">
+                            </div>
+
+                            <div class="button_right col-xs-6 col-xxs-12">
+                                <input type="button" ng-click="vm.$$ix.deleteFlight()" class="modal_btn modal_cancel_button" value="Yes">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
 
     </md-content>
 </div>

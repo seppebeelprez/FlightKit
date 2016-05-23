@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Trips;
 
 use App\Http\Requests;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -27,15 +28,9 @@ class TripsController extends Controller
      */
     public function index()
     {
-        return view('app');
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('app');
+        $check = Auth::user();
+        $user = User::find($check->id);
+        return view('app', ['user' => $user]);
     }
 
     /**
@@ -43,6 +38,8 @@ class TripsController extends Controller
      */
     public function detail()
     {
-        return view('app');
+        $check = Auth::user();
+        $user = User::find($check->id);
+        return view('app', ['user' => $user]);
     }
 }

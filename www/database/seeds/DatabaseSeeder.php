@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Role;
+use App\Trip;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        Role::create(array(
+          'name' => "admin"
+        ));
+
+        Role::create(array(
+          'name' => "user"
+        ));
     }
 }

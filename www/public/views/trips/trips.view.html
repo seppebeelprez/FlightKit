@@ -1,4 +1,17 @@
 <div id="trip_overview_content" ng-cloak>
+
+    <div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>
+
+    <script type="text/ng-template" id="loading.html">
+        <div class="modal-body">
+            <div class="modal-table">
+                <div class="modal-cell">
+                    <img src="../../img/loader/preloader.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </script>
+
     <md-toolbar>
         <div class="trip_overview_intro">
             <div class="col-xs-10">

@@ -1,0 +1,71 @@
+<div id="admin_user_overview_content" ng-cloak>
+
+    <div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>
+
+    <script type="text/ng-template" id="loading.html">
+        <div class="modal-body">
+            <div class="modal-table">
+                <div class="modal-cell">
+                    <img src="../../../img/loader/preloader.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <md-toolbar>
+        <div class="admin_user_overview_intro">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6 col-xxs-12">
+                <span class="admin_user_overview_intro_title">All users</span>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 col-xxs-12">
+                <div class="admin_search_users">
+                    <input ng-model="searchText" placeholder="Search users">
+                </div>
+            </div>
+        </div>
+    </md-toolbar>
+
+    <md-content>
+        <!-- WHEN NO SEARCH RESULTS -->
+        <div ng-hide="users.length" class="admin_user_noresults">
+            <span>No results...</span>
+        </div>
+
+        <!-- USER NG REPEAT -->
+        <div dir-paginate="user in users = (vm.users
+                        | orderBy:'user.name'
+                        | filter:searchText) | itemsPerPage:8"
+             class="admin_users_overview col-xs-12">
+            <a href="admin/users/detail/{{user.id}}">
+                <div class="admin_user_item col-xs-12">
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 col-xxs-4 col-500">
+                        {{ user.name }}
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-5 col-xs-5 col-xxs-8 col-500">
+                        {{ user.email }}
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-4 col-500">
+                        Flights: {{ (user.flights).length }}
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 col-xxs-4 col-500">
+                        Trips: {{ (user.trips).length }}
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- PAGINATION START -->
+        <div class="admin_pagination col-xs-12">
+            <dir-pagination-controls
+                    max-size="5"
+                    direction-links="true"
+                    boundary-links="true" >
+            </dir-pagination-controls>
+        </div>
+
+    </md-content>
+</div>

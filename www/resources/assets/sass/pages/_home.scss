@@ -30,6 +30,10 @@
 
   .home_options {
 
+    a {
+      color: $black_opacity;
+    }
+
     .home_option {
       background-color: $white;
       padding: 0;
@@ -44,29 +48,29 @@
 
       .home_option_bottom {
         background-color: $white;
+        display: table;
 
         .home_option_bottom_left {
           float: left;
 
-          a {
+          .home_option_bottom_left_div {
+            background-color: $main_green;
+            min-height: 80px;
+            min-width: 80px;
+            max-width: 80px;
+            max-height: 80px;
+            padding: 16px;
 
-            .home_option_bottom_left_div {
-              background-color: $main_green;
-              min-height: 80px;
-              min-width: 80px;
-              max-width: 80px;
-              max-height: 80px;
-              padding: 16px;
-
-              img {
-                width: 100%;
-              }
+            img {
+              width: 100%;
             }
           }
         }
 
         .home_option_bottom_right {
-          padding: 8px 8px 8px 92px;
+          display: table-cell;
+          vertical-align: middle;
+          padding-left: 16px;
           max-height: 80px;
 
           span {
@@ -81,20 +85,12 @@
         }
       }
     }
-
-    .home_option_left {
-
-    }
-
-    .home_option_right {
-
-    }
   }
 }
 
 @media screen and (max-width: 768px) {
   .home_option_bottom_right {
-    padding: 16px 8px 8px 92px;
+    //padding: 16px 8px 8px 92px;
   }
 }
 
@@ -135,7 +131,7 @@
           }
 
           .home_option_bottom_right {
-            padding-left: 80px;
+            //padding-left: 80px;
             max-height: 72px;
 
             p {

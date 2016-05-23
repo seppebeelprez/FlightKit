@@ -50,4 +50,40 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Trip::class)->withPivot('trip_id', 'user_id');
     }
+
+    /**
+     * One-to-One.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * A user has many trips
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)->withPivot('role_id', 'user_id');
+    }
+
+    public function is($roleName)
+    {
+        foreach ($this->roles()->get() as $role)
+        {
+            if ($role->name == $roleName)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isAdmin()
+    {
+        foreach ($this->roles()->get() as $role)
+        {
+            if ($role->name == 'admin')
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

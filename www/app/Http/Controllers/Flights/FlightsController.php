@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Flights;
 
 use App\Http\Requests;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -27,7 +28,9 @@ class FlightsController extends Controller
      */
     public function index()
     {
-        return view('app');
+        $check = Auth::user();
+        $user = User::find($check->id);
+        return view('app', ['user' => $user]);
     }
 
     /**
@@ -35,7 +38,9 @@ class FlightsController extends Controller
      */
     public function create()
     {
-        return view('app');
+        $check = Auth::user();
+        $user = User::find($check->id);
+        return view('app', ['user' => $user]);
     }
 
     /**
@@ -43,6 +48,8 @@ class FlightsController extends Controller
      */
     public function detail()
     {
-        return view('app');
+        $check = Auth::user();
+        $user = User::find($check->id);
+        return view('app', ['user' => $user]);
     }
 }

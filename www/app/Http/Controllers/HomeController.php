@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -24,6 +26,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('app');
+        $check = Auth::user();
+        $user = User::find($check->id);
+        return view('app', ['user' => $user]);
     }
 }

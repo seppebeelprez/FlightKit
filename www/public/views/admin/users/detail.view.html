@@ -1,0 +1,103 @@
+<div id="admin_userdetail_overview_content" ng-cloak>
+
+    <div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>
+
+    <script type="text/ng-template" id="loading.html">
+        <div class="modal-body">
+            <div class="modal-table">
+                <div class="modal-cell">
+                    <img src="../../../img/loader/preloader.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <md-toolbar>
+        <div class="admin_userdetail_overview_intro">
+            <div class="col-xs-10">
+                <span class="admin_user_overview_intro_title">{{ vm.data.user.name }}</span>
+            </div>
+
+            <div class="col-xs-2">
+                <i ng-click="vm.$$ix.deleteUser()" class="material-icons">delete_forever</i>
+            </div>
+        </div>
+    </md-toolbar>
+
+    <md-content>
+        <div class="users_detail_overview">
+
+            <div class="flights_overview base_info col-xs-12">
+                <div class="flight_item col-xs-12">
+                    <span>Id:  {{ vm.data.user.id }}</span>
+                    <span>Email:  {{ vm.data.user.email }}</span>
+                    <span>Created at:  {{ vm.data.user.created_at }}</span>
+                </div>
+            </div>
+
+            <div class="sub_title  col-xs-12">
+                <span>Flights</span>
+            </div>
+
+            <div ng-repeat="flight in vm.data.flights | orderBy:'flight.departure'" class="flights_overview col-xs-12">
+                <div class="flight_item col-xs-12">
+                    <div class="fi_place fip_airport col-lg-3 col-md-3 col-sm-4 col-xs-4 col-xxs-4 col-500">
+                        <span>{{ flight.departure }} <i class="material-icons">flight</i> {{ flight.arrival }}</span>
+                    </div>
+
+                    <div class="fi_place col-lg-3 col-md-3 col-sm-4 col-xs-4 col-xxs-4 col-500">
+                        <span>{{ flight.airline }} {{ flight.number }}</span>
+                    </div>
+
+                    <div class="fi_place fip_date col-lg-3 col-md-3 col-sm-4 col-xs-4 col-xxs-4 col-500">
+                        <span>{{ flight.day }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub_title  col-xs-12">
+                <span>Trips</span>
+            </div>
+
+            <div ng-repeat="trip in vm.data.trips | orderBy:'trip.airport'" class="flights_overview col-xs-12">
+                <div class="flight_item col-xs-12">
+                    <div class="fi_place fip_airport col-lg-3 col-md-3 col-sm-2 col-xs-1 col-xxs-2 col-500">
+                        <span>{{ trip.airport }}</span>
+                    </div>
+
+                    <div class="fi_place fip_airport col-lg-6 col-md-6 col-sm-6 col-xs-6 col-xxs-10 col-500">
+                        <span>{{ trip.api.airports[0].name }}</span>
+                    </div>
+
+                    <div class="fi_place fip_airport col-lg-3 col-md-3 col-sm-4 col-xs-5 col-xxs-12 col-500">
+                        <span>{{ trip.api.airports[0].city }}, {{ trip.api.airports[0].countryName }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/ng-template" id="deleteUserModal.html">
+            <div class="modal-body deleteModalDetail">
+                <div class="modal-title">
+                    <span>Are you sure you want to delete this user.</span>
+                </div>
+
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_create_modal col-xs-12">
+                            <div class="button_left col-xs-6 col-xxs-12">
+                                <input type="submit" ng-click="vm.$$ix.cancel()"
+                                       class="modal_btn modal_add_button" value="No">
+                            </div>
+
+                            <div class="button_right col-xs-6 col-xxs-12">
+                                <input type="button" ng-click="vm.$$ix.deleteUserDefinitive()"
+                                       class="modal_btn modal_cancel_button" value="Yes">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+    </md-content>
+</div>

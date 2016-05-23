@@ -28,7 +28,8 @@
 @import
   'components/buttons',
   'components/modals',
-  'components/select';
+  'components/select',
+  'components/pagination';
 
 // 6. Page-specific styles
 @import
@@ -40,7 +41,11 @@
   'pages/flights/flightdetail',
   'pages/trips/tripcreate',
   'pages/trips/tripoverview',
-  'pages/trips/tripdetail';
+  'pages/trips/tripdetail',
+  'pages/admin/flightoverview',
+  'pages/admin/tripoverview',
+  'pages/admin/useroverview',
+  'pages/admin/userdetail';
 
 // 7. Themes
 @import

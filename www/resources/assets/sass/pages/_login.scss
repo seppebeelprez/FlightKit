@@ -95,6 +95,11 @@
 
         .form-group {
 
+          .ngShow {
+            padding-left: 15px;
+            padding-right: 15px;
+          }
+
           label {
             color: $white;
             font-weight: 300;

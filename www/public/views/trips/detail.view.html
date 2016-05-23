@@ -145,6 +145,32 @@
                                         </span>
                                     </div>
                                 </div>
+                                <div class="ic_cell">
+                                    <div class="ic_cell_full ic_cell_forecast">
+                                        <span>
+                                            {{ vm.millisToUTCDate(vm.trip.forecast.day4.date) | date : 'EEEE, d' }}
+                                        </span>
+                                        <span>
+                                            <i class="wi {{ vm.trip.forecast.day3.weatherIcon }}"></i>
+                                        </span>
+                                        <span>
+                                            {{ vm.trip.forecast.day4.minTemp | number:0 }} / {{ vm.trip.forecast.day4.maxTemp | number:0 }}°C
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ic_cell">
+                                    <div class="ic_cell_full ic_cell_forecast">
+                                        <span>
+                                            {{ vm.millisToUTCDate(vm.trip.forecast.day5.date) | date : 'EEEE, d' }}
+                                        </span>
+                                        <span>
+                                            <i class="wi {{ vm.trip.forecast.day3.weatherIcon }}"></i>
+                                        </span>
+                                        <span>
+                                            {{ vm.trip.forecast.day5.minTemp | number:0 }} / {{ vm.trip.forecast.day5.maxTemp | number:0 }}°C
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

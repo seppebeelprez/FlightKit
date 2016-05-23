@@ -1,0 +1,57 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the pagination component.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+.admin_pagination {
+  text-align: center;
+  margin-top: 24px;
+
+  ul {
+    li {
+      a {
+        border: none;
+        color: $main_green;
+        font-size: 2rem;
+        padding: 6px 16px;
+      }
+
+      a:hover {
+        color: $main_blue;
+        background-color: white;
+      }
+
+      a:active {
+        color: $main_green;
+        background-color: white;
+      }
+    }
+
+    li.active {
+      a {
+        background-color: $main_green;
+        color: $white;
+      }
+
+      a:hover {
+        background-color: $main_green;
+        color: $white;
+      }
+    }
+
+    li.disabled {
+      a {
+        color: $black_opacity_24;
+      }
+
+      a:hover {
+        //color: $main_blue;
+      }
+    }
+
+    li:first-child>a, li:first-child>span,
+    li:last-child>a, li:last-child>span {
+      border-radius: 0;
+    }
+  }
+}

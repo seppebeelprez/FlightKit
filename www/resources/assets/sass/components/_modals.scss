@@ -90,6 +90,19 @@
   }
 }
 
+@media only screen and (max-width: 600px) {
+  .modal {
+    .buttons_create_modal .button_left,
+    .buttons_create_modal .button_right {
+      text-align: center;
+    }
+
+    .buttons_create_modal .button_left {
+      margin-bottom: 24px;
+    }
+  }
+}
+
 @media only screen and (max-width: 500px) {
   .modal {
     width: 90%;

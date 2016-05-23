@@ -47,6 +47,18 @@ class TripsController extends Controller
     }
 
     /**
+     * Show all trips, admin.
+     *
+     * @return \Illuminate\Http\Response
+     * @Request
+     */
+    public function admin()
+    {
+        $trips = DB::table('trips')->get();
+        return [ 'trips' => $trips ];
+    }
+
+    /**
      * Show detail trip
      *
      * @param $airport
@@ -169,4 +181,16 @@ class TripsController extends Controller
         }
     }
 
+    /**
+     * Hard Delete flight
+     *
+     * @param \Illuminate\Http\Response
+     */
+    public function harddelete($trip_id){
+
+        $deleteTrip = DB::table('trips')
+          ->where('id', $trip_id);
+
+        $deleteTrip->delete();
+    }
 }

@@ -1,5 +1,7 @@
 @if (Auth::guest())
 
+{{--@elseif(Auth::admin())--}}
+
 @else
     <header class="header">
         <div class="color_overlay_black">
@@ -30,6 +32,11 @@
                             <li class="scrollToInsideLink">
                                 <a {{ (Request::is('account') ? 'class=active' : '') }} href="{{ url('/account') }}">account</a>
                             </li>
+                            @if ( $user->isAdmin() )
+                                <li class="scrollToInsideLink">
+                                    <a {{ (Request::is('account') ? 'class=active' : '') }} href="{{ url('/admin/flights') }}">admin</a>
+                                </li>
+                            @endif
                             <li class="scrollToInsideLink">
                                 <a href="{{ url('/logout') }}">logout</a>
                             </li>
@@ -50,6 +57,9 @@
                 <a {{ (Request::is('flights') ? 'class=active' : '') }} href="{{ url('/flights') }}">flights</a>
                 <a {{ (Request::is('trips') ? 'class=active' : '') }} href="{{ url('/trips') }}">trips</a>
                 <a {{ (Request::is('account') ? 'class=active' : '') }} href="{{ url('/account') }}">account</a>
+                @if ( $user->isAdmin() )
+                    <a {{ (Request::is('account') ? 'class=active' : '') }} href="{{ url('/admin/flights') }}">admin</a>
+                @endif
                 <a href="{{ url('/logout') }}">logout</a>
             </div>
         </div>

@@ -33,6 +33,7 @@ var vendor = {
         cookies     : elixir.config.bowerDir + '/angular-cookies/angular-cookies.js',
         material    : elixir.config.bowerDir + '/angular-material/',
         messages    : elixir.config.bowerDir + '/angular-messages/angular-messages.js',
+        pagination  : elixir.config.bowerDir + '/angularUtils-pagination/dirPagination.js',
         resource    : elixir.config.bowerDir + '/angular-resource/angular-resource.js',
         route       : elixir.config.bowerDir + '/angular-route/angular-route.js',
         sanitize    : elixir.config.bowerDir + '/angular-sanitize/angular-sanitize.js',
@@ -125,6 +126,7 @@ elixir(function(mix) {
                 vendor.angularModule.cookies,
                 vendor.angularModule.material + 'angular-material.js',
                 vendor.angularModule.messages,
+                vendor.angularModule.pagination,
                 vendor.angularModule.resource,
                 vendor.angularModule.route,
                 vendor.angularModule.sanitize,
@@ -136,7 +138,7 @@ elixir(function(mix) {
         )
 
         .scriptsIn(
-            elixir.config.assetsDir + '/js/frontoffice',
+            elixir.config.assetsDir + '/js/app',
             elixir.config.jsOutput + '/frontoffice.js'
         );
 });

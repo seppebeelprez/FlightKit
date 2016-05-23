@@ -47,6 +47,18 @@ class FlightsController extends Controller
     }
 
     /**
+     * Show all flights, admin.
+     *
+     * @return \Illuminate\Http\Response
+     * @Request
+     */
+    public function admin()
+    {
+        $flights = DB::table('flights')->get();
+        return [ 'flights' => $flights ];
+    }
+
+    /**
      * Show detail flight
      *
      * @param $airline
@@ -230,6 +242,19 @@ class FlightsController extends Controller
             $getFlight = DB::table('flights')->where('id', $flight_id);
             $getFlight->delete();
         }
+    }
+
+    /**
+     * Hard Delete flight
+     *
+     * @param \Illuminate\Http\Response
+     */
+    public function harddelete($flight_id){
+
+        $deleteFlight = DB::table('flights')
+          ->where('id', $flight_id);
+
+        $deleteFlight->delete();
     }
 
     /**

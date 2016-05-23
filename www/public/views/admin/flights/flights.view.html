@@ -1,0 +1,185 @@
+<div id="admin_flight_overview_content" ng-cloak>
+
+    <div class="busyloader" cg-busy="{promise:vm.getData,message:'Loading Your Data',templateUrl:'loading.html',minDuration:1000}"></div>
+
+    <script type="text/ng-template" id="loading.html">
+        <div class="modal-body">
+            <div class="modal-table">
+                <div class="modal-cell">
+                    <img src="../../../img/loader/preloader.gif" alt="">
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <md-toolbar>
+        <div class="admin_flight_overview_intro">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-xs-6 col-xxs-12">
+                <span class="admin_flight_overview_intro_title">All flights</span>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6 col-xxs-12">
+                <div class="admin_search_flights">
+                    <input ng-model="searchText" placeholder="Search flights">
+                </div>
+                <!--<button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button&#45;&#45;icon">-->
+                    <!--<i class="material-icons">more_vert</i>-->
+                <!--</button>-->
+
+                <!--<ul class="mdl-menu mdl-menu&#45;&#45;bottom-right mdl-js-menu mdl-js-ripple-effect"-->
+                    <!--for="demo-menu-lower-right">-->
+                    <!--<a ng-if="vm.checkIfTrip == true" href="" ng-click="vm.$$ix.removefavorite()"><li class="mdl-menu__item item_favorite"><i class="material-icons">favorite_border</i> Remove from trips</li></a>-->
+                    <!--<a ng-if="vm.checkIfTrip == false" href="" ng-click="vm.$$ix.favorite()"><li class="mdl-menu__item item_favorite"><i class="material-icons">favorite</i> Add to trips</li></a>-->
+                    <!--<a href="" ng-click="vm.$$ix.delete()"><li class="mdl-menu__item item_delete"><i class="material-icons">delete</i> Delete</li></a>-->
+                    <!--<a href="" ng-click="vm.$$ix.refresh()"><li class="mdl-menu__item item_refresh"><i class="material-icons">refresh</i> Refresh</li></a>-->
+                <!--</ul>-->
+            </div>
+        </div>
+    </md-toolbar>
+
+    <md-content>
+
+        <!-- WHEN NO SEARCH RESULTS -->
+        <div ng-hide="allCheckedFlights.length" class="admin_flight_noresults">
+            <span>No results...</span>
+        </div>
+
+        <!-- FLIGHT NG REPEAT -->
+        <div dir-paginate="flight in allCheckedFlights = (vm.allCheckedFlights
+                        | filter:searchText) | itemsPerPage:8 | orderBy:'flight.allFlightDetails.flightStatus.departureDate.dateUtc':true"
+                        class="admin_flights_overview col-xs-12">
+            <a href="" ng-click="vm.$$ix.options(flight)">
+                <div class="admin_flight_item col-xs-12">
+
+                    <div class="fi_place col-lg-6 col-md-6 col-sm-5 col-xs-9 col-xxs-12 col-500">
+                        <span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>
+
+                        <span>
+                            <i class="material-icons">arrow_forward</i>
+                            {{ flight.arrivalAirport.name }} ({{ flight.arrivalAirport.iata }})
+                        </span>
+                    </div>
+
+                    <div class="fi_status col-lg-1 col-md-1 col-sm-2 col-xs-3 col-xxs-12 col-500">
+                        <span class="fi_first">Status</span>
+                        <i ng-if="flight.allFlightDetails.flightStatus.status === 'S'" class="material-icons">flight_takeoff</i>
+                        <i ng-if="flight.allFlightDetails.flightStatus.status === 'L'" class="material-icons">flight_land</i>
+                        <i ng-if="flight.allFlightDetails.flightStatus.status === 'A'" class="material-icons">filter_drama</i>
+                        <i ng-if="flight.allFlightDetails.flightStatus.status === 'C'" class="material-icons">error</i>
+                        <i ng-if="!flight.allFlightDetails.flightStatus.status === 'S'
+                                    && !flight.allFlightDetails.flightStatus.status === 'L'
+                                    && !flight.allFlightDetails.flightStatus.status === 'A'" class="material-icons">flight_takeoff</i>
+                    </div>
+
+                    <div class="fi_flight col-lg-2 col-md-2 col-sm-2 col-xs-12 col-xxs-12 col-500">
+                        <span class="fi_first">Flight</span>
+                        <span>{{ flight.allFlightDetails.flightStatus.carrierFsCode }} {{ flight.allFlightDetails.flightStatus.flightNumber }}</span>
+                    </div>
+
+                    <div ng-if="flight.allFlightDetails.flightStatus.status === 'A'"
+                         class="fi_time col-lg-3 col-md-2 col-sm-3 col-xs-12 col-xxs-12 col-500">
+                        <span class="fi_first">Arrival</span>
+                        <span>
+                                {{ flight.allFlightDetails.flightStatus.arrivalDate.dateLocal | date : 'hh:mm a' }},
+                                {{ flight.allFlightDetails.flightStatus.arrivalDate.dateLocal | date : 'MMM d' }}
+                        </span>
+                    </div>
+
+                    <div ng-if="flight.allFlightDetails.flightStatus.status === 'L'"
+                         class="fi_time col-lg-3 col-md-3 col-sm-3 col-xs-12 col-xxs-12 col-500">
+                        <span class="fi_first">Arrived</span>
+                        <span ng-if="flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival">
+                            {{ flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'hh:mm a' }},
+                                {{ flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival.dateLocal | date : 'MMM d' }}
+                        </span>
+                        <span ng-if="!flight.allFlightDetails.flightStatus.operationalTimes.actualGateArrival
+                                    && flight.allFlightDetails.flightStatus.operationalTimes.actualRunwayArrival">
+                            {{ flight.allFlightDetails.flightStatus.operationalTimes.actualRunwayArrival.dateLocal | date : 'hh:mm a' }},
+                                {{ flight.allFlightDetails.flightStatus.operationalTimes.actualRunwayArrival.dateLocal | date : 'MMM d' }}
+                        </span>
+                    </div>
+
+                    <div ng-if="flight.allFlightDetails.flightStatus.status === 'S'"
+                         class="fi_time col-lg-3 col-md-3 col-sm-3 col-xs-12 col-xxs-12 col-500">
+                        <span class="fi_first">Departure</span>
+                        <span>
+                            {{ flight.allFlightDetails.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'hh:mm a' }},
+                                    {{ flight.allFlightDetails.flightStatus.operationalTimes.publishedDeparture.dateLocal | date : 'MMM d' }}
+                        </span>
+                    </div>
+
+                    <!--<div class="fi_place col-lg-2 col-md-2 col-sm-2 col-xs-6 col-xxs-12 col-500">-->
+                        <!--<span>{{ flight.databaseFlight.database.day }}</span>-->
+                    <!--</div>-->
+
+                    <!--<div class="fi_place col-lg-4 col-md-4 col-sm-4 col-xs-6 col-xxs-12 col-500">-->
+                        <!--<span>{{ flight.departureAirport.name }} ({{ flight.departureAirport.iata }})</span>-->
+                    <!--</div>-->
+
+                    <!--<div class="fi_place col-lg-1 col-md-1 col-sm-1 col-xs-6 col-xxs-12 col-500">-->
+                        <!--<span>-->
+                            <!--<i ng-if="flight.allFlightDetails.flightStatus.status === 'S'" class="material-icons">flight_takeoff</i>-->
+                            <!--<i ng-if="flight.allFlightDetails.flightStatus.status === 'L'" class="material-icons">flight_land</i>-->
+                            <!--<i ng-if="flight.allFlightDetails.flightStatus.status === 'A'" class="material-icons">filter_drama</i>-->
+                            <!--<i ng-if="!flight.allFlightDetails.flightStatus.status === 'S'-->
+                                    <!--&& !flight.allFlightDetails.flightStatus.status === 'L'-->
+                                    <!--&& !flight.allFlightDetails.flightStatus.status === 'A'" class="material-icons">flight_takeoff</i>-->
+                        <!--</span>-->
+                    <!--</div>-->
+
+                    <!--<div class="fi_place col-lg-4 col-md-4 col-sm-4 col-xs-6 col-xxs-12 col-500">-->
+                        <!--<span>-->
+                            <!--{{ flight.arrivalAirport.name }} ({{ flight.arrivalAirport.iata }})-->
+                        <!--</span>-->
+                    <!--</div>-->
+
+                    <!--<div class="fi_place col-lg-2 col-md-2 col-sm-2 col-xs-6 col-xxs-12 col-500">-->
+                        <!--<span>-->
+                            <!--{{ flight.arrivalAirport.name }} ({{ flight.arrivalAirport.iata }})-->
+                        <!--</span>-->
+                    <!--</div>-->
+                </div>
+            </a>
+        </div>
+
+        <!-- PAGINATION START -->
+        <div class="admin_pagination col-xs-12">
+            <dir-pagination-controls
+                    max-size="5"
+                    direction-links="true"
+                    boundary-links="true" >
+            </dir-pagination-controls>
+        </div>
+
+        <!-- OPTIONS MODAL -->
+        <script type="text/ng-template" id="optionsModal.html">
+            <div class="modal-body">
+                <div class="modal-title">
+                    <span>Flight Options</span>
+                    <!--<span ng-repeat="item in flight">{{ item }}</span>-->
+                </div>
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_duplicate_modal col-xs-12">
+                            <!--<div class="button_left col-xs-6 col-xxs-12">-->
+                            <!--<input type="button" ng-click="vm.$$ix.cancel()" class="modal_btn_error modal_error_cancel_button" value="Cancel">-->
+                            <!--&lt;!&ndash;<a href="/" class="own_btn back_button" target="_self">BACK</a>&ndash;&gt;-->
+                            <!--</div>-->
+
+                            <div class="button_right col-xs-12">
+                                <!--<input type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self" value="NEXT">-->
+                                <input type="submit" ng-click="vm.$$ix.cancel()" class="modal_btn_error modal_error_again_button" value="Cancel">
+                                <!--<a href="" type="submit" ng-click="vm.$$ix.next()" class="own_btn next_button" target="_self">NEXT</a>-->
+                            </div>
+
+                            <div class="button_left col-xs-12">
+                                <input type="button" ng-click="vm.$$ix.delete()" class="modal_btn modal_cancel_button" value="Delete">
+                                <!--<a href="/" class="own_btn back_button" target="_self">BACK</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
+    </md-content>
+</div>

@@ -1,0 +1,377 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the admin flight overview page.
+// -----------------------------------------------------------------------------
+@import "../../themes/default";
+
+#admin_flight_overview_content {
+  padding-top: 16px;
+
+  .modal-body {
+    background-color: $white;
+    width: 100vw;
+    z-index: 9999;
+    height: 100%;
+    position: fixed !important;
+
+    .modal-table {
+      display: table;
+      width: 100%;
+      height: 100%;
+
+      .modal-cell {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+      }
+    }
+  }
+
+  .admin_flight_overview_intro {
+    color: $white;
+    font-size: 3rem;
+    font-weight: 300;
+    text-align: left;
+
+    .col-xs-10 {
+      margin-bottom: 16px;
+    }
+
+    .mdl-button {
+      float: right;
+
+      a {
+        color: $white;
+      }
+
+      i {
+        font-size: 32px;
+        line-height: 32px;
+        width: 32px;
+        transform: translate(-16px,-16px);
+      }
+
+      i:hover {
+        background-color: transparent;
+        //color: $accent_green;
+      }
+    }
+
+    .mdl-button:hover {
+      background-color: transparent;
+    }
+
+    .mdl-menu__container {
+      right: 28px !important;
+      margin-top: 16px !important;
+
+      .mdl-menu__outline {
+        box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22) !important;
+        -webkit-animation-delay: 1.2s;
+        -moz-animation-delay:1.2s;
+        animation-delay: 1.2s;
+      }
+
+      ul {
+        padding: 0;
+
+        li {
+          i {
+            margin-right: 16px;
+            vertical-align: middle;
+          }
+        }
+
+        li:nth-of-type(2) {
+          border-top: 1px solid $main_green;
+          border-bottom: 1px solid $main_green;
+        }
+
+        a:hover {
+          text-decoration: none;
+        }
+
+        .item_favorite {
+          color: $main_green;
+        }
+
+        .item_delete {
+          color: $accent_red;
+        }
+
+        .item_refresh {
+          color: $main_blue;
+        }
+      }
+    }
+
+    .admin_search_flights {
+      padding-right: 14px;
+      margin-bottom: 16px;
+
+      input {
+        border: none;
+        border-bottom: 1px solid $main_green;
+        background-color: rgba(255, 255, 255, 0.64);
+        width: 100%;
+        outline: none;
+        padding: 4px 8px;
+        height: 36px;
+        font-size: 1.6rem;
+        color: $black_opacity;
+      }
+
+      input::-webkit-input-placeholder {
+        color: $black_opacity;
+      }
+    }
+  }
+
+  .admin_flight_noresults {
+    width: 100%;
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 160px;
+
+    span {
+      font-size: 2rem;
+      color: $white;
+    }
+  }
+
+  .admin_flights_overview {
+    padding-right: 28px;
+    outline: none;
+
+    a {
+      outline: none;
+    }
+
+    .admin_flight_item {
+      background-color: $black_opacity_24;
+      color: $white !important;
+      margin-bottom: 16px;
+      padding-top: 16px;
+      padding-bottom: 8px;
+      font-size: 1.6rem;
+      font-weight: 300;
+
+      a {
+        color: $white !important;
+        font-weight: 300;
+      }
+
+      span {
+        margin-bottom: 8px;
+        display: block;
+
+        p {
+          font-weight: 300;
+          font-size: 1.4rem;
+        }
+      }
+
+      .fi_place {
+
+        i {
+          vertical-align: bottom;
+          margin-right: 4px;
+        }
+
+        span {
+
+          p {
+            margin-bottom: 0;
+            display: inline-block;
+            position: absolute;
+            margin-left: 8px;
+          }
+        }
+      }
+
+      .fi_status {
+        i {
+          vertical-align: bottom;
+        }
+      }
+    }
+
+  }
+
+  .flight_scheduled {
+    .flight_delay {
+      color: $warning_red;
+      font-weight: 500 !important;
+    }
+  }
+
+  .flight_landed {
+
+    .fi_gate {
+
+      .fi_first {
+        height: 22px !important;
+      }
+
+      .fi_remove {
+        a {
+          color: $white;
+        }
+
+        a:hover {
+
+        }
+      }
+    }
+  }
+
+  .flight_removed {
+    text-align: center;
+    padding: 32px 32px 0 32px;
+
+    span {
+      font-weight: 300;
+      color: $white;
+      font-size: 1.4rem;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #admin_flight_overview_content {
+    padding-top: 16px;
+
+    .admin_flight_overview_intro {
+      .admin_search_flights {
+        padding-right: 10px;
+      }
+    }
+
+    .admin_flights_overview {
+      padding-right: 25px;
+    }
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 768px) {
+  #admin_flight_overview_content {
+
+    .admin_flight_item {
+      padding-bottom: 16px;
+
+      .fi_first {
+        min-width: 80px;
+      }
+
+      .fi_status {
+        margin-top: 0;
+        text-align: right;
+        i {
+          margin-left: 4px;
+        }
+      }
+
+      .fi_status span,
+      .fi_flight span,
+      .fi_time span {
+        display: inline-block;
+        margin-bottom: 0;
+
+        p {
+          margin-left: 8px;
+          margin-bottom: 4px;
+        }
+      }
+
+      .fi_flight,
+      .fi_time {
+        margin: 4px 0;
+      }
+
+      .fi_status {
+        .fi_first {
+          width: auto !important;
+          min-width: auto !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 501px) and (max-width: 600px) {
+  #admin_flight_overview_content {
+
+    .admin_flight_item {
+      padding-bottom: 16px;
+
+      .fi_first {
+        min-width: 80px;
+      }
+
+      .fi_status span,
+      .fi_flight span,
+      .fi_time span {
+        display: inline-block;
+        margin-bottom: 0;
+
+        p {
+          margin-left: 8px;
+          margin-bottom: 4px;
+        }
+      }
+
+      .fi_status,
+      .fi_flight,
+      .fi_time {
+        margin: 4px 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #admin_flight_overview_content {
+    padding-top: 32px;
+
+    .admin_flight_item {
+      padding-bottom: 16px;
+
+      .fi_first {
+        min-width: 80px;
+      }
+
+      .fi_status span,
+      .fi_flight span,
+      .fi_time span {
+        display: inline-block;
+        margin-bottom: 0;
+
+        p {
+          margin-left: 8px;
+          margin-bottom: 4px;
+        }
+      }
+
+      .fi_status,
+      .fi_flight,
+      .fi_time {
+        margin: 4px 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 320px) {
+  #admin_flight_overview_content {
+    padding-top: 16px;
+
+    .admin_flight_item {
+      .fi_place,
+      .fi_status,
+      .fi_flight,
+      .fi_time {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+}

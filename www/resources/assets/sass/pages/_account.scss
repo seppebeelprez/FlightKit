@@ -1,0 +1,56 @@
+// -----------------------------------------------------------------------------
+// This file contains styles that are specific to the account page.
+// -----------------------------------------------------------------------------
+@import "../themes/default";
+
+#account_content {
+  padding-top: 32px;
+
+  .account_header {
+    background-color: $black_opacity_24;
+  }
+
+  form {
+    .ac_first {
+      margin-top: 32px !important;
+    }
+
+    .account_form {
+      margin: 0 0 16px 0;
+
+      span {
+        display: block;
+        color: white;
+        font-size: 1.6rem;
+        margin-bottom: 4px;
+      }
+
+      input[type=password] {
+        height: 32px;
+        border: none;
+        min-width: 100%;
+        outline: none !important;
+      }
+
+      input[type=submit] {
+        margin-top: 16px;
+        min-width: 100%;
+        outline: none !important;
+      }
+
+      .passwordMatch {
+        max-width: 200px;
+        min-width: 100%;
+        padding: 4px 4px 4px 8px;
+        background-color: rgba(255, 62, 62, 0.81);
+        color: white;
+      }
+    }
+  }
+}
+
+.modal_title_account {
+  span {
+    display: block !important;
+  }
+}

@@ -8,7 +8,7 @@
                     <h2>Signup</h2>
 
                     <div class="signup_form">
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
+                        <form class="form-horizontal" role="form" method="POST" action="/auth/register">
                             {!! csrf_field() !!}
 
                             <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -57,17 +57,17 @@
                                 @endif
                             </div>
 
-                            <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('password_confirm') ? ' has-error' : '' }}">
                                 <label class="col-xs-12">Repeat your password*</label>
 
                                 <div class="input-group col-xs-12">
                                     <span class="input-group-addon" id="basic-addon1"><i class="fa fa-lock fa-2x"></i></span>
-                                    <input type="password" class="form-control" name="password_confirmation" aria-describedby="basic-addon1">
+                                    <input type="password" class="form-control" name="password_confirm" aria-describedby="basic-addon1">
                                 </div>
 
-                                @if ($errors->has('password_confirmation'))
+                                @if ($errors->has('password_confirm'))
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                        <strong>{{ $errors->first('password_confirm') }}</strong>
                                     </span>
                                 @endif
                             </div>

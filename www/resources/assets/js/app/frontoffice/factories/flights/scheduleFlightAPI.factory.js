@@ -64,36 +64,6 @@
                 });
             }
         };
-
-        //var url = 'https://api.flightstats.com/flex/schedules/rest/v1/json/flight/:airline/:number/departing/:year/:month/:day?appId=:appId&appKey=:appKey';
-        ////var url = 'https://api.flightstats.com/flex/schedules/rest/v1/json/flight/AA/4200/departing/2016/04/08?appId=dbb6ea9e&appKey=5bf1b2bedbd8e63dc1b3221cbd834c2c';
-        //
-        //var paramDefaults = {
-        //    airline   : '@airline',
-        //    number    : '@number',
-        //    year      : '@year',
-        //    month     : '@month',
-        //    day       : '@day',
-        //    appId     : config.appId,
-        //    appKey    : config.appKey,
-        //    format    : 'jsonp'
-        //};
-        //
-        //var actions = {
-        //    'query' : {
-        //        method : 'GET',
-        //        headers: {
-        //            Accept: "application/json; charset=utf-8",
-        //            "Content-Type": "application/json; charset=utf-8"
-        //        },
-        //        dataType: 'jsonp',
-        //        crossDomain : true
-        //    }
-        //};
-        //
-        //return $resource(url, paramDefaults, actions);
-
-
     }
 
 })();

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use App\User;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Hash;
 
 class AccountController extends Controller
 {
@@ -44,6 +45,34 @@ class AccountController extends Controller
         }
 
         return [ 'users' => $users ];
+    }
+
+    /**
+     * All users.
+     *
+     * @return \Illuminate\Http\Response
+     *
+     * @param Request $request
+     */
+    public function update(Request $request)
+    {
+        if (Auth::check())
+        {
+            $user = Auth::user();
+
+            $oldpassword = $request->oldpassword;
+            $newpassword = $request->newpassword;
+            $userpassword = $user->password;
+
+
+            if (Hash::check($oldpassword, $userpassword) || $userpassword == NULL)
+            {
+                $user->password = Hash::make($newpassword);
+                $user->save();
+            }else {
+                return 'koekoek';
+            }
+        }
     }
 
     /**

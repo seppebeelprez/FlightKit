@@ -17,6 +17,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     
     //Account
     Route::resource('account', 'Api\AccountController');
+    Route::put('account', 'Api\AccountController@update');
     Route::resource('admin/users', 'Api\AccountController@users');
     Route::resource('admin/users/detail', 'Api\AccountController@show');
     Route::resource('admin/users/delete', 'Api\AccountController@harddelete');

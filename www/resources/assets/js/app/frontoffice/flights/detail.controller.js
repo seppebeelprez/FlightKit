@@ -74,7 +74,8 @@
             {name:'Snow', icon:'wi-snow'},
             {name:'Drizzle', icon:'wi-showers'},
             {name:'Thunderstorm', icon:'wi-thunderstorm'},
-            {name:'Extreme', icon:'wi-hurricane'}
+            {name:'Extreme', icon:'wi-hurricane'},
+            {name:'Haze', icon:'wi-day-haze'}
         ];
 
         vm.checkIfTrip = null;
@@ -143,7 +144,6 @@
 
             // var depWeatherCondition = $filter('filter')(response.apiDepWeather.weather[0].main, {key: 'Prevailing Conditions'}, true);
             var depWeatherValue = $filter('filter')(vm.weather, {name: response.apiDepWeather.weather[0].main}, true);
-            console.log(depWeatherValue);
             if(depWeatherValue.length > 0) {
                 vm.flight.depWeatherIcon = depWeatherValue[0].icon;
             }else {
@@ -153,11 +153,14 @@
             // var arrWeatherCondition = $filter('filter')(response.apiArrWeather.metar.tags, {key: 'Prevailing Conditions'}, true);
             var arrWeatherValue = $filter('filter')(vm.weather, {name: response.apiArrWeather.weather[0].main}, true);
             vm.flight.arrWeatherIcon = arrWeatherValue[0].icon;
+            if(arrWeatherValue.length > 0) {
+                vm.flight.arrWeatherIcon = arrWeatherValue[0].icon;
+            }else {
+                vm.flight.arrWeatherIcon = 'wi-day-sunny';
+            }
 
-            console.log(vm.flight.apiDepWeather, vm.flight.apiArrWeather);
-            // console.log(response.apiDepWeather.weather[0].main, response.apiArrWeather.weather[0].main);
-            // console.log(vm.flight.depWeatherIcon, vm.flight.arrWeatherIcon);
 
+            console.log(vm.flight);
             getTrips();
         }
 
@@ -193,9 +196,7 @@
             });
             
             if(checkDuplicate == true){
-                console.log('checkDuplicate = true!');
             }else {
-                console.log('checkDuplicate = false!');
                 vm.trip.airport = vm.flight.databaseflight.arrival;
                 var createTrips = createTripsFactory.createTrip(vm.trip);
 
@@ -241,7 +242,6 @@
         }
         function getTripsSuccess(response) {
             vm.userTrips = response[0].trips;
-            console.log('vm.userTrips: ', vm.userTrips);
 
             var checkIfTrip = $filter('filter')(vm.userTrips, {airport: vm.flight.databaseflight.arrival}, true);
 
@@ -251,7 +251,6 @@
                 }else {
                     vm.checkIfTrip = false;
                 }
-                console.log(vm.checkIfTrip);
             });
         }
 
@@ -269,7 +268,6 @@
             };
             vm.$$ix.deleteFlight = function ($id) {
                 deleteFlightModal.close(true);
-                console.log($id);
 
                 var deleteFlight = deleteFlightsFactory.deleteFlight($id);
 

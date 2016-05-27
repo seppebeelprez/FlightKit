@@ -34,7 +34,7 @@
                             </li>
                             @if ( $user->isAdmin() )
                                 <li class="scrollToInsideLink">
-                                    <a {{ (Request::is('account') ? 'class=active' : '') }} href="{{ url('/admin/flights') }}">admin</a>
+                                    <a {{ (Request::is('admin') ? 'class=active' : '') }} href="{{ url('/admin/flights') }}">admin</a>
                                 </li>
                             @endif
                             <li class="scrollToInsideLink">

@@ -38,7 +38,8 @@ var vendor = {
         route       : elixir.config.bowerDir + '/angular-route/angular-route.js',
         sanitize    : elixir.config.bowerDir + '/angular-sanitize/angular-sanitize.js',
         touch       : elixir.config.bowerDir + '/angular-touch/angular-touch.js',
-        ui_router   : elixir.config.bowerDir + '/angular-ui-router/release/angular-ui-router.js'
+        ui_router   : elixir.config.bowerDir + '/angular-ui-router/release/angular-ui-router.js',
+        validation  : elixir.config.bowerDir + '/angular-validation-match/dist/angular-validation-match.js'
     }
 };
 
@@ -131,7 +132,8 @@ elixir(function(mix) {
                 vendor.angularModule.route,
                 vendor.angularModule.sanitize,
                 vendor.angularModule.touch,
-                vendor.angularModule.ui_router
+                vendor.angularModule.ui_router,
+                vendor.angularModule.validation
             ],
             elixir.config.jsOutput + '/angular.js',
             elixir.config.jsBaseDir

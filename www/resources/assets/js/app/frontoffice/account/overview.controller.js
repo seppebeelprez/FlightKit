@@ -15,9 +15,13 @@
         '$log',
         '$scope',
         'config',
+        '$q',
+        '$uibModal',
+        '$window',
 
         // Custom
-        'GetAccountFactory'
+        'GetAccountFactory',
+        'accountFactory'
     ];
 
     function AccountOverviewController(
@@ -25,13 +29,19 @@
         $log,
         $scope,
         config,
+        $q,
+        $uibModal,
+        $window,
 
         // Custom
-        GetAccountFactory
+        GetAccountFactory,
+        accountFactory
     ) {
         // ViewModel
         // =========
         var vm = this;
+        
+        getAccount();
 
         // User Interface
         // --------------
@@ -40,7 +50,61 @@
             subtitle: 'Overview of records!'
         };
 
-        vm.user = GetAccountFactory.getAccount($scope);
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            confirm     : changePassword
+        };
+
+        vm.animationsEnabled = true;
+
+        vm.data = {};
+        
+        function getAccount() {
+            var params = {};
+
+            return vm.user = accountFactory.query(params, getAccountSuccess, getAccountError);
+            // var account = GetAccountFactory.getAccount();
+            //
+            // $q.all(account).then(function success(data){
+            //     console.log('q', data);
+            // });
+        }
+
+        function getAccountError(reason) {
+
+        }
+
+        function getAccountSuccess(response, responseHeader) {
+            vm.user = response.user;
+        }
+
+        function changePassword() {
+            if(vm.form.$valid){
+                console.log(vm.data);
+
+                var updateAccount = GetAccountFactory.changePass(vm.data);
+
+                $q.all(updateAccount).then(function success(data){
+                    console.log('check');
+                    confirmModal();
+                });
+            }
+        }
+
+        // Show delete modal popup
+        // -----
+        function confirmModal() {
+            var confirmModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'confirmModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                confirmModal.dismiss('cancel');
+                $window.location.href = '/account';
+            };
+        }
     }
 
 })();

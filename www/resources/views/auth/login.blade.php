@@ -5,10 +5,6 @@
         <div class="login_block">
             <h2>Login</h2>
 
-
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
             <div class="login_form">
                 <form class="form-horizontal" name="form" role="form" method="POST" action="/auth/login">
                     {!! csrf_field() !!}
@@ -20,10 +16,6 @@
                             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-envelope fa-2x"></i></span>
                             <input type="email" class="form-control" id="email" name="email" aria-describedby="basic-addon1" value="{{ old('email') }}">
                         </div>
-                        {{--<div ng-show="form.$submitted" class="ngShow">--}}
-                            {{--<div ng-show="form.email.$error.required">Email required</div>--}}
-                        {{--</div>--}}
-
                         @if ($errors->has('email'))
                             <span class="help-block">
                                         {{ $errors->first('email') }}
@@ -38,7 +30,6 @@
                             <span class="input-group-addon" id="basic-addon1"><i class="fa fa-lock fa-2x"></i></span>
                             <input type="password" class="form-control" id="password" name="password" aria-describedby="basic-addon1">
                         </div>
-
                         @if ($errors->has('password'))
                             <span class="help-block">
                                         {{ $errors->first('password') }}
@@ -74,9 +65,9 @@
                                         </label>
                                     </div>
 
-                                    <div class="col-xs-6">
-                                        <a class="btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>
-                                    </div>
+                                    {{--<div class="col-xs-6">--}}
+                                        {{--<a class="btn-link" href="{{ url('/password/reset') }}">Forgot Your Password?</a>--}}
+                                    {{--</div>--}}
                                 </div>
                             </div>
                         </div>

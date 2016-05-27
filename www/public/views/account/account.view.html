@@ -1,19 +1,74 @@
-<div style="height: 100vh" layout="column" ng-cloak>
-    <md-toolbar md-scroll-shrink>
-        <div class="md-toolbar-tools">
-            <h2>
-                <span>{{ vm.$$ui.title }}</span>
-            </h2>
-            <h4>
-                <span>{{ vm.$$ui.subtitle }}</span>
-            </h4>
-
-            <h2>{{ account.user.email }}</h2>
+<div id="account_content" ng-cloak>
+    <md-toolbar>
+        <div class="col-lg-offset-3 col-lg-6 col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 col-xxs-offset-1 col-xxs-10 col-500">
+            <div class="account_header col-xs-12">
+                <h1 class="welkom_user">
+                    <span>Change password</span>
+                </h1>
+            </div>
         </div>
     </md-toolbar>
-    <md-content>
-        <md-list>
 
-        </md-list>
+    <md-content>
+
+        <form name="vm.form" novalidate>
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 col-xxs-offset-1 col-xxs-10 col-500">
+                <div class="account_form ac_first col-xs-12">
+                    <span>Old password</span>
+                    <input type="password" ng-model="vm.data.oldpassword" name="oldPassword" required>
+                    <div ng-show="vm.form.$submitted" class="ngShow">
+                        <div class="passwordMatch" ng-show="vm.form.oldPassword.$error.required">Old password required!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 col-xxs-offset-1 col-xxs-10 col-500">
+                <div class="account_form col-xs-12">
+                    <span>New password</span>
+                    <input type="password" ng-model="vm.data.newpassword" name="newPassword" required>
+                    <div ng-show="vm.form.$submitted" class="ngShow">
+                        <div class="passwordMatch" ng-show="vm.form.newPassword.$error.required">New password required!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 col-xxs-offset-1 col-xxs-10 col-500">
+                <div class="account_form col-xs-12">
+                    <span>Confirm password</span>
+                    <input type="password" ng-model="vm.data.confirmpassword" name="confirmPassword" match="vm.data.newpassword" match-ignore-empty="true" required>
+                    <div ng-show="vm.form.$submitted" class="ngShow">
+                        <div class="passwordMatch" ng-show="vm.form.confirmPassword.$error.required">Confirm password required!</div>
+                    </div>
+                    <div class="passwordMatch" ng-show="vm.form.confirmPassword.$error.match">Passwords do not match!</div>
+                </div>
+            </div>
+
+            <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8 col-xxs-offset-1 col-xxs-10 col-500">
+                <div class="account_form col-xs-12">
+                    <input type="submit" ng-click="vm.$$ix.confirm()" class="own_btn next_button" value="SAVE">
+                </div>
+            </div>
+
+        </form>
+
+        <!-- DUPLICATE MODAL -->
+        <script type="text/ng-template" id="confirmModal.html">
+            <div class="modal-body">
+                <div class="modal-title modal_title_account">
+                    <span>Congratulations {{ vm.user.name }}!</span>
+                    <span>You changed your password successfully.</span>
+                </div>
+                <form class="form-horizontal">
+                    <div class="row btn-col min-btn">
+                        <div class="buttons_duplicate_modal col-xs-12">
+                            <div class="button_left col-xs-12">
+                                <input type="button" ng-click="vm.$$ix.cancel()" class="modal_btn modal_cancel_button" value="Close">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </script>
     </md-content>
 </div>

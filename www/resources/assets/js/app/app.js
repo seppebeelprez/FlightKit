@@ -35,7 +35,7 @@
     angular.module('app.home', ['ui.router', 'ngRoute']);
     angular.module('app.flights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy']);
     angular.module('app.trips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy']);
-    angular.module('app.account', ['ui.router']);
+    angular.module('app.account', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy', 'validation.match']);
 
     angular.module('app.adminflights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy', 'angularUtils.directives.dirPagination']);
     angular.module('app.admintrips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy', 'angularUtils.directives.dirPagination']);

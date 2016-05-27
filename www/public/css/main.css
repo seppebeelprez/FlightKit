@@ -1307,6 +1307,13 @@ select {
       border: none;
       border-radius: 0;
       outline: none; }
+  .container_login .login_block .login_form form .form-group .help-block {
+    padding: 4px 4px 4px 8px;
+    margin: 0 15px;
+    background-color: rgba(255, 62, 62, 0.81);
+    color: white; }
+    .container_login .login_block .login_form form .form-group .help-block strong {
+      font-weight: 400; }
   .container_login .login_block .login_form form .form-group .btn-login {
     font-size: 2rem;
     font-weight: 300;
@@ -1483,6 +1490,13 @@ select {
       border: none;
       border-radius: 0;
       outline: none; }
+  .container_login .signup_block .signup_form form .form-group .help-block {
+    padding: 4px 4px 4px 8px;
+    margin: 0 15px;
+    background-color: rgba(255, 62, 62, 0.81);
+    color: white; }
+    .container_login .signup_block .signup_form form .form-group .help-block strong {
+      font-weight: 400; }
   .container_login .signup_block .signup_form form .form-group .btn-login {
     font-size: 2rem;
     font-weight: 300;
@@ -1521,6 +1535,38 @@ select {
       margin-left: 8px;
       float: right;
       color: #33CC99; }
+
+#account_content {
+  padding-top: 32px; }
+  #account_content .account_header {
+    background-color: rgba(0, 0, 0, 0.24); }
+  #account_content form .ac_first {
+    margin-top: 32px !important; }
+  #account_content form .account_form {
+    margin: 0 0 16px 0; }
+    #account_content form .account_form span {
+      display: block;
+      color: white;
+      font-size: 1.6rem;
+      margin-bottom: 4px; }
+    #account_content form .account_form input[type=password] {
+      height: 32px;
+      border: none;
+      min-width: 100%;
+      outline: none !important; }
+    #account_content form .account_form input[type=submit] {
+      margin-top: 16px;
+      min-width: 100%;
+      outline: none !important; }
+    #account_content form .account_form .passwordMatch {
+      max-width: 200px;
+      min-width: 100%;
+      padding: 4px 4px 4px 8px;
+      background-color: rgba(255, 62, 62, 0.81);
+      color: white; }
+
+.modal_title_account span {
+  display: block !important; }
 
 #flight_create_content {
   padding-top: 32px; }
@@ -1903,7 +1949,9 @@ select {
       -webkit-column-gap: 10px;
       -webkit-column-fill: auto;
       -moz-column-gap: 10px;
+      -moz-column-fill: none !important;
       -webkit-column-gap: 15px;
+      -moz-column-gap: 15px;
       column-gap: 15px;
       -webkit-column-fill: auto;
       -moz-column-fill: auto;

@@ -35,7 +35,7 @@
     angular.module('app.home', ['ui.router', 'ngRoute']);
     angular.module('app.flights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy']);
     angular.module('app.trips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy']);
-    angular.module('app.account', ['ui.router']);
+    angular.module('app.account', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy', 'validation.match']);
 
     angular.module('app.adminflights', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy', 'angularUtils.directives.dirPagination']);
     angular.module('app.admintrips', ['ui.router', 'ngRoute', 'ngResource', 'ui.bootstrap', 'angucomplete-alt', 'ngMaterial', 'cgBusy', 'angularUtils.directives.dirPagination']);
@@ -911,9 +911,13 @@
         '$log',
         '$scope',
         'config',
+        '$q',
+        '$uibModal',
+        '$window',
 
         // Custom
-        'GetAccountFactory'
+        'GetAccountFactory',
+        'accountFactory'
     ];
 
     function AccountOverviewController(
@@ -921,13 +925,19 @@
         $log,
         $scope,
         config,
+        $q,
+        $uibModal,
+        $window,
 
         // Custom
-        GetAccountFactory
+        GetAccountFactory,
+        accountFactory
     ) {
         // ViewModel
         // =========
         var vm = this;
+        
+        getAccount();
 
         // User Interface
         // --------------
@@ -936,7 +946,61 @@
             subtitle: 'Overview of records!'
         };
 
-        vm.user = GetAccountFactory.getAccount($scope);
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            confirm     : changePassword
+        };
+
+        vm.animationsEnabled = true;
+
+        vm.data = {};
+        
+        function getAccount() {
+            var params = {};
+
+            return vm.user = accountFactory.query(params, getAccountSuccess, getAccountError);
+            // var account = GetAccountFactory.getAccount();
+            //
+            // $q.all(account).then(function success(data){
+            //     console.log('q', data);
+            // });
+        }
+
+        function getAccountError(reason) {
+
+        }
+
+        function getAccountSuccess(response, responseHeader) {
+            vm.user = response.user;
+        }
+
+        function changePassword() {
+            if(vm.form.$valid){
+                console.log(vm.data);
+
+                var updateAccount = GetAccountFactory.changePass(vm.data);
+
+                $q.all(updateAccount).then(function success(data){
+                    console.log('check');
+                    confirmModal();
+                });
+            }
+        }
+
+        // Show delete modal popup
+        // -----
+        function confirmModal() {
+            var confirmModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'confirmModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                confirmModal.dismiss('cancel');
+                $window.location.href = '/account';
+            };
+        }
     }
 
 })();
@@ -946,38 +1010,956 @@
  * @copyright Copyright © 2015-2016 Artevelde University College Ghent
  * @license   Apache License, Version 2.0
  */
-;(function () { 'use strict';
+;(function () {
+    'use strict';
 
-    angular.module('app.factories')
-        .factory('GetAccountFactory', GetAccountFactory);
+    angular.module('app.flights')
+        .controller('FlightsCreateController', FlightsCreateController);
 
-    GetAccountFactory.$inject = [
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    FlightsCreateController.$inject = [
+        // Angular
+        '$log',
+        '$state',
+        '$location',
+        '$filter',
+        'config',
+        '$scope',
+        '$q',
+        '$uibModal',
+        '$window',
         '$http',
+
+        //Custom
+        'createFlightsFactory',
+        'getFlightsFactory'
+    ];
+
+    function FlightsCreateController(
+        // Angular
+        $log,
+        $state,
+        $location,
+        $filter,
+        config,
+        $scope,
+        $q,
+        $uibModal,
+        $window,
+        $http,
+
+        //Custom
+        createFlightsFactory,
+        getFlightsFactory
+    ) {
+        //console.log('FlightsCreateController');
+        // ViewModel
+        // =========
+        var vm = this;
+
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            next        : createFlight,
+            confirm     : showModal,
+            airline     : airlineSelected,
+            airport     : airportSelected
+        };
+
+        getFlights();
+        getAirlines();
+        getAirports();
+
+        vm.animationsEnabled = true;
+
+        // User Interface
+        // --------------
+        vm.$$ui = {
+            title: 'Create a flight',
+            subtitle: 'Select your airline, airport, flight number and date.'
+        };
+
+        // Data
+        // ----
+        // vm.flight
+        vm.flight = {};
+        vm.userFlights = {};
+        vm.data = {};
+        vm.airlines = {};
+        vm.airports = {};
+        vm.flight.airline = {};
+        vm.flight.airport = {};
+        vm.existingFlightDetailId = {};
+
+        vm.flight.today = new Date();
+        vm.flight.setToday = new Date();
+
+
+        // Functions
+        // =========
+
+        // Angular autocomplete
+        // -----
+        function getAirlines() {
+            $http.get('../json/airlines_clean.json')
+                .then(function(data){
+                    vm.airlines = data.data.airlines;
+                    // console.log('airlines,', data.data.airlines);
+                });
+        }
+
+        function airlineSelected(selected) {
+            if (selected) {
+                console.log(selected);
+                vm.flight.airline = selected.description.iata;
+            } else {
+                console.log('cleared');
+            }
+        }
+
+        // vm.localSearch = function(str) {
+        //     console.log('localSearch');
+        //     var matches = [];
+        //     vm.airlines.forEach(function(airline) {
+        //         var fullName = airline.name;
+        //         matches.push(fullName);
+        //     });
+        //     return matches;
+        // };
+
+        function getAirports() {
+            $http.get('../json/airports_clean.json')
+                .then(function(data){
+                    vm.airports = data.data.airports;
+                    // console.log('airports,', data.data.airports);
+                });
+        }
+
+        function airportSelected(selected) {
+            if (selected) {
+                console.log(selected);
+                vm.flight.airport = selected.description.iata;
+            } else {
+                console.log('cleared');
+            }
+        }
+
+        // Show popup
+        // -----
+        function showModal() {
+
+
+            if($scope.form.$valid) {
+
+                vm.ArrayToCheckFlightData = [];
+                vm.checkCurrentFlight = [];
+
+                var check = $.ajax({
+                    url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
+                    '' + vm.flight.airline + '/' +
+                    '' + vm.flight.number + '/dep/' +
+                    '' + $filter('date')(vm.flight.today, 'yyyy/MM/dd') + '?appId=' +
+                    '' + config.appId + '&appKey=' +
+                    '' + config.appKey + '&airport=' + vm.flight.airport + '',
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    success: function(data) {
+                        //console.log('data:', data);
+                        vm.checkCurrentFlight.push(data);
+                    }
+                });
+
+                //console.log(result);
+                vm.ArrayToCheckFlightData.push(check);
+                $q.all(vm.ArrayToCheckFlightData).then(function success(data){
+                    console.log('vm.checkCurrentFlight: ', vm.checkCurrentFlight);
+
+
+                    if ( vm.checkCurrentFlight[0].error || vm.checkCurrentFlight[0].flightStatuses[0] == null ) {
+                        var alertFlightModal = $uibModal.open({
+                            animation: vm.animationsEnabled,
+                            templateUrl: 'errorModal.html',
+                            scope: $scope
+                        });
+                        vm.$$ix.again = function () {
+                            alertFlightModal.dismiss('cancel');
+                        };
+                    } else {
+
+                        vm.flight.departureCode = vm.checkCurrentFlight[0].flightStatuses[0].departureAirportFsCode;
+                        vm.flight.arrivalCode = vm.checkCurrentFlight[0].flightStatuses[0].arrivalAirportFsCode;
+
+                        vm.allAirports = [];
+                        vm.allAirports = vm.checkCurrentFlight[0].appendix.airports;
+
+                        vm.departureAirport = [];
+                        vm.arrivalAirport = [];
+
+                        angular.forEach(vm.allAirports, function(airport, key) {
+                            //console.log(key, airport);
+                            if ( airport.iata == vm.flight.departureCode ) {
+                                vm.departureAirport = airport;
+                                //console.log('Start: ', vm.departureAirport);
+                            }
+                            else if ( airport.iata == vm.flight.arrivalCode ) {
+                                vm.arrivalAirport = airport;
+                                //console.log('End: ', vm.arrivalAirport);
+                            }
+                        });
+
+
+                        var checkFlightModal = $uibModal.open({
+                            animation: vm.animationsEnabled,
+                            templateUrl: 'confirmModal.html',
+                            scope: $scope
+                        });
+                        vm.$$ix.cancel = function () {
+                            checkFlightModal.dismiss('cancel');
+                        };
+                        vm.$$ix.add = function () {
+                            checkFlightModal.close(true);
+                            createFlight();
+                        };
+                    }
+                }, function failure(err){
+                });
+            }
+        }
+
+        // Get already added flights
+        // -----
+        function getFlights() {
+            var params = {};
+            return getFlightsFactory
+                .query(
+                    params,
+                    getFlightsSuccess,
+                    getFlightsError);
+        }
+
+        function getFlightsError(reason) {
+            //$log.error('getFlightsError:', reason);
+        }
+        function getFlightsSuccess(response) {
+            //$log.success('getFlightsSuccess:', response);
+            vm.userFlights = response[0].flights;
+            console.log('vm.userFlights: ', vm.userFlights);
+        }
+
+
+        // Create Flight
+        // -----
+        function createFlight() {
+            console.log('createFlight: ', vm.checkCurrentFlight);
+            vm.flight.flightId = vm.checkCurrentFlight[0].flightStatuses[0].flightId;
+            vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
+            console.log('vm.flight: ', vm.flight);
+
+            vm.flightIdArray = [];
+
+            var checkDuplicate = false;
+
+            angular.forEach(vm.userFlights,function(flight,key){
+
+                vm.flightIdArray.push(flight);
+
+                if (vm.flight.flightId == flight.flightId) {
+                    console.log('DUPLICATE: ', vm.flight.flightId, flight.flightId);
+
+                    var duplicateFlightModal = $uibModal.open({
+                        animation: vm.animationsEnabled,
+                        templateUrl: 'duplicateModal.html',
+                        scope: $scope
+                    });
+                    vm.$$ix.cancel = function () {
+                        duplicateFlightModal.dismiss('cancel');
+                    };
+
+                    vm.$$ix.detail = function () {
+                        console.log('existingFlightDetailId: ', flight.flightId);
+                        duplicateFlightModal.dismiss('Go to detail: ', flight.flightId);
+                    };
+
+                    checkDuplicate = true;
+                }
+            });
+
+            if(checkDuplicate == true){
+                console.log('checkDuplicate = true!');
+            }else {
+                console.log('checkDuplicate = false!');
+                createFlightsFactory.createFlight(vm.flight);
+            }
+        }
+
+
+        // Go Back
+        // -----
+        vm.go = function ( path ) {
+            $location.path( path );
+        };
+    }
+
+})();
+
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
+    angular.module('app.flights')
+        .controller('FlightsDetailController', FlightsDetailController);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    FlightsDetailController.$inject = [
+        // Angular
+        '$log',
+        '$scope',
+        '$state',
+        '$stateParams',
+        '$window',
+        '$http',
+        '$filter',
+        '$uibModal',
+        '$q',
+
+        //Custom
+        'detailFlightsFactory',
+        'deleteFlightsFactory',
+        'createTripsFactory',
+        'getTripsFactory',
+        'deleteTripsFactory'
+    ];
+
+    function FlightsDetailController(
+        // Angular
+        $log,
+        $scope,
+        $state,
+        $stateParams,
+        $window,
+        $http,
+        $filter,
+        $uibModal,
+        $q,
+
+        //Custom
+        detailFlightsFactory,
+        deleteFlightsFactory,
+        createTripsFactory,
+        getTripsFactory,
+        deleteTripsFactory
+    ) {
+        // ViewModel
+        // =========
+        var vm = this;
+
+        getDetailFlight();
+
+        // User Interface
+        // --------------
+        vm.$$ui = {
+            title: 'Flight Detail',
+            subtitle: 'Detail flight!'
+        };
+
+        vm.flight = {};
+        vm.trip = {};
+
+        vm.weather = [
+            {name:'Clear', icon:'wi-day-sunny'},
+            {name:'Rain', icon:'wi-rain'},
+            {name:'Mist', icon:'wi-day-fog'},
+            {name:'Clouds', icon:'wi-cloudy'},
+            {name:'Atmosphere', icon:'wi-fog'},
+            {name:'Snow', icon:'wi-snow'},
+            {name:'Drizzle', icon:'wi-showers'},
+            {name:'Thunderstorm', icon:'wi-thunderstorm'},
+            {name:'Extreme', icon:'wi-hurricane'},
+            {name:'Haze', icon:'wi-day-haze'}
+        ];
+
+        vm.checkIfTrip = null;
+
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            refresh: refresh,
+            delete: deleteModal,
+            favorite: addToTrips,
+            removefavorite: deleteFromTripsModal,
+            convert: convertMins,
+            convertToCel: convertToCel,
+            convertToFah: convertToFah
+        };
+
+        vm.animationsEnabled = true;
+
+        // Functions
+        // --------------
+        function refresh() {
+            console.log('refresh');
+            $window.location.reload();
+        }
+
+        function convertMins(minutes) {
+            var hours = Math.floor( minutes / 60);
+            var mins = minutes % 60;
+            var time = hours + 'h' + mins + 'm';
+            return time;
+        }
+
+        function convertToCel(temperature) {
+            var cel = temperature - 273.15;
+            return cel;
+        }
+
+        function convertToFah(temperature) {
+            var fah = (temperature - 273.15) * 9.0 / 5.0 + 32;
+            return fah;
+        }
+
+        function getDetailFlight() {
+            // console.log('getDetailFlight');
+            var params = {
+                airline : $stateParams.airline,
+                number  : $stateParams.number
+            };
+
+            return vm.getData = detailFlightsFactory.query(params, getDetailFlightSuccess, getDetailFlightError);
+        }
+
+        function getDetailFlightError(reason) {
+            $log.error('getDetailFlightError:', reason);
+        }
+        function getDetailFlightSuccess(response, responseHeader) {
+            // vm.data = response[0];
+            // console.log('succes: ', response);
+            vm.flight.databaseflight = response.dbflight[0];
+            vm.flight.apiflight = response.apiflight;
+            vm.flight.apiDepAirport = response.apiDepAirport;
+            vm.flight.apiArrAirport = response.apiArrAirport;
+            vm.flight.apischeduleflight = response.apischeduleflight;
+            vm.flight.apiDepWeather = response.apiDepWeather;
+            vm.flight.apiArrWeather = response.apiArrWeather;
+
+            // var depWeatherCondition = $filter('filter')(response.apiDepWeather.weather[0].main, {key: 'Prevailing Conditions'}, true);
+            var depWeatherValue = $filter('filter')(vm.weather, {name: response.apiDepWeather.weather[0].main}, true);
+            if(depWeatherValue.length > 0) {
+                vm.flight.depWeatherIcon = depWeatherValue[0].icon;
+            }else {
+                vm.flight.depWeatherIcon = 'wi-day-sunny';
+            }
+
+            // var arrWeatherCondition = $filter('filter')(response.apiArrWeather.metar.tags, {key: 'Prevailing Conditions'}, true);
+            var arrWeatherValue = $filter('filter')(vm.weather, {name: response.apiArrWeather.weather[0].main}, true);
+            vm.flight.arrWeatherIcon = arrWeatherValue[0].icon;
+            if(arrWeatherValue.length > 0) {
+                vm.flight.arrWeatherIcon = arrWeatherValue[0].icon;
+            }else {
+                vm.flight.arrWeatherIcon = 'wi-day-sunny';
+            }
+
+
+            console.log(vm.flight);
+            getTrips();
+        }
+
+        function addToTrips() {
+            // console.log('createTrip');
+            // console.log('vm.trip to add: ', vm.flight.databaseflight.arrival);
+
+            vm.tripIdArray = [];
+            var checkDuplicate = false;
+
+            angular.forEach(vm.userTrips,function(trip,key){
+            
+                vm.tripIdArray.push(trip);
+            
+                if (vm.flight.databaseflight.arrival == trip.airport) {
+                    // console.log('DUPLICATE: ', vm.flight.databaseflight.arrival, trip.airport);
+            
+                    var duplicateTripModal = $uibModal.open({
+                        animation: vm.animationsEnabled,
+                        templateUrl: 'duplicateModal.html',
+                        scope: $scope
+                    });
+                    vm.$$ix.cancel = function () {
+                        duplicateTripModal.dismiss('cancel');
+                    };
+                    
+                    vm.$$ix.detail = function () {
+                        // console.log('existingTripDetailId: ', trip.id);
+                        duplicateTripModal.dismiss('Go to detail: ', trip.id);
+                    };
+                    checkDuplicate = true;
+                }
+            });
+            
+            if(checkDuplicate == true){
+            }else {
+                vm.trip.airport = vm.flight.databaseflight.arrival;
+                var createTrips = createTripsFactory.createTrip(vm.trip);
+
+                $q.all(createTrips).then(function success(data){
+                    vm.checkIfTrip = true;
+                });
+
+                var addedToTripsModal = $uibModal.open({
+                    animation: vm.animationsEnabled,
+                    templateUrl: 'addedToTripsModal.html',
+                    scope: $scope
+                });
+                vm.$$ix.cancel = function () {
+                    addedToTripsModal.dismiss('cancel');
+                    getTrips();
+                };
+            }
+        }
+        
+        function removeFromTrips($airport) {
+            var searchTrip = $filter('filter')(vm.userTrips, {airport: $airport}, true);
+            var deleteTrip = deleteTripsFactory.deleteTrip(searchTrip[0].id);
+
+            $q.all(deleteTrip).then(function success(data){
+                getTrips();
+            });
+        }
+
+        // Get already added trips
+        // -----
+        function getTrips() {
+            console.log('getTrips');
+            var params = {};
+            return getTripsFactory
+                .query(
+                    params,
+                    getTripsSuccess,
+                    getTripsError);
+        }
+
+        function getTripsError(reason) {
+            //$log.error('getTripsError:', reason);
+        }
+        function getTripsSuccess(response) {
+            vm.userTrips = response[0].trips;
+
+            var checkIfTrip = $filter('filter')(vm.userTrips, {airport: vm.flight.databaseflight.arrival}, true);
+
+            $q.all(checkIfTrip).then(function success(data){
+                if(checkIfTrip.length > 0) {
+                    vm.checkIfTrip = true;
+                }else {
+                    vm.checkIfTrip = false;
+                }
+            });
+        }
+
+
+        // Show delete modal popup
+        // -----
+        function deleteModal() {
+            var deleteFlightModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'deleteModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                deleteFlightModal.dismiss('cancel');
+            };
+            vm.$$ix.deleteFlight = function ($id) {
+                deleteFlightModal.close(true);
+
+                var deleteFlight = deleteFlightsFactory.deleteFlight($id);
+
+                $q.all(deleteFlight).then(function success(data){
+                    $window.location.href = '/flights';
+                });
+            };
+        }
+
+        function deleteFromTripsModal() {
+            var deleteTripModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'deleteFromTripsModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                deleteTripModal.dismiss('cancel');
+            };
+            vm.$$ix.deleteTrip = function ($airport) {
+                vm.checkIfTrip = false;
+                console.log(vm.checkIfTrip);
+                deleteTripModal.close(true);
+                console.log($airport);
+                removeFromTrips($airport);
+            };
+        }
+    }
+
+})();
+
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
+    angular.module('app.flights')
+        .config(Routes);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    Routes.$inject = [
+        // Angular
+        '$stateProvider',
+        '$urlRouterProvider',
+        '$locationProvider'
+    ];
+
+    function Routes(
+        // Angular
+        $stateProvider,
+        $urlRouterProvider,
+        $locationProvider
+    ) {
+        var getView = function( viewName ){
+            return '/views/' + viewName + '.view.html';
+        };
+
+        $urlRouterProvider.otherwise('/');
+
+        $stateProvider
+
+            .state('/flights', {
+                url: '/flights',
+                views: {
+                    main: {
+                        controller: 'FlightsOverviewController as vm',
+                        templateUrl: getView('flights/flights')
+                    }
+                }
+            })
+            .state('/flights/create', {
+                url: '/flights/create',
+                views: {
+                    main: {
+                        controller: 'FlightsCreateController as vm',
+                        templateUrl: getView('flights/create')
+                    }
+                }
+            })
+            .state('/flights/detail/:airline/:number', {
+                url: '/flights/detail/:airline/:number',
+                views: {
+                    main: {
+                        controller: 'FlightsDetailController as vm',
+                        templateUrl: getView('flights/detail')
+                    }
+                }
+            });
+
+        // use the HTML5 History API
+        $locationProvider.html5Mode(true);
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () {
+    'use strict';
+
+    angular.module('app.flights')
+        .controller('FlightsOverviewController', FlightsOverviewController);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    FlightsOverviewController.$inject = [
+        // Angular
+        '$log',
+        '$scope',
+        '$state',
+        '$filter',
+        '$q',
+        '$uibModal',
+
+        //Custom
+        'getFlightsFactory',
+        'deleteFlightsFactory',
         'config'
     ];
 
-    function GetAccountFactory(
+    function FlightsOverviewController(
+        // Angular
+        $log,
+        $scope,
+        $state,
+        $filter,
+        $q,
+        $uibModal,
 
-        $http,
+        //Custom
+        getFlightsFactory,
+        deleteFlightsFactory,
+        // scheduleFlightAPIFactory,
         config
     ) {
+        // ViewModel
+        // =========
+        var vm = this;
 
-        return {
+        getFlights();
+        
+        // User Interface
+        // --------------
+        vm.$$ui = {
+            title: 'Flights Overview'
+        };
 
-            getAccount : function(GetAccount) {
-                $http.get(config.api + 'account')
-                    .then (function(data){
-                            GetAccount.account = data.data;
-                            console.log("GetAccount works!");
-                            console.log(GetAccount.account);
-                        },
-                        function(){
-                            console.log("GetAccount doesn't works!");
-                        });
-            }
+        // User Interaction
+        // --------------
+        vm.$$ix = {
+            delete: deleteFlight
+        };
+
+        function getFlights() {
+            var params = {};
+            return getFlightsFactory
+                    .query(
+                        params,
+                        getFlightsSuccess,
+                        getFlightsError);
         }
+
+        function getFlightsError(reason) {
+            $log.error('getFlightsError:', reason);
+        }
+        function getFlightsSuccess(response, responseHeader) {
+            // $log.success('getFlightsSuccess:', response);
+            vm.data = response[0];
+
+            getSchedules();
+        }
+
+        function getSchedules() {
+
+            // console.log('vm.data: ', vm.data);
+
+            //Test array
+            vm.allFlightsData = [];
+            //Array to save flight from database
+            vm.flights = [];
+
+            //Foreach to get API information for each flight from the user in the database
+            angular.forEach(vm.data.flights,function(flight,key){
+
+                var result = $.ajax({
+                    url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
+                    '' + flight.flightId + '?appId=' +
+                    '' + config.appId + '&appKey=' +
+                    '' + config.appKey + '',
+                    dataType: 'jsonp',
+                    crossDomain: true
+                }).then (function successCallback (data, status, headers, config){
+                        //Empty array to make sure it's empty
+                        vm.currentFlightData = null;
+                        //Array to save API + database info for 1 flight
+                        vm.currentFlightData = {};
+                        //Store API data
+                        vm.currentFlightData.allData = data;
+                        //Store database id to go later to the details view
+                        vm.currentFlightData.database = flight;
+                        //Push array with 1 flight to array with multiple flights
+                        vm.flights.push(vm.currentFlightData);
+                        // console.log('vm.currentFlightData: ', vm.currentFlightData);
+                    },
+                    function errorCallback (){
+                        console.log("data not sent to API, new object is not created");
+                    });
+
+                //Fill test array to make sure for each went well!
+                //Use this name for next $q.all
+                //console.log('check 1');
+                vm.allFlightsData.push(result);
+            });
+
+            return vm.getData = $q.all(vm.allFlightsData).then(function success(data){
+                console.log('vm.flights: ', vm.flights); // Should all be here
+
+
+                //Test array
+                vm.checkForEachQAll = [];
+                //Array to store other arrays with checked flight information
+                vm.allCheckedFlights = [];
+
+
+                //For each flight of the user in the database get the correct information
+                //Especially for the departure and arrival airport
+                angular.forEach(vm.flights,function(flight,key){
+
+                    if (flight.allData.error) {
+                        console.log('404 remove flight: ', flight.database.id);
+                        deleteFlightsFactory.deleteOutdatedFlight(flight.database.id);
+                    }
+                    else {
+                        // console.log('found flight');
+
+                        //Get current departure and arrival code of flight
+                        //ex. BRU, JFK
+                        var depCode = null;
+                        var arrCode = null;
+                        depCode = flight.allData.flightStatus.departureAirportFsCode;
+                        //console.log('depCode:', key, depCode);
+                        arrCode = flight.allData.flightStatus.arrivalAirportFsCode;
+                        //console.log('arrCode:', key, arrCode);
+                        //++++
+
+                        //Get all the airports of the current flight
+                        //Connected flight can have multiple airports
+                        //other than the departure and arrival
+                        vm.allAirports = null;
+                        vm.allAirports = [];
+                        vm.allAirports = flight.allData.appendix.airports;
+                        //console.log('vm.allAirports:', vm.allAirports);
+                        //++++
+
+                        //Test array
+                        //vm.foreachCheckDataAirport = null;
+                        vm.foreachCheckDataAirport = [];
+
+                        //Temporary arrays
+                        vm.tempDepartureAirport = null;
+                        vm.tempDepartureAirport = {};
+                        //console.log('vm.tempDepartureAirport:', vm.tempDepartureAirport);
+                        vm.tempArrivalAirport = null;
+                        vm.tempArrivalAirport = {};
+                        //console.log('vm.tempArrivalAirport:', vm.tempArrivalAirport);
+
+
+                        //Loop to each airport of current flight and check if the
+                        //departure and arrival airports correspond, then push info
+                        //to correct place in array checkThisFlight
+                        angular.forEach(vm.allAirports, function(airport, key) {
+                            //console.log(key, airport);
+
+                            //Check if correspond with departureCode
+                            if ( airport.iata == depCode ) {
+                                vm.tempDepartureAirport = airport;
+                                //console.log('tempDepartureAirport: ', vm.tempDepartureAirport);
+                                //vm.checkThisFlight.departureAirport = vm.tempDepartureAirport;
+                            }
+                            //Check if correspond with arrivalCode
+                            else if ( airport.iata == arrCode ) {
+                                vm.tempArrivalAirport = airport;
+                                //console.log('tempArrivalAirport: ', vm.tempArrivalAirport);
+                                //vm.checkThisFlight.arrivalAirport = vm.tempArrivalAirport;
+                            }
+
+                            //console.log('vm.tempDepartureAirport:', key, vm.tempDepartureAirport);
+                            //console.log('vm.tempArrivalAirport:', key, vm.tempArrivalAirport);
+
+                            //Fill test array to make sure for each went well!
+                            //Use this name for next $q.all
+                            //console.log('check 2 = airport check');
+                            //vm.foreachCheckDataAirport.push(airport);
+                        });
+                        //$q.all(vm.foreachCheckDataAirport).then(function success(data) {
+                        //
+                        //}, function failure(err){
+                        //    // Can handle this is we want
+                        //});
+
+                        //console.log('should be after check 2');
+                        //Array to store all information to push to the complete array
+                        //In this array:
+                        // - all flight information about this flight:  'allFlightDetails'
+                        // - departure airport with its information     'departureAirport'
+                        // - arrival airport with its information       'arrivalAirport'
+                        vm.checkThisFlight = null;
+                        vm.checkThisFlight = {};
+
+                        vm.checkThisFlight.departureAirport     = null;
+                        vm.checkThisFlight.arrivalAirport       = null;
+                        vm.checkThisFlight.allFlightDetails     = null;
+                        vm.checkThisFlight.databaseFlight       = null;
+
+                        //Place all current flight information in allFlightDetails
+                        vm.checkThisFlight.departureAirport     = vm.tempDepartureAirport;
+                        vm.checkThisFlight.arrivalAirport       = vm.tempArrivalAirport;
+                        vm.checkThisFlight.allFlightDetails     = flight.allData;
+                        vm.checkThisFlight.databaseFlight       = flight;
+
+                        //Push current checkThisFlight to allCheckedFlights
+                        //console.log('before push tot allCheckedFlights', vm.checkThisFlight);
+                        vm.allCheckedFlights.push(vm.checkThisFlight);
+                        //console.log('Test checkThisFlight (ONLY 2 TIMES)', key, vm.allCheckedFlights);
+
+                        //Fill test array to make sure for each went well!
+                        //Use this name for next $q.all
+                        //console.log('check 3');
+                        vm.checkForEachQAll.push(flight);
+                    }
+                });
+
+                $q.all(vm.checkForEachQAll).then(function success(data) {
+                    //console.log('allCheckedFlights out for each: ', vm.allCheckedFlights)
+                    angular.forEach(vm.allCheckedFlights, function(flight, key) {
+                       console.log(key, flight);
+                    });
+                }, function failure(err){
+                    // Can handle this is we want
+                });
+
+                //console.log($scope.data);
+            }, function failure(err){
+                // Can handle this is we want
+            });
+
+        }
+
+        function getCorrectData () {
+          console.log('getCorrectData: ', vm.flights)
+        }
+
+        function getSchedulesError(reason) {
+            $log.error('getSchedulesError:', reason);
+        }
+
+        function getSchedulesSuccess(reason) {
+            $log.error('getSchedulesSuccess:', reason);
+        }
+
+
+        function deleteFlight($id) {
+
+            var deleteFlightModal = $uibModal.open({
+                animation: vm.animationsEnabled,
+                templateUrl: 'deleteModal.html',
+                scope: $scope
+            });
+            vm.$$ix.cancel = function () {
+                deleteFlightModal.dismiss('cancel');
+            };
+            vm.$$ix.deleteFlight = function () {
+                deleteFlightModal.close(true);
+                console.log($id);
+                deleteFlightsFactory.deleteFlight($id);
+            };
+            //
+            // console.log('deleteFlight: ', $id);
+            // deleteFlightsFactory.deleteFlight($id);
+        }
+
     }
+
 })();
+
 /**
  * @author    Seppe Beelprez
  * @copyright Copyright © 2015-2016 Artevelde University College Ghent
@@ -1801,963 +2783,6 @@
 })();
 /**
  * @author    Seppe Beelprez
- * @copyright Copyright © 2015-2016 Artevelde University College Ghent
- * @license   Apache License, Version 2.0
- */
-;(function () {
-    'use strict';
-
-    angular.module('app.flights')
-        .controller('FlightsCreateController', FlightsCreateController);
-
-    // Inject dependencies into constructor (needed when JS minification is applied).
-    FlightsCreateController.$inject = [
-        // Angular
-        '$log',
-        '$state',
-        '$location',
-        '$filter',
-        'config',
-        '$scope',
-        '$q',
-        '$uibModal',
-        '$window',
-        '$http',
-
-        //Custom
-        'createFlightsFactory',
-        'getFlightsFactory'
-    ];
-
-    function FlightsCreateController(
-        // Angular
-        $log,
-        $state,
-        $location,
-        $filter,
-        config,
-        $scope,
-        $q,
-        $uibModal,
-        $window,
-        $http,
-
-        //Custom
-        createFlightsFactory,
-        getFlightsFactory
-    ) {
-        //console.log('FlightsCreateController');
-        // ViewModel
-        // =========
-        var vm = this;
-
-        // User Interaction
-        // --------------
-        vm.$$ix = {
-            next        : createFlight,
-            confirm     : showModal,
-            airline     : airlineSelected,
-            airport     : airportSelected
-        };
-
-        getFlights();
-        getAirlines();
-        getAirports();
-
-        vm.animationsEnabled = true;
-
-        // User Interface
-        // --------------
-        vm.$$ui = {
-            title: 'Create a flight',
-            subtitle: 'Select your airline, airport, flight number and date.'
-        };
-
-        // Data
-        // ----
-        // vm.flight
-        vm.flight = {};
-        vm.userFlights = {};
-        vm.data = {};
-        vm.airlines = {};
-        vm.airports = {};
-        vm.flight.airline = {};
-        vm.flight.airport = {};
-        vm.existingFlightDetailId = {};
-
-        vm.flight.today = new Date();
-        vm.flight.setToday = new Date();
-
-
-        // Functions
-        // =========
-
-        // Angular autocomplete
-        // -----
-        function getAirlines() {
-            $http.get('../json/airlines_clean.json')
-                .then(function(data){
-                    vm.airlines = data.data.airlines;
-                    // console.log('airlines,', data.data.airlines);
-                });
-        }
-
-        function airlineSelected(selected) {
-            if (selected) {
-                console.log(selected);
-                vm.flight.airline = selected.description.iata;
-            } else {
-                console.log('cleared');
-            }
-        }
-
-        // vm.localSearch = function(str) {
-        //     console.log('localSearch');
-        //     var matches = [];
-        //     vm.airlines.forEach(function(airline) {
-        //         var fullName = airline.name;
-        //         matches.push(fullName);
-        //     });
-        //     return matches;
-        // };
-
-        function getAirports() {
-            $http.get('../json/airports_clean.json')
-                .then(function(data){
-                    vm.airports = data.data.airports;
-                    // console.log('airports,', data.data.airports);
-                });
-        }
-
-        function airportSelected(selected) {
-            if (selected) {
-                console.log(selected);
-                vm.flight.airport = selected.description.iata;
-            } else {
-                console.log('cleared');
-            }
-        }
-
-        // Show popup
-        // -----
-        function showModal() {
-
-
-            if($scope.form.$valid) {
-
-                vm.ArrayToCheckFlightData = [];
-                vm.checkCurrentFlight = [];
-
-                var check = $.ajax({
-                    url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
-                    '' + vm.flight.airline + '/' +
-                    '' + vm.flight.number + '/dep/' +
-                    '' + $filter('date')(vm.flight.today, 'yyyy/MM/dd') + '?appId=' +
-                    '' + config.appId + '&appKey=' +
-                    '' + config.appKey + '&airport=' + vm.flight.airport + '',
-                    dataType: 'jsonp',
-                    crossDomain: true,
-                    success: function(data) {
-                        //console.log('data:', data);
-                        vm.checkCurrentFlight.push(data);
-                    }
-                });
-
-                //console.log(result);
-                vm.ArrayToCheckFlightData.push(check);
-                $q.all(vm.ArrayToCheckFlightData).then(function success(data){
-                    console.log('vm.checkCurrentFlight: ', vm.checkCurrentFlight);
-
-
-                    if ( vm.checkCurrentFlight[0].error || vm.checkCurrentFlight[0].flightStatuses[0] == null ) {
-                        var alertFlightModal = $uibModal.open({
-                            animation: vm.animationsEnabled,
-                            templateUrl: 'errorModal.html',
-                            scope: $scope
-                        });
-                        vm.$$ix.again = function () {
-                            alertFlightModal.dismiss('cancel');
-                        };
-                    } else {
-
-                        vm.flight.departureCode = vm.checkCurrentFlight[0].flightStatuses[0].departureAirportFsCode;
-                        vm.flight.arrivalCode = vm.checkCurrentFlight[0].flightStatuses[0].arrivalAirportFsCode;
-
-                        vm.allAirports = [];
-                        vm.allAirports = vm.checkCurrentFlight[0].appendix.airports;
-
-                        vm.departureAirport = [];
-                        vm.arrivalAirport = [];
-
-                        angular.forEach(vm.allAirports, function(airport, key) {
-                            //console.log(key, airport);
-                            if ( airport.iata == vm.flight.departureCode ) {
-                                vm.departureAirport = airport;
-                                //console.log('Start: ', vm.departureAirport);
-                            }
-                            else if ( airport.iata == vm.flight.arrivalCode ) {
-                                vm.arrivalAirport = airport;
-                                //console.log('End: ', vm.arrivalAirport);
-                            }
-                        });
-
-
-                        var checkFlightModal = $uibModal.open({
-                            animation: vm.animationsEnabled,
-                            templateUrl: 'confirmModal.html',
-                            scope: $scope
-                        });
-                        vm.$$ix.cancel = function () {
-                            checkFlightModal.dismiss('cancel');
-                        };
-                        vm.$$ix.add = function () {
-                            checkFlightModal.close(true);
-                            createFlight();
-                        };
-                    }
-                }, function failure(err){
-                });
-            }
-        }
-
-        // Get already added flights
-        // -----
-        function getFlights() {
-            var params = {};
-            return getFlightsFactory
-                .query(
-                    params,
-                    getFlightsSuccess,
-                    getFlightsError);
-        }
-
-        function getFlightsError(reason) {
-            //$log.error('getFlightsError:', reason);
-        }
-        function getFlightsSuccess(response) {
-            //$log.success('getFlightsSuccess:', response);
-            vm.userFlights = response[0].flights;
-            console.log('vm.userFlights: ', vm.userFlights);
-        }
-
-
-        // Create Flight
-        // -----
-        function createFlight() {
-            console.log('createFlight: ', vm.checkCurrentFlight);
-            vm.flight.flightId = vm.checkCurrentFlight[0].flightStatuses[0].flightId;
-            vm.flight.date = $filter('date')(vm.flight.today, 'yyyy/MM/dd');
-            console.log('vm.flight: ', vm.flight);
-
-            vm.flightIdArray = [];
-
-            var checkDuplicate = false;
-
-            angular.forEach(vm.userFlights,function(flight,key){
-
-                vm.flightIdArray.push(flight);
-
-                if (vm.flight.flightId == flight.flightId) {
-                    console.log('DUPLICATE: ', vm.flight.flightId, flight.flightId);
-
-                    var duplicateFlightModal = $uibModal.open({
-                        animation: vm.animationsEnabled,
-                        templateUrl: 'duplicateModal.html',
-                        scope: $scope
-                    });
-                    vm.$$ix.cancel = function () {
-                        duplicateFlightModal.dismiss('cancel');
-                    };
-
-                    vm.$$ix.detail = function () {
-                        console.log('existingFlightDetailId: ', flight.flightId);
-                        duplicateFlightModal.dismiss('Go to detail: ', flight.flightId);
-                    };
-
-                    checkDuplicate = true;
-                }
-            });
-
-            if(checkDuplicate == true){
-                console.log('checkDuplicate = true!');
-            }else {
-                console.log('checkDuplicate = false!');
-                createFlightsFactory.createFlight(vm.flight);
-            }
-        }
-
-
-        // Go Back
-        // -----
-        vm.go = function ( path ) {
-            $location.path( path );
-        };
-    }
-
-})();
-
-/**
- * @author    Seppe Beelprez
- * @copyright Copyright © 2015-2016 Artevelde University College Ghent
- * @license   Apache License, Version 2.0
- */
-;(function () {
-    'use strict';
-
-    angular.module('app.flights')
-        .controller('FlightsDetailController', FlightsDetailController);
-
-    // Inject dependencies into constructor (needed when JS minification is applied).
-    FlightsDetailController.$inject = [
-        // Angular
-        '$log',
-        '$scope',
-        '$state',
-        '$stateParams',
-        '$window',
-        '$http',
-        '$filter',
-        '$uibModal',
-        '$q',
-
-        //Custom
-        'detailFlightsFactory',
-        'deleteFlightsFactory',
-        'createTripsFactory',
-        'getTripsFactory',
-        'deleteTripsFactory'
-    ];
-
-    function FlightsDetailController(
-        // Angular
-        $log,
-        $scope,
-        $state,
-        $stateParams,
-        $window,
-        $http,
-        $filter,
-        $uibModal,
-        $q,
-
-        //Custom
-        detailFlightsFactory,
-        deleteFlightsFactory,
-        createTripsFactory,
-        getTripsFactory,
-        deleteTripsFactory
-    ) {
-        // ViewModel
-        // =========
-        var vm = this;
-
-        getDetailFlight();
-
-        // User Interface
-        // --------------
-        vm.$$ui = {
-            title: 'Flight Detail',
-            subtitle: 'Detail flight!'
-        };
-
-        vm.flight = {};
-        vm.trip = {};
-
-        vm.weather = [
-            {name:'Clear', icon:'wi-day-sunny'},
-            {name:'Rain', icon:'wi-rain'},
-            {name:'Mist', icon:'wi-day-fog'},
-            {name:'Clouds', icon:'wi-cloudy'},
-            {name:'Atmosphere', icon:'wi-fog'},
-            {name:'Snow', icon:'wi-snow'},
-            {name:'Drizzle', icon:'wi-showers'},
-            {name:'Thunderstorm', icon:'wi-thunderstorm'},
-            {name:'Extreme', icon:'wi-hurricane'}
-        ];
-
-        vm.checkIfTrip = null;
-
-        // User Interaction
-        // --------------
-        vm.$$ix = {
-            refresh: refresh,
-            delete: deleteModal,
-            favorite: addToTrips,
-            removefavorite: deleteFromTripsModal,
-            convert: convertMins,
-            convertToCel: convertToCel,
-            convertToFah: convertToFah
-        };
-
-        vm.animationsEnabled = true;
-
-        // Functions
-        // --------------
-        function refresh() {
-            console.log('refresh');
-            $window.location.reload();
-        }
-
-        function convertMins(minutes) {
-            var hours = Math.floor( minutes / 60);
-            var mins = minutes % 60;
-            var time = hours + 'h' + mins + 'm';
-            return time;
-        }
-
-        function convertToCel(temperature) {
-            var cel = temperature - 273.15;
-            return cel;
-        }
-
-        function convertToFah(temperature) {
-            var fah = (temperature - 273.15) * 9.0 / 5.0 + 32;
-            return fah;
-        }
-
-        function getDetailFlight() {
-            // console.log('getDetailFlight');
-            var params = {
-                airline : $stateParams.airline,
-                number  : $stateParams.number
-            };
-
-            return vm.getData = detailFlightsFactory.query(params, getDetailFlightSuccess, getDetailFlightError);
-        }
-
-        function getDetailFlightError(reason) {
-            $log.error('getDetailFlightError:', reason);
-        }
-        function getDetailFlightSuccess(response, responseHeader) {
-            // vm.data = response[0];
-            // console.log('succes: ', response);
-            vm.flight.databaseflight = response.dbflight[0];
-            vm.flight.apiflight = response.apiflight;
-            vm.flight.apiDepAirport = response.apiDepAirport;
-            vm.flight.apiArrAirport = response.apiArrAirport;
-            vm.flight.apischeduleflight = response.apischeduleflight;
-            vm.flight.apiDepWeather = response.apiDepWeather;
-            vm.flight.apiArrWeather = response.apiArrWeather;
-
-            // var depWeatherCondition = $filter('filter')(response.apiDepWeather.weather[0].main, {key: 'Prevailing Conditions'}, true);
-            var depWeatherValue = $filter('filter')(vm.weather, {name: response.apiDepWeather.weather[0].main}, true);
-            console.log(depWeatherValue);
-            if(depWeatherValue.length > 0) {
-                vm.flight.depWeatherIcon = depWeatherValue[0].icon;
-            }else {
-                vm.flight.depWeatherIcon = 'wi-day-sunny';
-            }
-
-            // var arrWeatherCondition = $filter('filter')(response.apiArrWeather.metar.tags, {key: 'Prevailing Conditions'}, true);
-            var arrWeatherValue = $filter('filter')(vm.weather, {name: response.apiArrWeather.weather[0].main}, true);
-            vm.flight.arrWeatherIcon = arrWeatherValue[0].icon;
-
-            console.log(vm.flight.apiDepWeather, vm.flight.apiArrWeather);
-            // console.log(response.apiDepWeather.weather[0].main, response.apiArrWeather.weather[0].main);
-            // console.log(vm.flight.depWeatherIcon, vm.flight.arrWeatherIcon);
-
-            getTrips();
-        }
-
-        function addToTrips() {
-            // console.log('createTrip');
-            // console.log('vm.trip to add: ', vm.flight.databaseflight.arrival);
-
-            vm.tripIdArray = [];
-            var checkDuplicate = false;
-
-            angular.forEach(vm.userTrips,function(trip,key){
-            
-                vm.tripIdArray.push(trip);
-            
-                if (vm.flight.databaseflight.arrival == trip.airport) {
-                    // console.log('DUPLICATE: ', vm.flight.databaseflight.arrival, trip.airport);
-            
-                    var duplicateTripModal = $uibModal.open({
-                        animation: vm.animationsEnabled,
-                        templateUrl: 'duplicateModal.html',
-                        scope: $scope
-                    });
-                    vm.$$ix.cancel = function () {
-                        duplicateTripModal.dismiss('cancel');
-                    };
-                    
-                    vm.$$ix.detail = function () {
-                        // console.log('existingTripDetailId: ', trip.id);
-                        duplicateTripModal.dismiss('Go to detail: ', trip.id);
-                    };
-                    checkDuplicate = true;
-                }
-            });
-            
-            if(checkDuplicate == true){
-                console.log('checkDuplicate = true!');
-            }else {
-                console.log('checkDuplicate = false!');
-                vm.trip.airport = vm.flight.databaseflight.arrival;
-                var createTrips = createTripsFactory.createTrip(vm.trip);
-
-                $q.all(createTrips).then(function success(data){
-                    vm.checkIfTrip = true;
-                });
-
-                var addedToTripsModal = $uibModal.open({
-                    animation: vm.animationsEnabled,
-                    templateUrl: 'addedToTripsModal.html',
-                    scope: $scope
-                });
-                vm.$$ix.cancel = function () {
-                    addedToTripsModal.dismiss('cancel');
-                    getTrips();
-                };
-            }
-        }
-        
-        function removeFromTrips($airport) {
-            var searchTrip = $filter('filter')(vm.userTrips, {airport: $airport}, true);
-            var deleteTrip = deleteTripsFactory.deleteTrip(searchTrip[0].id);
-
-            $q.all(deleteTrip).then(function success(data){
-                getTrips();
-            });
-        }
-
-        // Get already added trips
-        // -----
-        function getTrips() {
-            console.log('getTrips');
-            var params = {};
-            return getTripsFactory
-                .query(
-                    params,
-                    getTripsSuccess,
-                    getTripsError);
-        }
-
-        function getTripsError(reason) {
-            //$log.error('getTripsError:', reason);
-        }
-        function getTripsSuccess(response) {
-            vm.userTrips = response[0].trips;
-            console.log('vm.userTrips: ', vm.userTrips);
-
-            var checkIfTrip = $filter('filter')(vm.userTrips, {airport: vm.flight.databaseflight.arrival}, true);
-
-            $q.all(checkIfTrip).then(function success(data){
-                if(checkIfTrip.length > 0) {
-                    vm.checkIfTrip = true;
-                }else {
-                    vm.checkIfTrip = false;
-                }
-                console.log(vm.checkIfTrip);
-            });
-        }
-
-
-        // Show delete modal popup
-        // -----
-        function deleteModal() {
-            var deleteFlightModal = $uibModal.open({
-                animation: vm.animationsEnabled,
-                templateUrl: 'deleteModal.html',
-                scope: $scope
-            });
-            vm.$$ix.cancel = function () {
-                deleteFlightModal.dismiss('cancel');
-            };
-            vm.$$ix.deleteFlight = function ($id) {
-                deleteFlightModal.close(true);
-                console.log($id);
-
-                var deleteFlight = deleteFlightsFactory.deleteFlight($id);
-
-                $q.all(deleteFlight).then(function success(data){
-                    $window.location.href = '/flights';
-                });
-            };
-        }
-
-        function deleteFromTripsModal() {
-            var deleteTripModal = $uibModal.open({
-                animation: vm.animationsEnabled,
-                templateUrl: 'deleteFromTripsModal.html',
-                scope: $scope
-            });
-            vm.$$ix.cancel = function () {
-                deleteTripModal.dismiss('cancel');
-            };
-            vm.$$ix.deleteTrip = function ($airport) {
-                vm.checkIfTrip = false;
-                console.log(vm.checkIfTrip);
-                deleteTripModal.close(true);
-                console.log($airport);
-                removeFromTrips($airport);
-            };
-        }
-    }
-
-})();
-
-/**
- * @author    Seppe Beelprez
- * @copyright Copyright © 2015-2016 Artevelde University College Ghent
- * @license   Apache License, Version 2.0
- */
-;(function () {
-    'use strict';
-
-    angular.module('app.flights')
-        .config(Routes);
-
-    // Inject dependencies into constructor (needed when JS minification is applied).
-    Routes.$inject = [
-        // Angular
-        '$stateProvider',
-        '$urlRouterProvider',
-        '$locationProvider'
-    ];
-
-    function Routes(
-        // Angular
-        $stateProvider,
-        $urlRouterProvider,
-        $locationProvider
-    ) {
-        var getView = function( viewName ){
-            return '/views/' + viewName + '.view.html';
-        };
-
-        $urlRouterProvider.otherwise('/');
-
-        $stateProvider
-
-            .state('/flights', {
-                url: '/flights',
-                views: {
-                    main: {
-                        controller: 'FlightsOverviewController as vm',
-                        templateUrl: getView('flights/flights')
-                    }
-                }
-            })
-            .state('/flights/create', {
-                url: '/flights/create',
-                views: {
-                    main: {
-                        controller: 'FlightsCreateController as vm',
-                        templateUrl: getView('flights/create')
-                    }
-                }
-            })
-            .state('/flights/detail/:airline/:number', {
-                url: '/flights/detail/:airline/:number',
-                views: {
-                    main: {
-                        controller: 'FlightsDetailController as vm',
-                        templateUrl: getView('flights/detail')
-                    }
-                }
-            });
-
-        // use the HTML5 History API
-        $locationProvider.html5Mode(true);
-    }
-
-})();
-/**
- * @author    Seppe Beelprez
- * @copyright Copyright © 2015-2016 Artevelde University College Ghent
- * @license   Apache License, Version 2.0
- */
-;(function () {
-    'use strict';
-
-    angular.module('app.flights')
-        .controller('FlightsOverviewController', FlightsOverviewController);
-
-    // Inject dependencies into constructor (needed when JS minification is applied).
-    FlightsOverviewController.$inject = [
-        // Angular
-        '$log',
-        '$scope',
-        '$state',
-        '$filter',
-        '$q',
-        '$uibModal',
-
-        //Custom
-        'getFlightsFactory',
-        'deleteFlightsFactory',
-        'config'
-    ];
-
-    function FlightsOverviewController(
-        // Angular
-        $log,
-        $scope,
-        $state,
-        $filter,
-        $q,
-        $uibModal,
-
-        //Custom
-        getFlightsFactory,
-        deleteFlightsFactory,
-        // scheduleFlightAPIFactory,
-        config
-    ) {
-        // ViewModel
-        // =========
-        var vm = this;
-
-        getFlights();
-        
-        // User Interface
-        // --------------
-        vm.$$ui = {
-            title: 'Flights Overview'
-        };
-
-        // User Interaction
-        // --------------
-        vm.$$ix = {
-            delete: deleteFlight
-        };
-
-        function getFlights() {
-            var params = {};
-            return getFlightsFactory
-                    .query(
-                        params,
-                        getFlightsSuccess,
-                        getFlightsError);
-        }
-
-        function getFlightsError(reason) {
-            $log.error('getFlightsError:', reason);
-        }
-        function getFlightsSuccess(response, responseHeader) {
-            // $log.success('getFlightsSuccess:', response);
-            vm.data = response[0];
-
-            getSchedules();
-        }
-
-        function getSchedules() {
-
-            // console.log('vm.data: ', vm.data);
-
-            //Test array
-            vm.allFlightsData = [];
-            //Array to save flight from database
-            vm.flights = [];
-
-            //Foreach to get API information for each flight from the user in the database
-            angular.forEach(vm.data.flights,function(flight,key){
-
-                var result = $.ajax({
-                    url: 'https://api.flightstats.com/flex/flightstatus/rest/v2/jsonp/flight/status/' +
-                    '' + flight.flightId + '?appId=' +
-                    '' + config.appId + '&appKey=' +
-                    '' + config.appKey + '',
-                    dataType: 'jsonp',
-                    crossDomain: true
-                }).then (function successCallback (data, status, headers, config){
-                        //Empty array to make sure it's empty
-                        vm.currentFlightData = null;
-                        //Array to save API + database info for 1 flight
-                        vm.currentFlightData = {};
-                        //Store API data
-                        vm.currentFlightData.allData = data;
-                        //Store database id to go later to the details view
-                        vm.currentFlightData.database = flight;
-                        //Push array with 1 flight to array with multiple flights
-                        vm.flights.push(vm.currentFlightData);
-                        // console.log('vm.currentFlightData: ', vm.currentFlightData);
-                    },
-                    function errorCallback (){
-                        console.log("data not sent to API, new object is not created");
-                    });
-
-                //Fill test array to make sure for each went well!
-                //Use this name for next $q.all
-                //console.log('check 1');
-                vm.allFlightsData.push(result);
-            });
-
-            return vm.getData = $q.all(vm.allFlightsData).then(function success(data){
-                console.log('vm.flights: ', vm.flights); // Should all be here
-
-
-                //Test array
-                vm.checkForEachQAll = [];
-                //Array to store other arrays with checked flight information
-                vm.allCheckedFlights = [];
-
-
-                //For each flight of the user in the database get the correct information
-                //Especially for the departure and arrival airport
-                angular.forEach(vm.flights,function(flight,key){
-
-                    if (flight.allData.error) {
-                        console.log('404 remove flight: ', flight.database.id);
-                        deleteFlightsFactory.deleteOutdatedFlight(flight.database.id);
-                    }
-                    else {
-                        // console.log('found flight');
-
-                        //Get current departure and arrival code of flight
-                        //ex. BRU, JFK
-                        var depCode = null;
-                        var arrCode = null;
-                        depCode = flight.allData.flightStatus.departureAirportFsCode;
-                        //console.log('depCode:', key, depCode);
-                        arrCode = flight.allData.flightStatus.arrivalAirportFsCode;
-                        //console.log('arrCode:', key, arrCode);
-                        //++++
-
-                        //Get all the airports of the current flight
-                        //Connected flight can have multiple airports
-                        //other than the departure and arrival
-                        vm.allAirports = null;
-                        vm.allAirports = [];
-                        vm.allAirports = flight.allData.appendix.airports;
-                        //console.log('vm.allAirports:', vm.allAirports);
-                        //++++
-
-                        //Test array
-                        //vm.foreachCheckDataAirport = null;
-                        vm.foreachCheckDataAirport = [];
-
-                        //Temporary arrays
-                        vm.tempDepartureAirport = null;
-                        vm.tempDepartureAirport = {};
-                        //console.log('vm.tempDepartureAirport:', vm.tempDepartureAirport);
-                        vm.tempArrivalAirport = null;
-                        vm.tempArrivalAirport = {};
-                        //console.log('vm.tempArrivalAirport:', vm.tempArrivalAirport);
-
-
-                        //Loop to each airport of current flight and check if the
-                        //departure and arrival airports correspond, then push info
-                        //to correct place in array checkThisFlight
-                        angular.forEach(vm.allAirports, function(airport, key) {
-                            //console.log(key, airport);
-
-                            //Check if correspond with departureCode
-                            if ( airport.iata == depCode ) {
-                                vm.tempDepartureAirport = airport;
-                                //console.log('tempDepartureAirport: ', vm.tempDepartureAirport);
-                                //vm.checkThisFlight.departureAirport = vm.tempDepartureAirport;
-                            }
-                            //Check if correspond with arrivalCode
-                            else if ( airport.iata == arrCode ) {
-                                vm.tempArrivalAirport = airport;
-                                //console.log('tempArrivalAirport: ', vm.tempArrivalAirport);
-                                //vm.checkThisFlight.arrivalAirport = vm.tempArrivalAirport;
-                            }
-
-                            //console.log('vm.tempDepartureAirport:', key, vm.tempDepartureAirport);
-                            //console.log('vm.tempArrivalAirport:', key, vm.tempArrivalAirport);
-
-                            //Fill test array to make sure for each went well!
-                            //Use this name for next $q.all
-                            //console.log('check 2 = airport check');
-                            //vm.foreachCheckDataAirport.push(airport);
-                        });
-                        //$q.all(vm.foreachCheckDataAirport).then(function success(data) {
-                        //
-                        //}, function failure(err){
-                        //    // Can handle this is we want
-                        //});
-
-                        //console.log('should be after check 2');
-                        //Array to store all information to push to the complete array
-                        //In this array:
-                        // - all flight information about this flight:  'allFlightDetails'
-                        // - departure airport with its information     'departureAirport'
-                        // - arrival airport with its information       'arrivalAirport'
-                        vm.checkThisFlight = null;
-                        vm.checkThisFlight = {};
-
-                        vm.checkThisFlight.departureAirport     = null;
-                        vm.checkThisFlight.arrivalAirport       = null;
-                        vm.checkThisFlight.allFlightDetails     = null;
-                        vm.checkThisFlight.databaseFlight       = null;
-
-                        //Place all current flight information in allFlightDetails
-                        vm.checkThisFlight.departureAirport     = vm.tempDepartureAirport;
-                        vm.checkThisFlight.arrivalAirport       = vm.tempArrivalAirport;
-                        vm.checkThisFlight.allFlightDetails     = flight.allData;
-                        vm.checkThisFlight.databaseFlight       = flight;
-
-                        //Push current checkThisFlight to allCheckedFlights
-                        //console.log('before push tot allCheckedFlights', vm.checkThisFlight);
-                        vm.allCheckedFlights.push(vm.checkThisFlight);
-                        //console.log('Test checkThisFlight (ONLY 2 TIMES)', key, vm.allCheckedFlights);
-
-                        //Fill test array to make sure for each went well!
-                        //Use this name for next $q.all
-                        //console.log('check 3');
-                        vm.checkForEachQAll.push(flight);
-                    }
-                });
-
-                $q.all(vm.checkForEachQAll).then(function success(data) {
-                    //console.log('allCheckedFlights out for each: ', vm.allCheckedFlights)
-                    angular.forEach(vm.allCheckedFlights, function(flight, key) {
-                       console.log(key, flight);
-                    });
-                }, function failure(err){
-                    // Can handle this is we want
-                });
-
-                //console.log($scope.data);
-            }, function failure(err){
-                // Can handle this is we want
-            });
-
-        }
-
-        function getCorrectData () {
-          console.log('getCorrectData: ', vm.flights)
-        }
-
-        function getSchedulesError(reason) {
-            $log.error('getSchedulesError:', reason);
-        }
-
-        function getSchedulesSuccess(reason) {
-            $log.error('getSchedulesSuccess:', reason);
-        }
-
-
-        function deleteFlight($id) {
-
-            var deleteFlightModal = $uibModal.open({
-                animation: vm.animationsEnabled,
-                templateUrl: 'deleteModal.html',
-                scope: $scope
-            });
-            vm.$$ix.cancel = function () {
-                deleteFlightModal.dismiss('cancel');
-            };
-            vm.$$ix.deleteFlight = function () {
-                deleteFlightModal.close(true);
-                console.log($id);
-                deleteFlightsFactory.deleteFlight($id);
-            };
-            //
-            // console.log('deleteFlight: ', $id);
-            // deleteFlightsFactory.deleteFlight($id);
-        }
-
-    }
-
-})();
-
-/**
- * @author    Seppe Beelprez
  * @copyright Copyright © 2014-2015 Artevelde University College Ghent
  * @license   Apache License, Version 2.0
  */
@@ -2959,6 +2984,101 @@
             }
         };
         
+        return $resource(url, paramDefaults, actions);
+    }
+
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2015-2016 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.factories')
+        .factory('GetAccountFactory', GetAccountFactory);
+
+    GetAccountFactory.$inject = [
+        '$http',
+        'config'
+    ];
+
+    function GetAccountFactory(
+
+        $http,
+        config
+    ) {
+
+        return {
+
+            getAccount : function(GetAccount) {
+                $http.get(config.api + 'account')
+                    .then (function(data){
+                            console.log(data);
+                            return data;
+                        },
+                        function(){
+                            console.log("GetAccount doesn't works!");
+                        });
+            },
+            changePass : function(ChangePass) {
+                console.log('GetAccountFactory.ChangePass');
+                $http.put(config.api + 'account',
+                    {
+                        'oldpassword'   : ChangePass.oldpassword,
+                        'newpassword'   : ChangePass.newpassword,
+                        'confirmpassword'   : ChangePass.confirmpassword
+                    })
+                    .then (function successCallback (data, status, headers, config){
+                            console.log ("data sent to API, new object created", data);
+                            // $window.location.href = '/trips';
+                        },
+                        function errorCallback (){
+                            console.log("data not sent to API, new object is not created");
+                        });
+            }
+        }
+    }
+})();
+/**
+ * @author    Seppe Beelprez
+ * @copyright Copyright © 2014-2015 Artevelde University College Ghent
+ * @license   Apache License, Version 2.0
+ */
+;(function () { 'use strict';
+
+    angular.module('app.account')
+        .factory('accountFactory', accountFactory);
+
+    // Inject dependencies into constructor (needed when JS minification is applied).
+    accountFactory.$inject = [
+        // Angular
+        '$resource',
+
+        // Custom
+        'config'
+    ];
+
+    function accountFactory(
+        // Angular
+        $resource,
+
+        // Custom
+        config
+    ) {
+        var url = config.api + 'account';
+
+        var paramDefaults = {
+            format    : 'json'
+        };
+
+        var actions = {
+            'query' : {
+                method : 'GET',
+                isArray: false
+            }
+        };
+
         return $resource(url, paramDefaults, actions);
     }
 
@@ -3229,36 +3349,6 @@
                 });
             }
         };
-
-        //var url = 'https://api.flightstats.com/flex/schedules/rest/v1/json/flight/:airline/:number/departing/:year/:month/:day?appId=:appId&appKey=:appKey';
-        ////var url = 'https://api.flightstats.com/flex/schedules/rest/v1/json/flight/AA/4200/departing/2016/04/08?appId=dbb6ea9e&appKey=5bf1b2bedbd8e63dc1b3221cbd834c2c';
-        //
-        //var paramDefaults = {
-        //    airline   : '@airline',
-        //    number    : '@number',
-        //    year      : '@year',
-        //    month     : '@month',
-        //    day       : '@day',
-        //    appId     : config.appId,
-        //    appKey    : config.appKey,
-        //    format    : 'jsonp'
-        //};
-        //
-        //var actions = {
-        //    'query' : {
-        //        method : 'GET',
-        //        headers: {
-        //            Accept: "application/json; charset=utf-8",
-        //            "Content-Type": "application/json; charset=utf-8"
-        //        },
-        //        dataType: 'jsonp',
-        //        crossDomain : true
-        //    }
-        //};
-        //
-        //return $resource(url, paramDefaults, actions);
-
-
     }
 
 })();

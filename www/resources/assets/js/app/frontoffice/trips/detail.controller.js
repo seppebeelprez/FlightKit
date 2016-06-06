@@ -62,12 +62,14 @@
         vm.weather = [
             {name:'Clear', icon:'wi-day-sunny'},
             {name:'Rain', icon:'wi-rain'},
+            {name:'Mist', icon:'wi-day-fog'},
             {name:'Clouds', icon:'wi-cloudy'},
             {name:'Atmosphere', icon:'wi-fog'},
             {name:'Snow', icon:'wi-snow'},
             {name:'Drizzle', icon:'wi-showers'},
             {name:'Thunderstorm', icon:'wi-thunderstorm'},
-            {name:'Extreme', icon:'wi-hurricane'}
+            {name:'Extreme', icon:'wi-hurricane'},
+            {name:'Haze', icon:'wi-day-haze'}
         ];
 
         // User Interaction
@@ -207,9 +209,14 @@
             vm.trip.apiweather = response.apiweather;
             vm.trip.apiforecast = response.apiforecast;
             vm.trip.forecast = {};
-
+            
             var weatherValue = $filter('filter')(vm.weather, {name: response.apiweather.weather[0].main}, true);
             vm.trip.weatherIcon = weatherValue[0].icon;
+            if(weatherValue.length > 0) {
+                vm.trip.weatherIcon = weatherValue[0].icon;
+            }else {
+                vm.trip.weatherIcon = 'wi-day-sunny';
+            }
 
             var sunrise = (vm.trip.apiweather.sys.sunrise + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
             var sunset = (vm.trip.apiweather.sys.sunset + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;

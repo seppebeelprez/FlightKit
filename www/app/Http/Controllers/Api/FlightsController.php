@@ -69,7 +69,7 @@ class FlightsController extends Controller
         {
             $appID = env('FLIGHT_APPID');
             $appKEY = env('FLIGHT_APPKEY');
-            $weatherKey = '71a17c7d27e3c0462f0798e88d8af51c';
+            $weatherKey = env('WEATHER_KEY');
 
 
             $dbflight = DB::table('flights')

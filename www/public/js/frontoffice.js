@@ -86,8 +86,8 @@
 
     angular.module('app')
         .constant('config', {
-            appId : '8ea22765',
-            appKey : 'f25a316d50feb48ecde4d35e5d235985',
+            appId : '6d147d19',
+            appKey : '0cd16b9ead2b3d2066b860e579a40bd7',
             api : 'api/v1/'
         });
 })();
@@ -1950,6 +1950,7 @@
                 deleteFlightModal.close(true);
                 console.log($id);
                 deleteFlightsFactory.deleteFlight($id);
+                $window.location.href = '/flights';
             };
             //
             // console.log('deleteFlight: ', $id);
@@ -2328,12 +2329,14 @@
         vm.weather = [
             {name:'Clear', icon:'wi-day-sunny'},
             {name:'Rain', icon:'wi-rain'},
+            {name:'Mist', icon:'wi-day-fog'},
             {name:'Clouds', icon:'wi-cloudy'},
             {name:'Atmosphere', icon:'wi-fog'},
             {name:'Snow', icon:'wi-snow'},
             {name:'Drizzle', icon:'wi-showers'},
             {name:'Thunderstorm', icon:'wi-thunderstorm'},
-            {name:'Extreme', icon:'wi-hurricane'}
+            {name:'Extreme', icon:'wi-hurricane'},
+            {name:'Haze', icon:'wi-day-haze'}
         ];
 
         // User Interaction
@@ -2473,9 +2476,14 @@
             vm.trip.apiweather = response.apiweather;
             vm.trip.apiforecast = response.apiforecast;
             vm.trip.forecast = {};
-
+            
             var weatherValue = $filter('filter')(vm.weather, {name: response.apiweather.weather[0].main}, true);
             vm.trip.weatherIcon = weatherValue[0].icon;
+            if(weatherValue.length > 0) {
+                vm.trip.weatherIcon = weatherValue[0].icon;
+            }else {
+                vm.trip.weatherIcon = 'wi-day-sunny';
+            }
 
             var sunrise = (vm.trip.apiweather.sys.sunrise + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;
             var sunset = (vm.trip.apiweather.sys.sunset + (vm.trip.apitrip.utcOffsetHours * 3600)) * 1000;

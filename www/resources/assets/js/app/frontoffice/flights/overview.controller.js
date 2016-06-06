@@ -280,6 +280,7 @@
                 deleteFlightModal.close(true);
                 console.log($id);
                 deleteFlightsFactory.deleteFlight($id);
+                $window.location.href = '/flights';
             };
             //
             // console.log('deleteFlight: ', $id);
